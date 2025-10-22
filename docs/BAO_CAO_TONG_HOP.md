@@ -1,6 +1,6 @@
 # BÁO CÁO TỔNG HỢP
 
-## HỆ THỐNG ĐIỀU KHIỂN MÁY XÚC TỰ ĐỘNG EKG-5A
+## HỆ THỐNG ĐIỀU KHIỂN MÁY XÚC TỰ ĐỘNG HUINA 1592
 
 ---
 
@@ -23,13 +23,14 @@
 
 ## 1. GIỚI THIỆU
 
-### 1.1. Tổng quan về máy xúc EKG-5A
+### 1.1. Tổng quan về máy xúc Huina 1592
 
-Máy xúc EKG-5A là loại máy xúc điện có dung tích gầu 5m³, được sử dụng rộng rãi trong các công trình khai thác mỏ và xây dựng lớn. Hệ thống truyền động điện của máy xúc sử dụng:
+Máy xúc Huina 1592 là mô hình máy xúc điều khiển từ xa (RC Excavator) tỉ lệ 1:14, được sản xuất bởi Huina Toys. Đây là nền tảng lý tưởng cho nghiên cứu và phát triển hệ thống điều khiển máy xúc tự động ở quy mô nhỏ. Hệ thống điều khiển của máy xúc sử dụng:
 
-- **Hệ thống khuếch đại từ kép ПДД-1,5B**: Khuếch đại tín hiệu điều khiển
-- **Máy phát DC**: Cung cấp nguồn điện áp biến đổi
-- **Động cơ DC**: Điều khiển các cơ cấu chuyển động
+- **Mạch điều khiển PWM**: Điều khiển tốc độ động cơ DC
+- **Động cơ DC Brushed 540/550**: Điều khiển các cơ cấu chuyển động
+- **Pin Li-ion 7.4V (2S)**: Nguồn cung cấp điện
+- **ESC (Electronic Speed Controller)**: Bộ điều khiển tốc độ điện tử
 
 ### 1.2. Mục tiêu nghiên cứu
 
@@ -42,7 +43,7 @@ Nghiên cứu này tập trung vào:
 
 ### 1.3. Phạm vi nghiên cứu
 
-- **Hệ thống điều khiển** cơ cấu nâng hạ gầu máy xúc EKG-5A
+- **Hệ thống điều khiển** cơ cấu nâng hạ gầu máy xúc Huina 1592
 - **Phân tích lý thuyết** và tính toán thông số
 - **Mô phỏng động học** bằng MATLAB/Simulink
 - **Nghiên cứu ứng dụng** autonomous excavator (máy xúc tự động)

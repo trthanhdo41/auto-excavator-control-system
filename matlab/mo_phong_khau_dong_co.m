@@ -1,30 +1,32 @@
 %% MÔ PHỎNG KHÂU ĐỘNG CƠ
-% Mô phỏng động cơ DC nâng hạ gầu EKG-5A
-% Tác giả: Hệ thống điều khiển máy xúc EKG-5A
+% Mô phỏng động cơ DC nâng hạ gầu Huina 1592
+% Tác giả: Hệ thống điều khiển máy xúc Huina 1592
 % Ngày: 10/2025
 
 clc; clear all; close all;
 
 %% ========== THÔNG SỐ ĐỘNG CƠ ==========
+% Động cơ: 540/550 Brushed DC Motor (Huina 1592)
 
-% Thông số định mức
-P_rated = 75000;        % Công suất [W]
-U_rated = 220;          % Điện áp [V]
-I_rated = 350;          % Dòng điện [A]
-n_rated = 600;          % Tốc độ [rpm]
+% Thông số định mức (RC Model - scaled down)
+P_rated = 30;           % Công suất [W] (not 75kW!)
+U_rated = 7.4;          % Điện áp [V] (7.4V Li-ion 2S)
+I_rated = 4;            % Dòng điện [A]
+n_no_load = 12000;      % Tốc độ không tải [rpm]
+n_rated = 8000;         % Tốc độ có tải [rpm]
 omega_rated = n_rated * 2 * pi / 60;  % Tốc độ góc [rad/s]
-M_rated = P_rated / omega_rated;      % Mô men [N.m]
+M_rated = P_rated / omega_rated;      % Mô men [N.m] ~ 0.035 N.m
 
-% Thông số điện
-R_a = 0.035;            % Điện trở phần ứng [Ohm]
-L_a = 0.005;            % Độ tự cảm phần ứng [H]
-R_f = 50;               % Điện trở kích từ [Ohm]
+% Thông số điện (RC Motor)
+R_a = 0.8;              % Điện trở phần ứng [Ohm]
+L_a = 0.0002;           % Độ tự cảm phần ứng [H] = 0.2 mH
+R_f = 20;               % Điện trở kích từ (nếu có) [Ohm]
 
-% Thông số cơ
-J_motor = 5.2;          % Mô men đà động cơ [kg.m²]
-J_load = 150;           % Mô men đà tải (gầu + đất) [kg.m²]
+% Thông số cơ (RC Scale)
+J_motor = 0.00005;      % Mô men đà động cơ [kg.m²] (rất nhỏ)
+J_load = 0.0002;        % Mô men đà tải (gầu + vật xúc) [kg.m²]
 J_total = J_motor + J_load;  % Mô men đà tổng [kg.m²]
-B = 0.5;                % Hệ số ma sát nhớt [N.m.s/rad]
+B = 0.0001;             % Hệ số ma sát nhớt [N.m.s/rad] (nhỏ)
 
 % Hằng số động cơ
 E_a_rated = U_rated - I_rated * R_a;
@@ -60,12 +62,12 @@ t_sim = 5.0;            % Thời gian mô phỏng [s]
 dt = 0.0001;            % Bước thời gian [s]
 t = 0:dt:t_sim;         % Vector thời gian
 
-% Điện áp đầu vào (từ máy phát)
+% Điện áp đầu vào (từ ESC - Electronic Speed Controller)
 U_in = zeros(size(t));
 U_in(t >= 0.0 & t < 0.5) = 0;
-U_in(t >= 0.5 & t < 2.0) = 110;      % 50% điện áp
-U_in(t >= 2.0 & t < 3.5) = 220;      % 100% điện áp
-U_in(t >= 3.5) = 150;                % Giảm xuống
+U_in(t >= 0.5 & t < 2.0) = 3.7;      % 50% điện áp (1S)
+U_in(t >= 2.0 & t < 3.5) = 7.4;      % 100% điện áp (2S)
+U_in(t >= 3.5) = 5.0;                % Giảm xuống
 
 % Mô men tải (thay đổi)
 M_load = zeros(size(t));

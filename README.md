@@ -1,7 +1,7 @@
-# HỆ THỐNG ĐIỀU KHIỂN MÁY XÚC TỰ ĐỘNG EKG-5A
+# HỆ THỐNG ĐIỀU KHIỂN MÁY XÚC TỰ ĐỘNG HUINA 1592
 
 ## Giới thiệu
-Dự án nghiên cứu hệ thống điều khiển tự động cho máy xúc EKG-5A, bao gồm các phần tính toán thông số, mô phỏng MATLAB và báo cáo chi tiết.
+Dự án nghiên cứu hệ thống điều khiển tự động cho máy xúc Huina 1592, bao gồm các phần tính toán thông số, mô phỏng MATLAB và báo cáo chi tiết.
 
 ## Cấu trúc thư mục
 
@@ -62,7 +62,7 @@ mo_phong_khau_dong_co
 Mở file `docs/bao_cao_tong_hop.pdf`
 
 ## Tài liệu tham khảo
-- Tài liệu máy xúc EKG-5A
+- Tài liệu máy xúc Huina 1592
 - TERA: Terrain Excavation Robot Autonomy (https://droneslab.github.io/tera/)
 - Các papers về autonomous excavator
 

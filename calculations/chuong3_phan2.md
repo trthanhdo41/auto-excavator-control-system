@@ -397,17 +397,19 @@ C_e = (p × Z) / (60 × a)
 => E_od = C_e × Φ × n
 ```
 
-### Thông số máy phát nâng hạ gầu EKG-5A:
+### Thông số hệ thống nâng hạ gầu Huina 1592:
+
+**Lưu ý:** Huina 1592 là máy xúc RC tỉ lệ 1:14, sử dụng động cơ DC và xi lanh thủy lực nhỏ.
 
 | Thông số | Ký hiệu | Giá trị | Đơn vị |
 |----------|---------|---------|--------|
-| Công suất | P | 75 | kW |
-| Điện áp định mức | U_đm | 220 | V |
-| Dòng định mức | I_đm | 350 | A |
-| Tốc độ | n | 1500 | rpm |
-| Số đôi cực | p | 2 | - |
-| Số thanh dẫn | Z | 480 | thanh |
-| Số nhánh song song | a | 2 | - |
+| Nguồn điện | U_nguồn | 7.4 - 11.1 | V |
+| Công suất động cơ | P | 20 - 50 | W |
+| Điện áp làm việc | U_đm | 7.4 | V |
+| Dòng định mức | I_đm | 3 - 5 | A |
+| Tốc độ | n | 3000 - 6000 | rpm |
+| Loại động cơ | - | 540/550 Brushed DC | - |
+| Pin | - | 7.4V 2S Li-ion | - |
 
 ### Tính hằng số C_e:
 
@@ -1086,7 +1088,7 @@ dU/dI_KTSS > R_kích_từ
 
 ### Tổ hợp kích từ hỗn hợp:
 
-Trong hệ thống EKG-5A, thường dùng cả hai:
+Trong hệ thống Huina 1592, thường dùng cả hai:
 ```
 F_tổng = F_ĐL + F_KTSS (+ hoặc -)
 ```
@@ -1547,17 +1549,21 @@ T_F_hiệu_quả = 0.4 × 1.2 = 0.48s
 - T_a: Hằng số thời gian điện, thường rất nhỏ
 - K_e, K_m: Hằng số động cơ, liên hệ giữa điện và cơ
 
-### Thông số động cơ EKG-5A:
+### Thông số động cơ Huina 1592:
+
+**Loại động cơ:** 540/550 Brushed DC Motor (phổ biến trong mô hình RC)
 
 | Thông số | Ký hiệu | Giá trị | Đơn vị |
 |----------|---------|---------|--------|
-| Công suất | P_đm | 75 | kW |
-| Điện áp | U_đm | 220 | V |
-| Dòng điện | I_đm | 350 | A |
-| Tốc độ | n_đm | 600 | rpm |
-| Điện trở phần ứng | R_a | 0.035 | Ω |
-| Điện trở kích từ | R_f | 50 | Ω |
-| Moment đà | J | 5.2 | kg.m² |
+| Công suất | P_đm | 30 | W |
+| Điện áp | U_đm | 7.4 | V |
+| Dòng điện | I_đm | 4 | A |
+| Tốc độ không tải | n₀ | 12000 | rpm |
+| Tốc độ có tải | n_đm | 8000 | rpm |
+| Mô men định mức | M_đm | 0.035 | N.m |
+| Điện trở phần ứng | R_a | 0.8 | Ω |
+| Moment đà | J | 0.00005 | kg.m² |
+| Khối lượng | m | ~0.15 | kg |
 
 ### 1. Tính toán điện trở phần ứng (R_a):
 

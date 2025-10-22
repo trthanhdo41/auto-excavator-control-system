@@ -1,6 +1,6 @@
-%% MÔ PHỎNG KHÂU KHUẾCH ĐẠI TỪ
-% Mô phỏng sơ đồ cấu trúc MATLAB khâu khuếch đại từ ПДД-1,5B
-% Tác giả: Hệ thống điều khiển máy xúc EKG-5A
+%% MÔ PHỎNG MẠCH ĐIỀU KHIỂN PWM
+% Mô phỏng mạch điều khiển PWM cho động cơ DC (thay thế khuếch đại từ)
+% Tác giả: Hệ thống điều khiển máy xúc Huina 1592
 % Ngày: 10/2025
 
 clc; clear all; close all;

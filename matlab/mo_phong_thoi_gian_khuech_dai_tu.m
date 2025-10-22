@@ -1,6 +1,6 @@
-%% MÔ PHỎNG THỜI GIAN KHUẾCH ĐẠI TỪ KÉP ПДД-1,5B
-% Script mô phỏng thời gian đáp ứng của khuếch đại từ
-% Tác giả: Hệ thống điều khiển máy xúc EKG-5A
+%% MÔ PHỎNG ĐÁP ỨNG THỜI GIAN HỆ THỐNG
+% Script mô phỏng thời gian đáp ứng của hệ thống điều khiển PWM
+% Tác giả: Hệ thống điều khiển máy xúc Huina 1592
 % Ngày: 10/2025
 
 clc; clear all; close all;

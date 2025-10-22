@@ -1,42 +1,40 @@
-%% MÔ PHỎNG KHÂU MÁY PHÁT
-% Mô phỏng máy phát nâng hạ gầu EKG-5A
-% Tác giả: Hệ thống điều khiển máy xúc EKG-5A
+%% MÔ PHỎNG HỆ THỐNG ĐIỀU KHIỂN ĐỘNG CƠ
+% Mô phỏng hệ thống nâng hạ gầu Huina 1592
+% Tác giả: Hệ thống điều khiển máy xúc Huina 1592
 % Ngày: 10/2025
 
 clc; clear all; close all;
 
-%% ========== THÔNG SỐ MÁY PHÁT ==========
+%% ========== THÔNG SỐ HỆ THỐNG ĐIỀU KHIỂN ==========
+% Hệ thống: PWM Controller + DC Motor (Huina 1592)
 
-% Thông số định mức
-P_rated = 75000;        % Công suất định mức [W]
-U_rated = 220;          % Điện áp định mức [V]
-I_rated = 350;          % Dòng điện định mức [A]
-n_rated = 1500;         % Tốc độ định mức [rpm]
+% Thông số định mức (RC Model)
+P_rated = 30;           % Công suất định mức [W]
+U_rated = 7.4;          % Điện áp định mức [V] (2S Li-ion)
+I_rated = 4;            % Dòng điện định mức [A]
+n_rated = 8000;         % Tốc độ định mức [rpm]
 omega_rated = n_rated * 2 * pi / 60;  % Tốc độ góc [rad/s]
 
-% Thông số mạch điện
-R_a = 0.05;             % Điện trở phần ứng [Ohm]
-L_a = 0.005;            % Độ tự cảm phần ứng [H]
-R_f = 50;               % Điện trở kích từ [Ohm]
-L_f = 25;               % Độ tự cảm kích từ [H]
+% Thông số mạch điện (RC Motor)
+R_a = 0.8;              % Điện trở phần ứng [Ohm]
+L_a = 0.0002;           % Độ tự cảm phần ứng [H] = 0.2 mH
+R_f = 20;               % Điện trở kích từ [Ohm]
+L_f = 0.05;             % Độ tự cảm kích từ [H] = 50 mH
 
 % Hằng số thời gian
 T_f = L_f / R_f;        % Hằng số thời gian kích từ [s]
 T_a = L_a / R_a;        % Hằng số thời gian phần ứng [s]
 
-% Hằng số máy phát
-C_e = 8;                % Hằng số EMF [V.min/Wb.vòng]
-K_phi = 0.0198;         % Từ thông định mức [Wb]
-K_e = C_e * K_phi * 2 * pi / 60;  % Hằng số EMF [V/(rad/s)]
+% Hằng số động cơ
+M_rated = P_rated / omega_rated;  % Mô men [N.m]
+K_e = (U_rated - I_rated * R_a) / omega_rated;  % Hằng số EMF [V/(rad/s)]
+K_m = M_rated / I_rated;  % Hằng số mô men [N.m/A]
 
-% Thông số các cuộn kích từ
-N_2 = 1000;             % Số vòng YCM-2 (điều khiển)
-R_2 = 220;              % Điện trở YCM-2 [Ohm]
-N_1 = 100;              % Số vòng YCM-1 (phản hồi)
-alpha_1 = 0.1;          % Hệ số phân dòng YCM-1
-N_6 = 600;              % Số vòng YCM-6 (độc lập)
-U_6 = 110;              % Điện áp YCM-6 [V]
-R_6 = 110;              % Điện trở YCM-6 [Ohm]
+% Thông số PWM Controller (thay thế các cuộn kích từ)
+PWM_freq = 20000;       % Tần số PWM [Hz] = 20 kHz
+V_supply = 7.4;         % Điện áp nguồn [V]
+Duty_min = 0;           % Duty cycle min [0-1]
+Duty_max = 1.0;         % Duty cycle max [0-1]
 
 %% ========== TÍNH TOÁN CÁC THAM SỐ ==========
 

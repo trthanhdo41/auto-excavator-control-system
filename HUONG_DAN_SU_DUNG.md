@@ -1,6 +1,6 @@
 # HƯỚNG DẪN SỬ DỤNG
 
-## HỆ THỐNG ĐIỀU KHIỂN MÁY XÚC TỰ ĐỘNG EKG-5A
+## HỆ THỐNG ĐIỀU KHIỂN MÁY XÚC TỰ ĐỘNG HUINA 1592
 
 ---
 
