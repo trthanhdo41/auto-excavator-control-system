@@ -1,6 +1,6 @@
 # HƯỚNG DẪN THỰC NGHIỆM VỚI HUINA 1592
 
-## 📋 MỤC LỤC
+##  MỤC LỤC
 1. [Giới thiệu](#1-giới-thiệu)
 2. [Thiết bị cần thiết](#2-thiết-bị-cần-thiết)
 3. [Chuẩn bị thực nghiệm](#3-chuẩn-bị-thực-nghiệm)
@@ -16,10 +16,10 @@
 
 ### 1.1. Mục tiêu thực nghiệm
 Hướng dẫn này giúp bạn:
-- ✅ Đo đạc các thông số thực tế của động cơ DC 540/550 trên Huina 1592
-- ✅ Kiểm chứng các tính toán lý thuyết với kết quả thực tế
-- ✅ Hiểu rõ đặc tính động cơ DC và điều khiển PWM
-- ✅ Xây dựng cơ sở để phát triển hệ thống điều khiển tự động
+-  Đo đạc các thông số thực tế của động cơ DC 540/550 trên Huina 1592
+-  Kiểm chứng các tính toán lý thuyết với kết quả thực tế
+-  Hiểu rõ đặc tính động cơ DC và điều khiển PWM
+-  Xây dựng cơ sở để phát triển hệ thống điều khiển tự động
 
 ### 1.2. Đối tượng thực nghiệm
 - **Mô hình:** Huina 1592 RC Excavator (1:14 scale)
@@ -104,7 +104,7 @@ Hướng dẫn này giúp bạn:
 
 #### Bước 1: Tháo rời động cơ
 ```
-⚠️ LƯU Ý: Chụp ảnh hoặc đánh dấu vị trí dây trước khi tháo!
+ LƯU Ý: Chụp ảnh hoặc đánh dấu vị trí dây trước khi tháo!
 
 1. Tắt nguồn, tháo pin ra khỏi mô hình
 2. Tháo vỏ che để tiếp cận động cơ (thường là động cơ di chuyển)
@@ -116,10 +116,10 @@ Hướng dẫn này giúp bạn:
 #### Bước 2: Nhận diện động cơ
 ```
 Kiểm tra:
-✓ Loại động cơ: 540 hay 550 (đo đường kính thân: 36mm = 540, 38mm = 550)
-✓ Số vòng dây (turns): thường in trên vỏ (ví dụ: 35T, 27T, 21T)
-✓ Dây dẫn: 2 dây (động cơ brushed thường)
-✓ Tình trạng: không có vết cháy, không mùi khét
+ Loại động cơ: 540 hay 550 (đo đường kính thân: 36mm = 540, 38mm = 550)
+ Số vòng dây (turns): thường in trên vỏ (ví dụ: 35T, 27T, 21T)
+ Dây dẫn: 2 dây (động cơ brushed thường)
+ Tình trạng: không có vết cháy, không mùi khét
 ```
 
 #### Bước 3: Gá động cơ lên bàn thí nghiệm
@@ -178,13 +178,13 @@ ESC / H-Bridge
 
 ### 3.3. Kiểm tra an toàn
 ```
-☑ Tất cả kết nối chắc chắn, không bị lỏng
-☑ Không có chập mạch giữa dây + và -
-☑ Động cơ được cố định chắc chắn
-☑ Trục động cơ không va chạm vật cản
-☑ Có bảo vệ quá dòng (fuse hoặc trong nguồn)
-☑ Khu vực thí nghiệm thông thoáng, không cháy nổ
-☑ Có dụng cụ dập lửa (bình cứu hỏa mini) gần đó
+ Tất cả kết nối chắc chắn, không bị lỏng
+ Không có chập mạch giữa dây + và -
+ Động cơ được cố định chắc chắn
+ Trục động cơ không va chạm vật cản
+ Có bảo vệ quá dòng (fuse hoặc trong nguồn)
+ Khu vực thí nghiệm thông thoáng, không cháy nổ
+ Có dụng cụ dập lửa (bình cứu hỏa mini) gần đó
 ```
 
 ---
@@ -314,7 +314,7 @@ Xác định dòng điện khi động cơ hoạt động ở chế độ địn
 - P_n ≈ 30W
 - n_n ≈ 6000-7000 rpm (có tải)
 
-⚠️ Không giữ động cơ ở I > 5A quá 30 giây!
+ Không giữ động cơ ở I > 5A quá 30 giây!
 ```
 
 #### Ghi dữ liệu:
@@ -512,10 +512,10 @@ Duty (%) | Duty (0-255) | V_avg (V) | I (A) | n (rpm) | n/n_max (%)
 
 #### Phân tích:
 ```
-✓ n có tuyến tính với duty% không?
-✓ V_avg = V_supply × (duty/100) ?
-✓ Tốc độ tối đa đạt được bao nhiêu?
-✓ Có hiện tượng "dead zone" ở duty thấp không?
+ n có tuyến tính với duty% không?
+ V_avg = V_supply × (duty/100) ?
+ Tốc độ tối đa đạt được bao nhiêu?
+ Có hiện tượng "dead zone" ở duty thấp không?
 ```
 
 ---
@@ -893,67 +893,67 @@ plt.show()
 ### 7.1. An toàn điện
 
 ```
-⚠️ NGUY HIỂM
-✓ Pin LiPo có thể phát nổ/cháy nếu bị chập mạch
-✓ Dòng điện ngắn mạch có thể > 50A → rất nguy hiểm
-✓ Luôn kiểm tra cực tính trước khi cấp điện
+ NGUY HIỂM
+ Pin LiPo có thể phát nổ/cháy nếu bị chập mạch
+ Dòng điện ngắn mạch có thể > 50A → rất nguy hiểm
+ Luôn kiểm tra cực tính trước khi cấp điện
 
-🛡️ BIỆN PHÁP AN TOÀN
-☑ Dùng fuse hoặc MCB để bảo vệ quá dòng
-☑ Không để dây trần chạm vào nhau
-☑ Sạc pin LiPo đúng cách (balance charging)
-☑ Không dùng pin sưng phồng hoặc hư hỏng
-☑ Có bình cứu hỏa hoặc cát gần nơi làm việc
+ BIỆN PHÁP AN TOÀN
+ Dùng fuse hoặc MCB để bảo vệ quá dòng
+ Không để dây trần chạm vào nhau
+ Sạc pin LiPo đúng cách (balance charging)
+ Không dùng pin sưng phồng hoặc hư hỏng
+ Có bình cứu hỏa hoặc cát gần nơi làm việc
 ```
 
 ### 7.2. An toàn cơ khí
 
 ```
-⚠️ NGUY HIỂM
-✓ Trục động cơ quay với tốc độ 8000 rpm rất nguy hiểm
-✓ Vật thể có thể văng ra nếu không cố định chắc
-✓ Động cơ có thể nóng > 70°C
+ NGUY HIỂM
+ Trục động cơ quay với tốc độ 8000 rpm rất nguy hiểm
+ Vật thể có thể văng ra nếu không cố định chắc
+ Động cơ có thể nóng > 70°C
 
-🛡️ BIỆN PHÁP AN TOÀN
-☑ Cố định chắc chắn động cơ trước khi chạy
-☑ Không đưa tay gần trục động cơ khi đang quay
-☑ Dùng vỏ bảo vệ cho trục động cơ
-☑ Đeo kính bảo hộ khi làm việc
-☑ Để động cơ nguội trước khi chạm vào
+ BIỆN PHÁP AN TOÀN
+ Cố định chắc chắn động cơ trước khi chạy
+ Không đưa tay gần trục động cơ khi đang quay
+ Dùng vỏ bảo vệ cho trục động cơ
+ Đeo kính bảo hộ khi làm việc
+ Để động cơ nguội trước khi chạm vào
 ```
 
 ### 7.3. An toàn nhiệt
 
 ```
-⚠️ NGUY HIỂM
-✓ Động cơ quá tải có thể nóng > 100°C
-✓ ESC/MOSFET có thể bị cháy nếu quá nhiệt
-✓ Pin LiPo quá nóng có thể phồng/nổ
+ NGUY HIỂM
+ Động cơ quá tải có thể nóng > 100°C
+ ESC/MOSFET có thể bị cháy nếu quá nhiệt
+ Pin LiPo quá nóng có thể phồng/nổ
 
-🛡️ BIỆN PHÁP AN TOÀN
-☑ Giám sát nhiệt độ bằng cảm biến
-☑ Không chạy động cơ liên tục > 2 phút
-☑ Có tản nhiệt cho ESC và động cơ
-☑ Dừng ngay nếu thấy mùi khét
-☑ Để nguội ít nhất 5 phút giữa các lần chạy
+ BIỆN PHÁP AN TOÀN
+ Giám sát nhiệt độ bằng cảm biến
+ Không chạy động cơ liên tục > 2 phút
+ Có tản nhiệt cho ESC và động cơ
+ Dừng ngay nếu thấy mùi khét
+ Để nguội ít nhất 5 phút giữa các lần chạy
 ```
 
 ### 7.4. Quy trình khẩn cấp
 
 ```
-🚨 NẾU CÓ CHÁY
+ NẾU CÓ CHÁY
 1. Ngắt nguồn ngay lập tức
 2. Dùng bình cứu hỏa CO2 hoặc cát (KHÔNG dùng nước)
 3. Di tản khỏi khu vực
 4. Gọi 114 nếu cần
 
-🚨 NẾU BỊ ĐIỆN GIẬT
+ NẾU BỊ ĐIỆN GIẬT
 1. Ngắt nguồn ngay
 2. Không chạm trực tiếp vào nạn nhân
 3. Dùng vật cách điện để tách nạn nhân
 4. Gọi 115 ngay lập tức
 
-🚨 NẾU ĐỘNG CƠ QUÁ NÓNG
+ NẾU ĐỘNG CƠ QUÁ NÓNG
 1. Ngắt nguồn
 2. Không chạm vào động cơ
 3. Để nguội tự nhiên (không dùng nước)
@@ -1109,13 +1109,13 @@ NGUYÊN NHÂN CÓ THỂ:
 ├──────────┼────────────┼──────────┼──────────┼───────────┤
 │ 540-21T  │ 7.4V       │ 40W      │ 10000    │ 21        │
 │ 540-27T  │ 7.4V       │ 35W      │ 8500     │ 27        │
-│ 540-35T  │ 7.4V       │ 30W      │ 8000     │ 35 ★      │
+│ 540-35T  │ 7.4V       │ 30W      │ 8000     │ 35       │
 │ 550-21T  │ 7.4V       │ 60W      │ 11000    │ 21        │
 │ 550-27T  │ 7.4V       │ 50W      │ 9500     │ 27        │
 │ 550-35T  │ 7.4V       │ 40W      │ 8500     │ 35        │
 └──────────┴────────────┴──────────┴──────────┴───────────┘
 
-★ Thông dụng nhất trong Huina 1592
+ Thông dụng nhất trong Huina 1592
 
 Lưu ý:
 - Số vòng dây càng nhiều (T lớn) → mômen lớn, tốc độ thấp
@@ -1159,24 +1159,24 @@ Lưu ý:
 ### C. Checklist trước thí nghiệm
 
 ```
-□ Đã đọc kỹ hướng dẫn an toàn
-□ Đã kiểm tra tất cả thiết bị hoạt động tốt
-□ Đã chuẩn bị sổ ghi chép/file Excel
-□ Pin đã sạc đầy (7.4V - 8.4V)
-□ Động cơ cố định chắc chắn
-□ Kết nối điện đúng cực tính (+/-)
-□ Không có vật cản gần trục động cơ
-□ Có bình cứu hỏa/cát gần đó
-□ Đã thông báo cho người xung quanh
-□ Đã đeo kính bảo hộ (nếu cần)
+ Đã đọc kỹ hướng dẫn an toàn
+ Đã kiểm tra tất cả thiết bị hoạt động tốt
+ Đã chuẩn bị sổ ghi chép/file Excel
+ Pin đã sạc đầy (7.4V - 8.4V)
+ Động cơ cố định chắc chắn
+ Kết nối điện đúng cực tính (+/-)
+ Không có vật cản gần trục động cơ
+ Có bình cứu hỏa/cát gần đó
+ Đã thông báo cho người xung quanh
+ Đã đeo kính bảo hộ (nếu cần)
 ```
 
 ### D. Liên hệ và hỗ trợ
 
 ```
-📧 Email hỗ trợ: [email của bạn]
-🌐 Website: https://github.com/trthanhdo41/auto-excavator-control-system
-📱 Zalo/Telegram: [số điện thoại]
+ Email hỗ trợ: [email của bạn]
+ Website: https://github.com/trthanhdo41/auto-excavator-control-system
+ Zalo/Telegram: [số điện thoại]
 
 Các nhóm/diễn đàn hữu ích:
 - RC Việt Nam: facebook.com/groups/rcvietnam
@@ -1190,13 +1190,13 @@ Các nhóm/diễn đàn hữu ích:
 
 Hướng dẫn này cung cấp đầy đủ các thông tin cần thiết để thực hiện thí nghiệm với động cơ DC của Huina 1592. Thông qua các thí nghiệm, bạn sẽ:
 
-✅ Hiểu rõ nguyên lý hoạt động của động cơ DC brushed
-✅ Xác định được các thông số kỹ thuật thực tế
-✅ Kiểm chứng được tính toán lý thuyết
-✅ Nắm vững điều khiển PWM
-✅ Có cơ sở để phát triển hệ thống tự động
+ Hiểu rõ nguyên lý hoạt động của động cơ DC brushed
+ Xác định được các thông số kỹ thuật thực tế
+ Kiểm chứng được tính toán lý thuyết
+ Nắm vững điều khiển PWM
+ Có cơ sở để phát triển hệ thống tự động
 
-**Chúc bạn thí nghiệm thành công! 🚀**
+**Chúc bạn thí nghiệm thành công! **
 
 ---
 
