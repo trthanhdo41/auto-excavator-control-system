@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            line-height: 1.8;
+            margin: 2.54cm 3.17cm;
+            text-align: justify;
+        }
+        h1 { font-size: 18pt; font-weight: bold; text-align: center; margin: 24pt 0 18pt; text-transform: uppercase; }
+        h2 { font-size: 16pt; font-weight: bold; margin: 18pt 0 12pt; }
+        h3 { font-size: 14pt; font-weight: bold; margin: 14pt 0 10pt; }
+        h4 { font-size: 13pt; font-weight: bold; margin: 12pt 0 8pt; }
+        p { text-indent: 1cm; margin: 6pt 0; }
+        .no-indent { text-indent: 0; }
+        table { border-collapse: collapse; width: 100%; margin: 12pt 0; font-size: 12pt; }
+        th, td { border: 1px solid black; padding: 8pt; }
+        th { background-color: #e8e8e8; font-weight: bold; text-align: center; }
+        pre, code { font-family: 'Courier New'; background: #f5f5f5; padding: 2pt 6pt; font-size: 11pt; }
+        pre { padding: 12pt; border: 1px solid #ddd; margin: 12pt 0; white-space: pre-wrap; }
+        ul, ol { margin-left: 2cm; }
+        li { margin-bottom: 6pt; }
+        strong { font-weight: bold; }
+        em { font-style: italic; }
+    </style>
+</head>
+<body>
+<tr><td>PID</td><td>Proportional-Integral-Derivative</td><td>Điều khiển tỷ lệ-tích phân-vi phân</td></tr>
+<tr><td>IMU</td><td>Inertial Measurement Unit</td><td>Cảm biến quán tính</td></tr>
+<tr><td>SLAM</td><td>Simultaneous Localization And Mapping</td><td>Định vị và lập bản đồ đồng thời</td></tr>
+<tr><td>ROS</td><td>Robot Operating System</td><td>Hệ điều hành robot</td></tr>
+<tr><td>AI</td><td>Artificial Intelligence</td><td>Trí tuệ nhân tạo</td></tr>
+<tr><td>RL</td><td>Reinforcement Learning</td><td>Học tăng cường</td></tr>
+</table>
+<h3>C. Công thức tổng hợp</h3>
+<h4>1. Động cơ DC:</h4>
+<pre>
+U = R_a × I_a + L_a × dI_a/dt + K_e × ω
+E_a = K_e × ω
+M_em = K_m × I_a
+J × dω/dt = M_em - M_load - B × ω
+n = (U / K_e) - (R_a / K_e²) × M
+T_a = L_a / R_a
+T_m = (J × R_a) / K_e²
+</pre>
+<h4>2. PWM:</h4>
+<pre>
+U_avg = D × V_supply
+ΔI ≈ (V - E_a) × D × (1-D) / (L_a × f_PWM)
+P_loss_MOSFET = I² × R_ds_on + V × I × t_sw × f_PWM
+η_ESC = P_out / (P_out + P_loss)
+</pre>
+<h4>3. Hiệu suất:</h4>
+<pre>
+P_out = M × ω
+P_in = U × I
+η = P_out / P_in
+P_loss = P_Cu + P_cơ + P_sắt + P_ESC
+P_Cu = I² × R_a
+</pre>
+<h3>D. Bảng chuyển đổi đơn vị</h3>
+<table>
+<tr><th>Đại lượng</th><th>Đơn vị 1</th><th>Đơn vị 2</th><th>Công thức</th></tr>
+<tr><td>Tốc độ</td><td>rpm</td><td>rad/s</td><td>ω = 2πn/60</td></tr>
+<tr><td>Tốc độ</td><td>rad/s</td><td>rpm</td><td>n = 60ω/(2π)</td></tr>
+<tr><td>Mô men</td><td>N.m</td><td>mN.m</td><td>M_mNm = M_Nm × 1000</td></tr>
+<tr><td>Công suất</td><td>W</td><td>mW</td><td>P_mW = P_W × 1000</td></tr>
+<tr><td>Thời gian</td><td>s</td><td>ms</td><td>t_ms = t_s × 1000</td></tr>
+<tr><td>Điện trở</td><td>Ω</td><td>mΩ</td><td>R_mΩ = R_Ω × 1000</td></tr>
+<tr><td>Độ tự cảm</td><td>H</td><td>mH</td><td>L_mH = L_H × 1000</td></tr>
+</table>
+<hr style="border: 1px solid #ccc; margin: 18pt 0;">
+<h2>KẾT THÚC BÁO CÁO</h2>
+<p class="no-indent"><strong>Ngày hoàn thành:</strong> Tháng 10/2025</p>
+<p class="no-indent"><strong>Nhóm nghiên cứu:</strong> Hệ thống điều khiển máy xúc tự động Huina 1592</p>
+<p class="no-indent"><strong>GitHub:</strong> https://github.com/trthanhdo41/auto-excavator-control-system</p>
+<p class="no-indent"><strong>Liên hệ:</strong> [Thông tin liên hệ]</p>
+<hr style="border: 1px solid #ccc; margin: 18pt 0;">
+<h3>Lời cảm ơn:</h3>
+<p>Cảm ơn cộng đồng RC Việt Nam, Arduino Vietnam, và các diễn đàn robotics đã hỗ trợ trong quá trình nghiên cứu.</p>
+<p>Đặc biệt cảm ơn các tác giả của TERA framework và RSL HEAP project đã cung cấp nguồn cảm hứng và tài liệu quý báu về autonomous excavation.</p>
+<hr style="border: 1px solid #ccc; margin: 18pt 0;">
+<p class="no-indent"><strong>Tất cả code mô phỏng MATLAB và tài liệu có sẵn trên GitHub.</strong></p>
+<p class="no-indent"><strong>Chúc các bạn thành công với dự án! 🚜⚡</strong></p>
+</body>
+</html>
