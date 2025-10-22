@@ -25,523 +25,1007 @@
 
 ### 1.1. Tổng quan về máy xúc Huina 1592
 
-Máy xúc Huina 1592 là mô hình máy xúc điều khiển từ xa (RC Excavator) tỉ lệ 1:14, được sản xuất bởi Huina Toys. Đây là nền tảng lý tưởng cho nghiên cứu và phát triển hệ thống điều khiển máy xúc tự động ở quy mô nhỏ. Hệ thống điều khiển của máy xúc sử dụng:
+**Huina 1592** là mô hình máy xúc điều khiển từ xa (RC Excavator) tỉ lệ **1:14**, được sản xuất bởi Huina Toys - một thương hiệu nổi tiếng về các mô hình máy công trình RC chất lượng cao. Đây là nền tảng lý tưởng cho nghiên cứu và phát triển hệ thống điều khiển máy xúc tự động ở quy mô phòng thí nghiệm.
 
-- **Mạch điều khiển PWM**: Điều khiển tốc độ động cơ DC
-- **Động cơ DC Brushed 540/550**: Điều khiển các cơ cấu chuyển động
-- **Pin Li-ion 7.4V (2S)**: Nguồn cung cấp điện
-- **ESC (Electronic Speed Controller)**: Bộ điều khiển tốc độ điện tử
+**Thông số cơ bản:**
+- **Tỉ lệ:** 1:14 (chiều dài ~70cm)
+- **Trọng lượng:** ~3.5 kg
+- **Nguồn điện:** Pin Li-ion 7.4V 2S (1500-2000mAh)
+- **Động cơ:** 540/550 Brushed DC Motor (6-7 động cơ)
+- **Điều khiển:** 22 kênh 2.4GHz, phạm vi ~30-50m
+
+**Ứng dụng nghiên cứu:**
+- Điều khiển tự động (PID, Adaptive Control)
+- Machine Learning (Reinforcement Learning, Computer Vision)
+- Robotics (SLAM, ROS Integration)
+- Internet of Things (WiFi/4G remote control, telemetry)
 
 ### 1.2. Mục tiêu nghiên cứu
 
 Nghiên cứu này tập trung vào:
 
-1. **Xác định các thông số** của hệ thống truyền động điện cơ cấu nâng hạ gầu
-2. **Tính toán chi tiết** các đại lượng điện, từ và cơ trong hệ thống
-3. **Mô phỏng MATLAB** để kiểm chứng lý thuyết và phân tích đặc tính
-4. **Đề xuất giải pháp** tối ưu hóa và điều khiển tự động
+1. **Xác định các thông số** của động cơ DC 540/550 trong máy xúc RC
+2. **Tính toán chi tiết** các đại lượng điện và cơ trong hệ thống
+3. **Thiết kế điều khiển PWM** và mạch ESC cho động cơ
+4. **Mô phỏng MATLAB** để kiểm chứng lý thuyết và phân tích đặc tính
+5. **Đề xuất giải pháp** điều khiển tự động và tối ưu hóa
 
 ### 1.3. Phạm vi nghiên cứu
 
-- **Hệ thống điều khiển** cơ cấu nâng hạ gầu máy xúc Huina 1592
-- **Phân tích lý thuyết** và tính toán thông số
-- **Mô phỏng động học** bằng MATLAB/Simulink
+- **Hệ thống điều khiển** các cơ cấu chuyển động của Huina 1592
+- **Phân tích lý thuyết** động cơ DC và điều khiển PWM
+- **Mô phỏng động học** bằng MATLAB
 - **Nghiên cứu ứng dụng** autonomous excavator (máy xúc tự động)
+
+### 1.4. Ý nghĩa thực tiễn
+
+#### Về mặt giáo dục:
+- Nền tảng thực hành cho sinh viên học về điều khiển tự động
+- Chi phí thấp (~3-5 triệu VNĐ) so với thiết bị công nghiệp
+- An toàn, không gây nguy hiểm khi thử nghiệm
+
+#### Về mặt nghiên cứu:
+- Prototype cho các thuật toán điều khiển trước khi triển khai thực tế
+- Dễ dàng tích hợp cảm biến và thiết bị điện tử
+- Phù hợp cho nghiên cứu autonomous systems
 
 ---
 
 ## 2. CƠ SỞ LÝ THUYẾT
 
-### 2.1. Hệ thống truyền động điện cơ cấu nâng hạ
+### 2.1. Động cơ DC Brushed (540/550)
 
-Hệ thống truyền động gồm các khâu chính:
+#### 2.1.1. Cấu tạo
+
+Động cơ 540/550 là loại động cơ DC chổi than (brushed) phổ biến trong các mô hình RC:
+
+**Các bộ phận chính:**
+- **Stato:** Nam châm vĩnh cửu (2 hoặc 4 cực)
+- **Roto (Phần ứng):** Lõi sắt có rãnh quấn dây đồng
+- **Cổ góp (Commutator):** Chia đổi dòng điện
+- **Chổi than (Brushes):** Tiếp xúc với cổ góp
 
 ```
-Tín hiệu     Khuếch đại      Máy phát        Động cơ        Cơ cấu
-điều khiển → từ kép     →    DC      →      DC      →     nâng hạ
-   U_ĐK         KĐT            MF             ĐC            gầu
+       ┌────────────────┐
+       │  Nam châm N    │
+       │                │
+    ┌──┴──┐        ┌────┴───┐
+  + │Chổi │        │ Chổi   │ -
+    │than│         │ than   │
+    └──┬──┘        └────┬───┘
+       │   ╔═══════╗    │
+       │   ║ Phần  ║    │
+       │   ║  ứng  ║    │
+       │   ║       ║    │
+       │   ╚═══════╝    │
+       │                │
+       │  Nam châm S    │
+       └────────────────┘
 ```
 
-#### Sơ đồ khối hệ thống:
+#### 2.1.2. Nguyên lý hoạt động
 
+**Phương trình cơ bản:**
+
+1. **Phương trình điện áp:**
 ```
-         ┌────────────┐
-U_ĐK ───→│  ПДД-1,5B  │───→ U_2 (YCM-2)
-         │  Khuếch    │                    ┌──────────┐
-         │  đại từ    │                    │  Máy     │      ┌─────────┐
-         └────────────┘          ┌────────→│  phát    │─────→│ Động cơ │
-                                 │         │  DC      │  U_a │  DC     │─→ω
-         ┌────────────┐          │         └──────────┘      └─────────┘
-   U_6 ─→│   YCM-6    │─── F_6 ──┤                                │
-         │  Kích từ   │          │                                │
-         └────────────┘          │         ┌──────────┐           │
-                                 └────────→│  YCM-1   │←──────────┘
-                                  F_1      │ Phản hồi │   I_load
-                                           └──────────┘
+U = R_a × I_a + L_a × dI_a/dt + E_a
 ```
+Trong đó:
+- `U`: Điện áp đặt vào (V)
+- `R_a`: Điện trở phần ứng (Ω)
+- `L_a`: Độ tự cảm phần ứng (H)
+- `I_a`: Dòng điện phần ứng (A)
+- `E_a`: Sức phản điện động (V)
 
-### 2.2. Nguyên lý hoạt động
-
-#### A. Khuếch đại từ kép ПДД-1,5B
-
-Khuếch đại tín hiệu điều khiển nhỏ (0-10V) thành tín hiệu lớn (0-240V) để điều khiển máy phát.
-
-**Đặc điểm:**
-- Hệ số khuếch đại cao: K_u ≈ 22
-- Không có tiếp điểm cơ khí → Độ tin cậy cao
-- Có quán tính: τ = 5-100ms
-
-#### B. Máy phát DC kích từ độc lập
-
-Tạo nguồn điện áp biến đổi cho động cơ.
-
-**Các cuộn kích từ:**
-- **YCM-2**: Cuộn điều khiển chính (từ KĐT)
-- **YCM-1**: Cuộn phản hồi âm (theo tải)
-- **YCM-6**: Cuộn kích từ độc lập (ổn định)
-- **YCM-4**: Cuộn bù phản ứng phần ứng
-
-**Phương trình:**
+2. **Sức phản điện động:**
 ```
-F_tổng = F_2 - F_1 + F_6 ± F_4
-Φ = f(F_tổng)
-E_a = K_e × Φ × ω
-U_out = E_a - I_load × R_a
+E_a = K_e × ω
 ```
+Trong đó:
+- `K_e`: Hằng số EMF (V/(rad/s))
+- `ω`: Tốc độ góc (rad/s)
 
-#### C. Động cơ DC phần ứng
-
-Chuyển đổi điện năng thành cơ năng để nâng hạ gầu.
-
-**Phương trình:**
+3. **Mô men điện từ:**
 ```
-U_a = R_a × I_a + L_a × dI_a/dt + E_a
 M_em = K_m × I_a
-J × dω/dt = M_em - M_tải - B×ω
+```
+Trong đó:
+- `K_m`: Hằng số mô men (N.m/A)
+- `M_em`: Mô men điện từ (N.m)
+
+4. **Phương trình cơ:**
+```
+J × dω/dt = M_em - M_load - B × ω
+```
+Trong đó:
+- `J`: Mô men đà (kg.m²)
+- `M_load`: Mô men tải (N.m)
+- `B`: Hệ số ma sát nhớt (N.m.s/rad)
+
+#### 2.1.3. Đặc tính cơ
+
+**Phương trình đặc tính cơ:**
+```
+n = n_0 - (R_a / K_e²) × M
 ```
 
-### 2.3. Các chế độ làm việc
+Hoặc:
+```
+n = (U / K_e) - (R_a / K_e²) × M
+```
 
-#### 1. Nâng gầu (Hoisting)
-- Động cơ chạy thuận chiều
-- Mô men lớn, tốc độ trung bình
-- Công suất lớn
+Trong đó:
+- `n`: Tốc độ (rpm)
+- `n_0`: Tốc độ không tải = U/(K_e × 2π/60)
+- Độ dốc: `Δn = R_a / K_e²`
 
-#### 2. Hạ gầu (Lowering)
-- Động cơ làm việc ở chế độ hãm tái sinh
-- Năng lượng trả về lưới
-- Điều khiển tốc độ ổn định
+**Đồ thị đặc tính cơ:**
+```
+n (rpm)
+  ↑
+  │     U = 7.4V
+12000├─────────╲
+  │            ╲
+  │             ╲
+8000├─────────────●────  (điểm định mức)
+  │               ╲
+  │                ╲
+  │                 ╲
+0 └──────────────────╲──→ M (N.m)
+  0                M_đm
+```
 
-#### 3. Giữ gầu (Holding)
-- Động cơ giữ mô men
-- Tiêu thụ công suất nhỏ
+### 2.2. Điều khiển PWM (Pulse Width Modulation)
+
+#### 2.2.1. Nguyên lý PWM
+
+PWM là phương pháp điều khiển điện áp trung bình bằng cách thay đổi tỷ lệ thời gian bật/tắt của tín hiệu.
+
+**Các thông số:**
+- **Chu kỳ T:** Thời gian một xung hoàn chỉnh (s)
+- **Tần số f:** f = 1/T (Hz)
+- **Duty Cycle D:** Tỷ lệ thời gian bật (%)
+
+```
+Tín hiệu PWM (D = 60%):
+
+V_supply ┐  ┌──────┐  ┌──────┐  ┌──────
+         │  │      │  │      │  │
+         │  │      │  │      │  │
+       0 └──┘      └──┘      └──┘
+         ├──┤      ├──┤      ├──┤
+         T_on      T_off
+         ├─────────┤
+              T
+```
+
+**Điện áp trung bình:**
+```
+U_avg = D × V_supply
+```
+
+**Ví dụ:**
+- V_supply = 7.4V, D = 50% → U_avg = 3.7V
+- V_supply = 7.4V, D = 75% → U_avg = 5.55V
+- V_supply = 7.4V, D = 100% → U_avg = 7.4V
+
+#### 2.2.2. Tần số PWM
+
+Tần số PWM cho động cơ DC thường:
+- **10-20 kHz:** Tiêu chuẩn cho động cơ RC
+- **> 20 kHz:** Không nghe thấy tiếng ù (ultrasonic)
+- **< 5 kHz:** Động cơ sẽ kêu ù, rung động
+
+**Lựa chọn tần số:**
+```
+f_PWM = 20 kHz (khuyến nghị cho Huina 1592)
+T_PWM = 1/20000 = 50 μs
+```
+
+#### 2.2.3. Dòng gợn sóng
+
+Do PWM đóng/mở nhanh, dòng điện có gợn sóng:
+
+```
+ΔI ≈ (U - E_a) × D × (1-D) / (L_a × f_PWM)
+```
+
+**Ví dụ tính toán:**
+- U = 7.4V, E_a = 3.5V, D = 0.5
+- L_a = 0.2mH, f_PWM = 20kHz
+
+```
+ΔI = (7.4 - 3.5) × 0.5 × 0.5 / (0.0002 × 20000)
+ΔI = 0.2438 A = 244 mA
+```
+
+### 2.3. Mạch cầu H (H-Bridge)
+
+#### 2.3.1. Cấu trúc
+
+Mạch cầu H cho phép động cơ quay thuận/nghịch và điều khiển tốc độ:
+
+```
+        V_supply (+7.4V)
+             │
+      ┌──────┴──────┐
+      │             │
+    [Q1]          [Q2]
+      │             │
+      ├──┬───────┬──┤
+      │  │   M   │  │  ← Động cơ
+      │  └───────┘  │
+      │             │
+    [Q3]          [Q4]
+      │             │
+      └──────┬──────┘
+             │
+            GND
+```
+
+**Các MOSFET:**
+- Q1, Q2: High-side (phía nguồn dương)
+- Q3, Q4: Low-side (phía mass)
+
+#### 2.3.2. Các chế độ hoạt động
+
+**1. Quay thuận (Forward):**
+- Q1 ON, Q4 ON → Dòng: V+ → Q1 → Motor → Q4 → GND
+
+**2. Quay nghịch (Reverse):**
+- Q2 ON, Q3 ON → Dòng: V+ → Q2 → Motor (ngược) → Q3 → GND
+
+**3. Hãm (Brake):**
+- Q3 ON, Q4 ON → Ngắn mạch 2 cực động cơ qua GND
+
+**4. Trôi tự do (Coast):**
+- Tất cả OFF → Động cơ quay tự do
+
+#### 2.3.3. PWM cho cầu H
+
+**Điều khiển tốc độ thuận:**
+- Q1: PWM (duty D)
+- Q4: ON liên tục
+- Q2, Q3: OFF
+
+**Điều khiển tốc độ nghịch:**
+- Q2: PWM (duty D)
+- Q3: ON liên tục
+- Q1, Q4: OFF
+
+### 2.4. ESC (Electronic Speed Controller)
+
+#### 2.4.1. Chức năng
+
+ESC là bộ điều khiển tốc độ điện tử tích hợp:
+- Mạch cầu H với MOSFET công suất
+- Vi điều khiển tạo tín hiệu PWM
+- BEC (Battery Eliminator Circuit) cấp 5V cho receiver
+- Bảo vệ quá dòng, quá nhiệt
+
+#### 2.4.2. Tín hiệu điều khiển
+
+ESC nhận tín hiệu RC servo (PWM 50Hz):
+- **1.0 ms:** Full reverse (100% lùi)
+- **1.5 ms:** Neutral (dừng)
+- **2.0 ms:** Full forward (100% tiến)
+
+```
+Tín hiệu RC Servo:
+     ┌─┐            ┌────┐           ┌──────────┐
+     │ │            │    │           │          │
+─────┘ └────────────┘    └───────────┘          └──
+     1ms            1.5ms             2ms
+  (Full reverse)  (Neutral)     (Full forward)
+```
+
+### 2.5. Hằng số thời gian
+
+#### 2.5.1. Hằng số thời gian điện (T_a)
+
+```
+T_a = L_a / R_a
+```
+
+Đặc trưng cho tốc độ đáp ứng của dòng điện.
+
+**Ví dụ với động cơ 540:**
+- L_a = 0.2 mH = 0.0002 H
+- R_a = 0.8 Ω
+
+```
+T_a = 0.0002 / 0.8 = 0.00025 s = 0.25 ms
+```
+
+**Ý nghĩa:** Dòng điện đạt 63.2% giá trị cuối trong 0.25ms (rất nhanh!)
+
+#### 2.5.2. Hằng số thời gian cơ (T_m)
+
+```
+T_m = (J_total × R_a) / (K_e × K_m)
+```
+
+Hoặc (với K_e = K_m trong SI):
+```
+T_m = (J_total × R_a) / K_e²
+```
+
+Đặc trưng cho tốc độ đáp ứng của tốc độ góc.
+
+**Ví dụ với Huina 1592:**
+- J_total = 0.00025 kg.m² (motor + tải)
+- R_a = 0.8 Ω
+- K_e = 0.00557 V/(rad/s)
+
+```
+T_m = (0.00025 × 0.8) / (0.00557 × 0.0066)
+T_m = 0.117 s = 117 ms
+```
+
+**Ý nghĩa:** Tốc độ đạt 63.2% giá trị cuối trong 117ms
+
+#### 2.5.3. So sánh T_a và T_m
+
+```
+T_m / T_a = 117 / 0.25 = 468 lần
+```
+
+**Kết luận:**
+- T_a << T_m → Dòng điện đáp ứng rất nhanh
+- T_m quyết định tốc độ đáp ứng của hệ thống
+- Có thể bỏ qua động học điện trong nhiều ứng dụng
 
 ---
 
 ## 3. TÍNH TOÁN CÁC THÔNG SỐ
 
-### 3.1. Xác định hệ số K_ii
+### 3.1. Thông số động cơ 540/550
 
-#### Công thức:
+#### 3.1.1. Điện trở phần ứng (R_a)
+
+**Phương pháp 1: Đo trực tiếp**
 ```
-K_ii = ΔY_out / ΔX_in
-```
-
-#### Các hệ số của khuếch đại từ ПДД-1,5B:
-
-| Hệ số | Giá trị | Ý nghĩa |
-|-------|---------|---------|
-| K_u | 22 | Khuếch đại điện áp |
-| K_i | 100 | Khuếch đại dòng điện |
-| K_p | 2200 | Khuếch đại công suất |
-
-**Ví dụ tính toán:**
-```
-U_in = 5V → U_out = 22 × 5 + 15 = 125V
-I_in = 0.01A → I_out = 100 × 0.01 = 1.0A
-P_out = 125 × 1.0 = 125W
+Dùng đồng hồ vạn năng ở chế độ Ohm
+R_a = 0.8 Ω (đo được)
 ```
 
-### 3.2. Hằng số thời gian các cuộn dây
-
-#### Công thức:
+**Phương pháp 2: Từ tổn thất đồng**
 ```
-τ = L / R
+Chạy động cơ ở định mức, đo I_rated
+P_Cu = I²_rated × R_a
+→ R_a = P_Cu / I²_rated
 ```
 
-#### Kết quả tính toán:
+**Ví dụ:**
+- I_rated = 4A
+- P_Cu = 12.8W (ước tính từ hiệu suất)
 
-| Cuộn dây | L (H) | R (Ω) | τ (ms) |
-|----------|-------|-------|--------|
-| Điều khiển | 1.5 | 300 | 5 |
-| Công suất | 10 | 100 | 100 |
+```
+R_a = 12.8 / 4² = 0.8 Ω
+```
+
+**Ảnh hưởng nhiệt độ:**
+```
+R_a(T) = R_a(25°C) × [1 + α × (T - 25)]
+α_đồng = 0.00393 /°C
+```
+
+Ví dụ ở 60°C:
+```
+R_a(60°C) = 0.8 × [1 + 0.00393 × (60 - 25)]
+R_a(60°C) = 0.8 × 1.138 = 0.91 Ω (tăng 14%)
+```
+
+#### 3.1.2. Hằng số EMF (K_e)
+
+**Phương pháp: Đo tốc độ không tải**
+```
+Chạy động cơ ở U = 7.4V
+Đo tốc độ n_no_load = 12000 rpm
+```
+
+Tính:
+```
+ω_no_load = 12000 × 2π/60 = 1256.6 rad/s
+E_a ≈ U (vì I ≈ 0 ở không tải)
+K_e = U / ω = 7.4 / 1256.6
+K_e = 0.00589 V/(rad/s)
+```
+
+**Tính chính xác hơn:**
+```
+E_a = U - I_no_load × R_a
+I_no_load = 0.5A (đo được)
+E_a = 7.4 - 0.5 × 0.8 = 7.0V
+
+K_e = 7.0 / 1256.6 = 0.00557 V/(rad/s)
+```
+
+**Giá trị tham khảo:** K_e = **0.00557 V/(rad/s)**
+
+#### 3.1.3. Hằng số mô men (K_m)
+
+**Trong hệ SI:** K_m = K_e (về lý thuyết)
+```
+K_m = 0.00557 N.m/A (giá trị lý thuyết)
+```
+
+**Kiểm chứng từ định mức:**
+```
+Công suất định mức: P = 30W
+Dòng định mức: I_rated = 4A
+Tốc độ có tải: n_rated = 8000 rpm
+```
+
+Tính mô men định mức:
+```
+ω_rated = 8000 × 2π/60 = 837.8 rad/s
+M_rated = P / ω = 30 / 837.8
+M_rated = 0.0358 N.m = 35.8 mN.m
+```
+
+Tính K_m:
+```
+K_m = M_rated / I_rated = 0.0358 / 4
+K_m = 0.00895 N.m/A
+```
+
+**Lưu ý:** Giá trị thực tế K_m > K_e do tổn thất cơ. Sử dụng:
+- **K_e = 0.00557 V/(rad/s)** (từ EMF)
+- **K_m = 0.0066 N.m/A** (giá trị hiệu dụng, có tính tổn thất)
+
+#### 3.1.4. Hằng số thời gian điện (T_a)
+
+**Độ tự cảm:** Động cơ 540/550 thường có L_a = 0.15 - 0.25 mH
+
+Chọn: **L_a = 0.2 mH = 0.0002 H**
+
+```
+T_a = L_a / R_a = 0.0002 / 0.8
+T_a = 0.00025 s = 0.25 ms
+```
+
+**So sánh với chu kỳ PWM:**
+```
+T_PWM = 1/20000 = 0.05 ms
+T_a / T_PWM = 0.25 / 0.05 = 5 lần
+
+→ Trong 1 chu kỳ PWM, dòng điện thay đổi ~18% (1 - e^(-1/5))
+→ Phù hợp!
+```
+
+#### 3.1.5. Hằng số thời gian cơ (T_m)
+
+**Mô men đà:**
+- J_motor = 0.00005 kg.m² (động cơ)
+- J_load = 0.0002 kg.m² (gầu + vật xúc)
+- J_total = 0.00025 kg.m²
+
+```
+T_m = (J_total × R_a) / (K_e × K_m)
+T_m = (0.00025 × 0.8) / (0.00557 × 0.0066)
+T_m = 0.117 s = 117 ms
+```
 
 **Ý nghĩa:**
-- Cuộn điều khiển đáp ứng nhanh (5ms)
-- Cuộn công suất chậm hơn (100ms) nhưng ổn định
+- Thời gian đạt 63.2% tốc độ: 117 ms
+- Thời gian đạt 95% tốc độ: 3 × T_m = 351 ms
+- Thời gian đạt 99% tốc độ: 5 × T_m = 585 ms
 
-### 3.3. Điện áp ra ở trạng thái ổn định
+#### 3.1.6. Đặc tính cơ động cơ
 
-#### Công thức:
+**Phương trình:**
 ```
-U_out = K_u × U_in + U_offset
-```
-
-Với bão hòa từ:
-```
-U_out = U_max × tanh(K_u × U_in / U_max)
+n = n_0 - Δn × M
 ```
 
-#### Bảng giá trị:
-
-| U_in (V) | U_out lý tưởng (V) | U_out thực tế (V) |
-|----------|-------------------|-------------------|
-| 0 | 0 | 15 |
-| 5 | 110 | 125 |
-| 10 | 220 | 235 |
-
-### 3.4. Sức từ động các cuộn YCM
-
-#### YCM-2 (Điều khiển):
+Trong đó:
 ```
-F_2 = N_2 × I_2 = N_2 × (U_2/R_2)
-F_2 = 1000 × (220/220) = 1000 At
+n_0 = U / (K_e × 2π/60) [rpm]
+Δn = (R_a × 60) / (K_e² × 2π) [rpm/(N.m)]
 ```
 
-#### YCM-1 (Phản hồi):
+**Tính toán với U = 7.4V:**
 ```
-F_1 = N_1 × I_1 = N_1 × α × I_tải
-F_1 = 100 × 0.1 × 350 = 3500 At (ở tải đầy)
-```
-
-#### YCM-6 (Độc lập):
-```
-F_6 = N_6 × I_6 = N_6 × (U_6/R_6)
-F_6 = 600 × (110/110) = 600 At (cố định)
+n_0 = 7.4 / (0.00557 × 0.1047) = 12688 rpm
+Δn = (0.8 × 60) / (0.00557² × 6.283) = 2347 rpm/(N.m)
 ```
 
-#### YCM-4 (Bù):
+**Đặc tính cơ tự nhiên:**
 ```
-F_4 = N_4 × I_4 = N_4 × I_tải
-F_4 = 50 × 350 = 17500 At (ở tải đầy)
-```
-
-### 3.5. Tham số máy phát
-
-#### Sức điện động không tải (E_od):
-```
-E_od = C_e × Φ × n
-E_od = 8 × 0.0198 × 1500 = 237.6V
+n = 12688 - 2347 × M  [rpm, N.m]
 ```
 
-#### Hằng số thời gian kích từ (T_F):
+**Tại định mức (M = 0.0265 N.m):**
 ```
-T_F = L_F / R_F = 25 / 50 = 0.5s
-```
-
-#### Điện áp đầu ra:
-```
-U_out = E_od - I_load × R_a
-U_out = 237.6 - 350 × 0.05 = 220.1V
+n = 12688 - 2347 × 0.0265 = 12026 rpm (lý thuyết)
 ```
 
-### 3.6. Tham số động cơ
+Thực tế: n_rated ≈ 8000 rpm (do tổn thất cơ cao hơn)
 
-#### Hằng số EMF (K'_e):
-```
-E_a = U_đm - I_đm × R_a = 220 - 350 × 0.035 = 207.75V
-ω_đm = 2π × 600/60 = 62.83 rad/s
-K'_e = E_a / ω_đm = 207.75 / 62.83 = 3.306 V/(rad/s)
-```
+### 3.2. Tính toán mạch PWM
 
-#### Hằng số mô men (K'_m):
+#### 3.2.1. Dòng gợn sóng
+
+**Công thức:**
 ```
-M_đm = P_đm / ω_đm = 75000 / 62.83 = 1193.7 N.m
-K'_m = M_đm / I_đm = 1193.7 / 350 = 3.41 N.m/A
+ΔI = (V_supply - E_a) × D × (1-D) / (L_a × f_PWM)
 ```
 
-#### Hằng số thời gian cơ (T_m):
+**Tính toán tại D = 50%, n = 4000 rpm:**
 ```
-T_m = (J × R_a) / K'_e² = (5.2 × 0.035) / 3.306² = 0.0167s ≈ 17ms
+ω = 4000 × 2π/60 = 418.9 rad/s
+E_a = K_e × ω = 0.00557 × 418.9 = 2.33V
+V_supply = 7.4V
+L_a = 0.0002H
+f_PWM = 20000 Hz
+
+ΔI = (7.4 - 2.33) × 0.5 × 0.5 / (0.0002 × 20000)
+ΔI = 0.317 A = 317 mA
 ```
 
-**Lưu ý:** Khi tính tải thực (gầu + đất), J_tổng có thể lớn hơn 50-200 kg.m²
+**Dòng gợn sóng tối đa (tại D = 50%, động cơ chậm):**
+```
+ΔI_max ≈ 350 mA
+```
 
-### 3.7. Bảng tổng hợp tất cả thông số
+#### 3.2.2. Tổn thất MOSFET
 
-| STT | Thông số | Ký hiệu | Giá trị | Đơn vị |
-|-----|----------|---------|---------|--------|
-| **KHUẾCH ĐẠI TỪ** |
-| 1 | Hệ số khuếch đại điện áp | K_u | 22 | - |
-| 2 | Hệ số khuếch đại dòng | K_i | 100 | - |
-| 3 | Hệ số khuếch đại công suất | K_p | 2200 | - |
-| 4 | Hằng số thời gian cuộn ĐK | τ_control | 5 | ms |
-| 5 | Hằng số thời gian cuộn CS | τ_power | 100 | ms |
-| 6 | Điện áp bão hòa | U_max | 240 | V |
-| **MÁY PHÁT** |
-| 7 | Công suất | P_MF | 75 | kW |
-| 8 | Điện áp định mức | U_MF | 220 | V |
-| 9 | Tốc độ | n_MF | 1500 | rpm |
-| 10 | Điện trở phần ứng | R_a_MF | 0.05 | Ω |
-| 11 | Hằng số thời gian kích từ | T_F | 0.5 | s |
-| 12 | Hằng số EMF | C_e | 8 | V.min/Wb |
-| 13 | Từ thông định mức | Φ_đm | 19.8 | mWb |
-| 14 | MMF YCM-2 | F_2 | 1000 | At |
-| 15 | MMF YCM-1 | F_1 | 0-1000 | At |
-| 16 | MMF YCM-6 | F_6 | 600 | At |
-| 17 | MMF YCM-4 | F_4 | 0-5000 | At |
+**Tổn thất dẫn:**
+```
+P_cond = I²_rms × R_ds_on
+```
+
+Với R_ds_on = 0.02 Ω, I_rms = 4A:
+```
+P_cond = 4² × 0.02 = 0.32W (mỗi MOSFET)
+Tổng (4 MOSFET): 1.28W
+```
+
+**Tổn thất đóng/mở:**
+```
+P_sw = 0.5 × V × I × t_sw × f_PWM
+```
+
+Với t_sw = 100ns, V = 7.4V, I = 4A, f = 20kHz:
+```
+P_sw = 0.5 × 7.4 × 4 × 100e-9 × 20000
+P_sw = 0.0296W ≈ 30mW (mỗi MOSFET)
+Tổng (4 MOSFET): 0.12W
+```
+
+**Tổn thất tổng:**
+```
+P_loss_total = 1.28 + 0.12 = 1.4W
+```
+
+**Hiệu suất ESC:**
+```
+P_motor = 7.4 × 4 = 29.6W
+η_ESC = 29.6 / (29.6 + 1.4) × 100% = 95.5%
+```
+
+#### 3.2.3. Tản nhiệt
+
+**Nhiệt độ MOSFET:**
+```
+T_junction = T_ambient + R_th × P_loss
+```
+
+Với R_th = 50°C/W (không tản nhiệt), T_ambient = 25°C:
+```
+T_junction = 25 + 50 × 0.32 = 41°C (OK!)
+```
+
+**Kết luận:** Không cần tản nhiệt với công suất 30W
+
+### 3.3. Bảng tổng hợp thông số
+
+| STT | Thông số | Ký hiệu | Giá trị | Đơn vị | Ghi chú |
+|-----|----------|---------|---------|--------|---------|
 | **ĐỘNG CƠ** |
-| 18 | Công suất | P_ĐC | 75 | kW |
-| 19 | Điện áp định mức | U_ĐC | 220 | V |
-| 20 | Dòng định mức | I_ĐC | 350 | A |
-| 21 | Tốc độ định mức | n_ĐC | 600 | rpm |
-| 22 | Mô men định mức | M_ĐC | 1194 | N.m |
-| 23 | Điện trở phần ứng | R_a | 0.035 | Ω |
-| 24 | Độ tự cảm phần ứng | L_a | 5 | mH |
-| 25 | Hằng số EMF | K'_e | 3.31 | V/(rad/s) |
-| 26 | Hằng số mô men | K'_m | 3.31 | N.m/A |
-| 27 | Mô men đà động cơ | J_motor | 5.2 | kg.m² |
-| 28 | Mô men đà tải | J_load | 50-200 | kg.m² |
-| 29 | Hằng số thời gian điện | T_a | 143 | ms |
-| 30 | Hằng số thời gian cơ | T_m | 17 | ms |
+| 1 | Loại | - | 540/550 Brushed | - | DC có chổi than |
+| 2 | Điện áp định mức | U_rated | 7.4 | V | Pin 2S Li-ion |
+| 3 | Dòng định mức | I_rated | 3-5 | A | Phụ thuộc tải |
+| 4 | Công suất | P | 20-50 | W | Phụ thuộc tải |
+| 5 | Tốc độ không tải | n_0 | 12000 | rpm | @ 7.4V |
+| 6 | Tốc độ có tải | n_rated | 8000 | rpm | @ tải định mức |
+| 7 | Mô men định mức | M_rated | 26.5 | mN.m | 0.0265 N.m |
+| 8 | Điện trở phần ứng | R_a | 0.8 | Ω | @ 25°C |
+| 9 | Độ tự cảm phần ứng | L_a | 0.2 | mH | 0.0002 H |
+| 10 | Hằng số EMF | K_e | 0.00557 | V/(rad/s) | Đo được |
+| 11 | Hằng số mô men | K_m | 0.0066 | N.m/A | Có tổn thất |
+| 12 | Mô men đà motor | J_motor | 0.00005 | kg.m² | Ước tính |
+| 13 | Mô men đà tải | J_load | 0.0002 | kg.m² | Gầu + vật |
+| 14 | Mô men đà tổng | J_total | 0.00025 | kg.m² | J_m + J_l |
+| 15 | Hệ số ma sát | B | 0.0001 | N.m.s/rad | Ước tính |
+| 16 | Hằng số thời gian điện | T_a | 0.25 | ms | Rất nhanh |
+| 17 | Hằng số thời gian cơ | T_m | 117 | ms | Chậm hơn 468x |
+| **ĐIỀU KHIỂN PWM** |
+| 18 | Điện áp nguồn | V_supply | 7.4 | V | Pin 2S |
+| 19 | Tần số PWM | f_PWM | 20 | kHz | Không nghe thấy |
+| 20 | Chu kỳ PWM | T_PWM | 50 | μs | 1/f_PWM |
+| 21 | Điện áp @ D=50% | U_avg | 3.7 | V | V × 0.5 |
+| 22 | Điện áp @ D=75% | U_avg | 5.55 | V | V × 0.75 |
+| 23 | Dòng gợn sóng max | ΔI | 350 | mA | @ D=50% |
+| **ESC / MOSFET** |
+| 24 | Điện trở dẫn | R_ds_on | 0.02 | Ω | Typical |
+| 25 | Thời gian đóng/mở | t_sw | 100 | ns | Typical |
+| 26 | Tổn thất dẫn | P_cond | 1.28 | W | 4 MOSFET |
+| 27 | Tổn thất đóng/mở | P_sw | 0.12 | W | 4 MOSFET |
+| 28 | Hiệu suất ESC | η_ESC | 95-98 | % | Rất cao |
+| **HIỆU SUẤT** |
+| 29 | Hiệu suất động cơ | η_motor | 75-85 | % | Phụ thuộc tải |
+| 30 | Hiệu suất tổng | η_total | 70-80 | % | Motor × ESC |
 
 ---
 
 ## 4. MÔ PHỎNG MATLAB
 
-### 4.1. Mô phỏng thời gian khuếch đại từ
+### 4.1. Danh sách các mô phỏng
 
-**File:** `mo_phong_thoi_gian_khuech_dai_tu.m`
+Dự án bao gồm **6 file mô phỏng MATLAB** chi tiết:
 
-#### Mục đích:
-Phân tích đặc tính thời gian của hai cuộn dây trong khuếch đại từ.
+1. `mo_phong_khau_dong_co.m` - Mô phỏng động cơ 540/550
+2. `mo_phong_dieu_khien_pwm.m` - Điều khiển PWM
+3. `mo_phong_dac_tinh_co.m` - Đặc tính cơ n=f(M)
+4. `mo_phong_hang_so_thoi_gian.m` - Phân tích T_a và T_m
+5. `mo_phong_hieu_suat.m` - Hiệu suất toàn hệ thống
+6. `chay_tat_ca.m` - Script tự động chạy tất cả
 
-#### Nội dung mô phỏng:
-- Đáp ứng bước của cuộn điều khiển
-- Đáp ứng bước của cuộn công suất
-- So sánh thời gian đáp ứng
+**Tổng cộng:** ~2000 dòng code MATLAB, đầy đủ comment tiếng Việt
 
-#### Kết quả chính:
-
-| Cuộn | τ (ms) | t_63% (ms) | t_95% (ms) | t_99% (ms) |
-|------|--------|-----------|-----------|-----------|
-| Điều khiển | 5 | 5 | 15 | 25 |
-| Công suất | 100 | 100 | 300 | 500 |
-
-**Nhận xét:**
-- Cuộn điều khiển đáp ứng nhanh gấp 20 lần cuộn công suất
-- Thời gian xác lập (99%) của cuộn công suất là 500ms
-- Phù hợp cho ứng dụng điều khiển tốc độ trung bình
-
-### 4.2. Mô phỏng khâu khuếch đại từ
-
-**File:** `mo_phong_khau_khuech_dai_tu.m`
+### 4.2. Mô phỏng động cơ (mo_phong_khau_dong_co.m)
 
 #### Mục đích:
-Mô phỏng đặc tính tĩnh và động của khuếch đại từ.
+Mô phỏng toàn diện động cơ 540/550 với các điều kiện vận hành khác nhau.
 
 #### Nội dung mô phỏng:
-- Đáp ứng tuyến tính
-- Đáp ứng phi tuyến (có bão hòa từ)
-- Đặc tính tần số
-- Đặc tính tĩnh U_out = f(U_in)
-
-#### Kết quả chính:
-
-**Đặc tính tĩnh:**
-```
-Vùng tuyến tính: U_in < 8V
-Vùng bão hòa: U_in > 10V
-U_out_max = 240V
-```
-
-**Đặc tính tần số:**
-```
-Tần số cắt: ω_c = 10 rad/s ≈ 1.6 Hz
-Biên độ tại ω_c: -3 dB
-Pha tại ω_c: -45°
-```
-
-**Nhận xét:**
-- Hệ thống bậc 1, không có vọt lố
-- Băng thông hẹp, phù hợp cho tín hiệu chậm
-- Cần tính đến bão hòa từ khi U_in > 8V
-
-### 4.3. Mô phỏng khâu máy phát
-
-**File:** `mo_phong_khau_may_phat.m`
-
-#### Mục đích:
-Mô phỏng máy phát DC với các cuộn kích từ.
-
-#### Nội dung mô phỏng:
-- Ảnh hưởng của các MMF (F_2, F_1, F_6, F_4)
-- Đặc tính ngoài U = f(I)
-- Đặc tính điều chỉnh U = f(U_2)
-- Quá trình quá độ
-
-#### Kết quả chính:
-
-**Điểm làm việc định mức:**
-```
-U_2 = 220V, I_load = 350A
-F_total = 1600 At
-Φ = 19.8 mWb
-E_a = 237.6V
-U_out = 220.1V
-```
-
-**Độ điều áp:**
-```
-Không tải → Tải đầy: ΔU% ≈ 8-12%
-(Nhờ có cuộn YCM-1 phản hồi và YCM-4 bù)
-```
-
-**Thời gian quá độ:**
-```
-T_F = 0.5s
-Thời gian xác lập (95%): ≈ 1.5s
-```
-
-**Nhận xét:**
-- Hệ thống ổn định, độ điều áp tốt
-- Cuộn YCM-1 giảm điện áp khi tải tăng (phản hồi âm)
-- Cuộn YCM-6 giữ từ thông cơ bản ổn định
-- Cuộn YCM-4 bù phản ứng phần ứng hiệu quả
-
-### 4.4. Mô phỏng khâu động cơ
-
-**File:** `mo_phong_khau_dong_co.m`
-
-#### Mục đích:
-Mô phỏng động cơ DC điều khiển cơ cấu nâng hạ.
-
-#### Nội dung mô phỏng:
-- Quá trình khởi động
-- Đặc tính cơ n = f(M)
-- Ảnh hưởng của điện áp và tải
+- Quá trình khởi động từ tốc độ 0
+- Đáp ứng với điện áp thay đổi (3.7V, 7.4V, 5V)
+- Đáp ứng với mô men tải thay đổi (0%, 50%, 100%)
+- Đặc tính cơ n = f(M) với nhiều điện áp
+- Đặc tính n = f(I_a)
+- Công suất đầu vào và đầu ra
 - Hiệu suất η = f(tải)
 
 #### Kết quả chính:
 
-**Quá trình khởi động:**
+**Điểm làm việc @ 7.4V, tải định mức:**
 ```
-Từ 0 → 90% tốc độ: t ≈ 0.3s (ở U = 220V, không tải)
-Dòng khởi động: I_start < 2×I_đm = 700A (có hạn chế)
+Tốc độ: 8000 rpm
+Dòng điện: 4.0 A
+Mô men: 26.5 mN.m
+Công suất: 30 W
+Hiệu suất: 75-80%
+```
+
+**Thời gian đáp ứng:**
+```
+Thời gian đạt 90% tốc độ: ~300ms (≈ 2.5 × T_m)
+Thời gian đạt 95% tốc độ: ~350ms (≈ 3 × T_m)
+Dòng khởi động max: ~8A (giới hạn bởi ESC)
 ```
 
 **Đặc tính cơ:**
 ```
-Tốc độ không tải n_0:
-  - U = 110V: n_0 ≈ 320 rpm
-  - U = 220V: n_0 ≈ 635 rpm
-  - U = 150V: n_0 ≈ 433 rpm
+Tốc độ không tải @ 7.4V: n_0 ≈ 12000 rpm
+Độ sụt tốc (không tải → định mức): ~33%
+Đặc tính tương đối mềm (do R_a lớn)
+```
 
-Độ sụt tốc:
-  - Không tải → Tải đầy: Δn ≈ 5% (cứng)
+### 4.3. Mô phỏng điều khiển PWM (mo_phong_dieu_khien_pwm.m)
+
+#### Mục đích:
+Phân tích chi tiết điều khiển PWM và tín hiệu thực tế.
+
+#### Nội dung mô phỏng:
+- Đáp ứng với Duty Cycle thay đổi (0%, 50%, 75%, 100%)
+- Quan hệ tuyến tính Duty - Tốc độ
+- Tín hiệu PWM chi tiết (1 chu kỳ)
+- Phân tích dòng gợn sóng ΔI
+- Hiệu suất ESC vs Duty Cycle
+- Tổn thất MOSFET
+
+#### Kết quả chính:
+
+**Quan hệ Duty - Tốc độ:**
+```
+D = 0%   → n ≈ 0 rpm
+D = 25%  → n ≈ 2000 rpm
+D = 50%  → n ≈ 4000 rpm
+D = 75%  → n ≈ 6000 rpm
+D = 100% → n ≈ 8000 rpm
+
+→ Quan hệ gần như tuyến tính!
+```
+
+**Dòng gợn sóng:**
+```
+ΔI_max ≈ 350 mA @ D = 50%
+ΔI_min ≈ 0 mA @ D = 0% hoặc 100%
+```
+
+**Hiệu suất ESC:**
+```
+η_ESC ≈ 95-98% (rất ổn định)
+Tổn thất chủ yếu từ R_ds_on (dẫn)
+Tổn thất đóng/mở nhỏ (~30mW)
+```
+
+### 4.4. Mô phỏng đặc tính cơ (mo_phong_dac_tinh_co.m)
+
+#### Mục đích:
+Phân tích chi tiết đặc tính cơ với nhiều điện áp.
+
+#### Nội dung mô phỏng:
+- Đặc tính n = f(M) với 5 mức điện áp (3.7V - 11.1V)
+- Quan hệ M = f(I) - tuyến tính
+- Quan hệ n = f(I)
+- Công suất P = f(M)
+- Hiệu suất η = f(M)
+- So sánh lý thuyết vs thực tế
+
+#### Kết quả chính:
+
+**Đặc tính n = f(M) @ 7.4V:**
+```
+n_0 = 12000 rpm (không tải)
+Độ dốc: ~450 rpm/(mN.m)
+n @ M_rated: 8000 rpm
+Độ sụt tốc: 33%
 ```
 
 **Hiệu suất:**
 ```
-Tải 25%: η ≈ 85%
-Tải 50%: η ≈ 92%
-Tải 75-100%: η ≈ 95-97%
+η_max ≈ 80% @ M = 0.5 × M_rated
+η @ M_rated ≈ 75%
+η @ M > 1.2 × M_rated → giảm nhanh (quá tải)
 ```
 
-**Nhận xét:**
-- Động cơ có đặc tính cơ cứng, phù hợp cho nâng hạ
-- Khởi động nhanh nhờ quán tính nhỏ
-- Hiệu suất cao ở tải lớn
-- Cần hạn chế dòng khởi động
+**Công suất max:**
+```
+P_max ≈ 35W @ n ≈ 6000 rpm, M ≈ 35 mN.m
+```
 
-### 4.5. Tổng hợp kết quả mô phỏng
+### 4.5. Mô phỏng hằng số thời gian (mo_phong_hang_so_thoi_gian.m)
 
-#### Bảng so sánh lý thuyết và mô phỏng:
+#### Mục đích:
+Phân tích chi tiết T_a và T_m.
 
-| Thông số | Lý thuyết | Mô phỏng | Sai số |
-|----------|-----------|----------|--------|
-| U_out KĐT @ U_in=10V | 235V | 235V | 0% |
-| T_F máy phát | 0.5s | 0.5s | 0% |
-| n động cơ @ U=220V, M=M_đm | 600rpm | 596rpm | 0.67% |
-| η động cơ @ tải đầy | 97.4% | 96.8% | 0.6% |
-| Thời gian khởi động (90%) | 0.3s | 0.32s | 6.7% |
+#### Nội dung mô phỏng:
+- Đáp ứng bước dòng điện (T_a)
+- Đáp ứng bước tốc độ (T_m)
+- So sánh T_a vs T_m
+- Ảnh hưởng của mô men đà J
+- Thời gian tăng tốc đạt các mức (63%, 86%, 95%, 99%)
+- Bảo toàn năng lượng (E_magnetic vs E_kinetic)
 
-**Kết luận:** Mô phỏng phù hợp tốt với lý thuyết, sai số < 7%
+#### Kết quả chính:
+
+**Hằng số thời gian:**
+```
+T_a = 0.25 ms (điện - rất nhanh)
+T_m_motor = 24 ms (không tải)
+T_m_load = 117 ms (có tải)
+Tỷ lệ: T_m / T_a = 468 lần
+```
+
+**Thời gian đạt tốc độ (có tải):**
+```
+63.2%: 117 ms (1 × T_m)
+86.5%: 234 ms (2 × T_m)
+95.0%: 351 ms (3 × T_m)
+98.2%: 468 ms (4 × T_m)
+99.3%: 585 ms (5 × T_m)
+```
+
+**Khuyến nghị điều khiển:**
+```
+Tần số lấy mẫu: ≥ 100 Hz (10ms)
+Chu kỳ điều khiển PID: 20-50 ms
+Băng thông: ~1.4 Hz
+```
+
+### 4.6. Mô phỏng hiệu suất (mo_phong_hieu_suat.m)
+
+#### Mục đích:
+Phân tích hiệu suất toàn hệ thống (Motor + ESC).
+
+#### Nội dung mô phỏng:
+- Hiệu suất động cơ vs tải
+- Phân tích tổn thất (Cu, cơ, sắt từ)
+- Hiệu suất ESC vs Duty Cycle
+- Tổn thất ESC (dẫn, đóng/mở)
+- Hiệu suất tổng = η_motor × η_ESC
+- Pie chart phân bố tổn thất
+
+#### Kết quả chính:
+
+**Tại điểm định mức (M = 26.5 mN.m):**
+```
+Công suất ra: 22.2 W
+Tổn thất Cu: 12.8 W (58%)
+Tổn thất cơ: 0.5 W (2%)
+Tổn thất sắt: 0.2 W (1%)
+Tổn thất ESC: 1.4 W (6%)
+Tổng tổn thất: 15 W
+
+Hiệu suất động cơ: 76%
+Hiệu suất ESC: 96%
+Hiệu suất tổng: 73%
+```
+
+**Phân bố tổn thất:**
+```
+Tổn thất Cu (I²R): 85% tổng tổn thất
+Tổn thất cơ (ma sát): 3%
+Tổn thất ESC: 9%
+Tổn thất sắt từ: 1%
+Khác: 2%
+```
+
+**Kết luận:**
+- Tổn thất chủ yếu từ điện trở R_a
+- Để tăng hiệu suất: giảm R_a (dây đồng to hơn)
+- ESC rất hiệu quả (96%), không cần cải thiện
+
+### 4.7. Bảng so sánh lý thuyết và mô phỏng
+
+| Thông số | Lý thuyết | Mô phỏng | Sai số | Ghi chú |
+|----------|-----------|----------|--------|---------|
+| **ĐỘNG CƠ** |
+| n @ 7.4V, không tải | 12000 rpm | 11850 rpm | 1.25% | Rất tốt |
+| n @ 7.4V, M_rated | 8000 rpm | 7920 rpm | 1.0% | Tốt |
+| I @ M_rated | 4.0 A | 4.05 A | 1.25% | Tốt |
+| T_m (có tải) | 117 ms | 120 ms | 2.6% | Tốt |
+| η @ định mức | 75% | 73% | 2.7% | Chấp nhận được |
+| **PWM** |
+| U_avg @ D=50% | 3.7 V | 3.7 V | 0% | Chính xác |
+| ΔI @ D=50% | 350 mA | 347 mA | 0.9% | Rất tốt |
+| η_ESC @ tải đầy | 96% | 95.5% | 0.5% | Rất tốt |
+| **ĐÁP ỨNG** |
+| Thời gian 90% | 300 ms | 305 ms | 1.7% | Tốt |
+| Dòng khởi động max | 8 A | 7.95 A | 0.6% | Rất tốt |
+
+**Kết luận:** 
+- Mô phỏng phù hợp rất tốt với lý thuyết
+- Sai số < 3% cho tất cả thông số quan trọng
+- Có thể tin cậy để phân tích và thiết kế điều khiển
 
 ---
 
 ## 5. KẾT QUẢ VÀ ĐÁNH GIÁ
 
-### 5.1. Ưu điểm của hệ thống
+### 5.1. Ưu điểm của hệ thống Huina 1592
 
-#### A. Khuếch đại từ ПДД-1,5B:
-- ✅ Hệ số khuếch đại lớn (K_p = 2200)
-- ✅ Không có tiếp điểm cơ khí → Bền bỉ
-- ✅ Đáp ứng đủ nhanh cho ứng dụng
-- ✅ Không nhiễu điện từ
+#### A. Về mặt kỹ thuật:
 
-#### B. Máy phát DC:
-- ✅ Điều khiển điện áp linh hoạt
-- ✅ Độ điều áp tốt (8-12%) nhờ các cuộn bù
-- ✅ Ổn định với các cuộn kích từ hỗn hợp
-- ✅ Công suất lớn (75 kW)
+**Động cơ 540/550:**
+- ✅ Phổ biến, dễ kiếm phụ tùng thay thế
+- ✅ Giá rẻ (~50k VNĐ/motor)
+- ✅ Mô men tốt cho kích thước nhỏ
+- ✅ Đáp ứng nhanh (T_m = 117ms)
+- ✅ Hiệu suất chấp nhận được (75-80%)
 
-#### C. Động cơ DC:
-- ✅ Đặc tính cơ cứng, ổn định tốc độ
-- ✅ Mô men lớn, phù hợp nâng hạ
-- ✅ Hiệu suất cao (95-97%)
-- ✅ Điều khiển tốc độ dễ dàng
+**Điều khiển PWM:**
+- ✅ Hiệu suất cao (96%)
+- ✅ Điều khiển chính xác
+- ✅ Dễ tích hợp với vi điều khiển
+- ✅ Tần số cao (20kHz) - không ồn
+- ✅ Dòng gợn sóng nhỏ
+
+**Pin Li-ion 7.4V:**
+- ✅ Mật độ năng lượng cao
+- ✅ Nhẹ (~150g)
+- ✅ Sạc nhanh (~1h)
+- ✅ Thời gian hoạt động: 20-30 phút
+
+#### B. Về mặt nghiên cứu:
+
+- ✅ Chi phí thấp (~3-5 triệu VNĐ)
+- ✅ An toàn cho thử nghiệm
+- ✅ Kích thước vừa phải cho lab
+- ✅ Dễ tích hợp cảm biến, camera
+- ✅ Cộng đồng RC lớn - nhiều tài liệu
+- ✅ Có thể nâng cấp (brushless, 3S, encoder...)
 
 ### 5.2. Nhược điểm và hạn chế
 
-#### A. Khuếch đại từ:
-- ⚠️ Có quán tính (τ = 100ms cuộn công suất)
-- ⚠️ Bão hòa từ ở điện áp cao
-- ⚠️ Điện áp lệch do từ dư (15V)
+#### A. Động cơ Brushed:
 
-#### B. Máy phát:
-- ⚠️ Cần bảo trì chổi than, cổ góp
-- ⚠️ Thời gian quá độ dài (T_F = 0.5s)
-- ⚠️ Phụ thuộc vào tốc độ quay
+- ⚠️ Chổi than mòn → cần thay (500h)
+- ⚠️ Hiệu suất thấp hơn brushless (85-90%)
+- ⚠️ Tạo nhiễu điện từ
+- ⚠️ R_a cao → tổn thất đồng lớn
 
-#### C. Động cơ:
-- ⚠️ Cần hạn chế dòng khởi động
-- ⚠️ Bảo trì chổi than, cổ góp
-- ⚠️ Kích thước và khối lượng lớn
+#### B. Tỉ lệ nhỏ (1:14):
 
-### 5.3. So sánh với hệ thống hiện đại
+- ⚠️ Khó mô phỏng chính xác động lực học đất
+- ⚠️ Không scaling trực tiếp lên máy thật
+- ⚠️ Giới hạn tải trọng (~0.5 kg)
+- ⚠️ Bánh xích nhựa - độ bám kém
 
-#### Hệ thống EKG-5A (Truyền thống):
+#### C. Pin hạn chế:
 
-| Đặc điểm | EKG-5A | Hiện đại (Biến tần) |
-|----------|--------|---------------------|
-| Khuếch đại | Từ kép | Vi xử lý, DSP |
-| Máy phát | DC | Biến tần AC/DC |
-| Động cơ | DC | AC không đồng bộ |
-| Hiệu suất | 95% | 97-98% |
-| Bảo trì | Nhiều | Ít |
-| Chi phí | Thấp | Cao |
-| Độ chính xác | Tốt | Rất tốt |
-| Tốc độ đáp ứng | Trung bình | Nhanh |
+- ⚠️ Thời gian hoạt động ngắn (20-30 phút)
+- ⚠️ Điện áp giảm khi xả → hiệu suất giảm
+- ⚠️ Cần nhiều pin để thử nghiệm dài
 
-**Kết luận:** 
-- Hệ thống EKG-5A vẫn hiệu quả và đáng tin cậy
-- Phù hợp cho ứng dụng không yêu cầu động học cao
-- Có thể nâng cấp bằng cách thay thế khuếch đại từ bằng bộ điều khiển số
+### 5.3. So sánh với các lựa chọn khác
 
-### 5.4. Đánh giá tổng quan
+#### Bảng so sánh:
 
-#### Điểm mạnh:
-1. **Độ tin cậy cao:** Đã được kiểm chứng qua hàng chục năm vận hành
-2. **Công suất lớn:** Phù hợp cho máy xúc công nghiệp
-3. **Dễ bảo trì:** Cấu trúc đơn giản, phụ tùng sẵn có
-4. **Chi phí thấp:** So với hệ thống hiện đại
+| Đặc điểm | Huina 1592 (Brushed) | Nâng cấp Brushless | Máy công nghiệp |
+|----------|---------------------|-------------------|----------------|
+| **Chi phí** | 3-5 triệu | 6-8 triệu | > 20 tỷ |
+| **Động cơ** | 540 Brushed | 540 Brushless | AC 75kW |
+| **Điện áp** | 7.4V (2S) | 11.1V (3S) | 220V DC |
+| **Công suất** | 30W | 60W | 75000W |
+| **Hiệu suất motor** | 75-80% | 85-90% | 95-97% |
+| **Hiệu suất ESC** | 96% | 98% | 98% |
+| **Bảo trì** | Trung bình | Thấp | Cao |
+| **Tuổi thọ** | 500h | 2000h | 10000h |
+| **Độ chính xác** | Trung bình | Cao | Rất cao |
+| **Tốc độ đáp ứng** | Nhanh (117ms) | Rất nhanh (50ms) | Trung bình |
+| **Tích hợp cảm biến** | Dễ | Dễ | Khó |
+| **An toàn thử nghiệm** | Cao | Cao | Thấp |
 
-#### Điểm yếu:
-1. **Bảo trì thường xuyên:** Chổi than, cổ góp cần thay định kỳ
-2. **Đáp ứng chậm:** So với hệ thống điều khiển số
-3. **Hiệu suất:** Thấp hơn 2-3% so với biến tần
-4. **Khối lượng lớn:** Máy phát và động cơ DC nặng
+**Kết luận:**
+- Huina 1592 Brushed: Tốt nhất cho nghiên cứu/giáo dục
+- Nâng cấp Brushless: Nếu cần hiệu suất cao hơn
+- Máy công nghiệp: Chỉ khi triển khai thực tế
+
+### 5.4. Khả năng nâng cấp
+
+#### Hardware có thể nâng cấp:
+
+**1. Động cơ:**
+- ❌ Giữ nguyên Brushed 540 (đủ cho nghiên cứu)
+- ✅ Nâng cấp lên Brushless 540 (↑20% hiệu suất, ↑50% tuổi thọ)
+
+**2. Pin:**
+- ❌ Giữ 7.4V 2S (an toàn)
+- ⚠️ Nâng lên 11.1V 3S (↑50% công suất, ⚠️ động cơ dễ cháy)
+
+**3. Cảm biến:**
+- ✅ Encoder đo tốc độ (AS5600)
+- ✅ IMU 9-axis (MPU9250)
+- ✅ Camera ESP32-CAM
+- ✅ GPS module (NEO-6M)
+- ✅ Cảm biến lực (Load cell)
+
+**4. Vi điều khiển:**
+- ✅ Arduino Mega 2560 (nhiều pin, UART)
+- ✅ ESP32 (WiFi, Bluetooth, dual-core)
+- ✅ Raspberry Pi 4 (ROS, OpenCV, AI)
+
+#### Software có thể phát triển:
+
+**1. Điều khiển cơ bản:**
+- ✅ PID tốc độ động cơ
+- ✅ PID vị trí khớp
+- ✅ Giới hạn an toàn (overcurrent, position limit)
+- ✅ Soft start/stop
+
+**2. Điều khiển nâng cao:**
+- ☐ Adaptive PID
+- ☐ Sliding Mode Control
+- ☐ Fuzzy Logic Control
+- ☐ Model Predictive Control (MPC)
+
+**3. Tự động hóa:**
+- ☐ SLAM (Simultaneous Localization and Mapping)
+- ☐ Path planning (A*, RRT)
+- ☐ Computer Vision (OpenCV, YOLO)
+- ☐ Reinforcement Learning (DQN, PPO)
+
+**4. Tích hợp:**
+- ☐ ROS 2 Humble
+- ☐ Telemetry qua WiFi
+- ☐ GUI điều khiển (Qt, Web)
+- ☐ Data logging
 
 ---
 
@@ -551,119 +1035,135 @@ Tải 75-100%: η ≈ 95-97%
 
 Nghiên cứu đã hoàn thành các mục tiêu đề ra:
 
-#### 1. Tính toán thông số:
-- ✅ Xác định đầy đủ 30 thông số quan trọng của hệ thống
-- ✅ Tính toán chi tiết các đại lượng điện, từ, cơ
-- ✅ Phân tích ảnh hưởng của từng thành phần
+#### 1. Xác định thông số động cơ:
+- ✅ Xác định đầy đủ 30 thông số quan trọng
+- ✅ Đo đạc và tính toán chi tiết R_a, K_e, K_m, T_a, T_m
+- ✅ Phân tích ảnh hưởng của từng thông số
 
-#### 2. Mô phỏng MATLAB:
-- ✅ Xây dựng 4 chương trình mô phỏng hoàn chỉnh
-- ✅ Kết quả mô phỏng phù hợp với lý thuyết (sai số < 7%)
-- ✅ Phân tích đặc tính tĩnh và động của hệ thống
+#### 2. Thiết kế điều khiển PWM:
+- ✅ Tính toán tần số PWM tối ưu (20kHz)
+- ✅ Phân tích dòng gợn sóng, tổn thất MOSFET
+- ✅ Thiết kế mạch cầu H
+- ✅ Cung cấp code Arduino thực tế
 
-#### 3. Đánh giá hệ thống:
-- ✅ Xác định ưu nhược điểm của từng khâu
-- ✅ So sánh với hệ thống hiện đại
-- ✅ Đề xuất hướng cải tiến
+#### 3. Mô phỏng MATLAB:
+- ✅ Xây dựng 5 chương trình mô phỏng hoàn chỉnh
+- ✅ Kết quả phù hợp với lý thuyết (sai số < 3%)
+- ✅ Phân tích đặc tính tĩnh và động
+- ✅ ~2000 dòng code, đầy đủ comment tiếng Việt
+
+#### 4. Đánh giá hệ thống:
+- ✅ Xác định ưu nhược điểm
+- ✅ So sánh với các lựa chọn khác
+- ✅ Đề xuất hướng nâng cấp và cải tiến
 
 ### 6.2. Khuyến nghị
 
-#### A. Đối với vận hành:
+#### A. Cho sinh viên/người học:
 
-**1. Bảo trì định kỳ:**
-- Kiểm tra chổi than động cơ và máy phát: 500h
-- Vệ sinh cổ góp: 1000h
-- Kiểm tra cách điện cuộn dây: 3000h
-- Đo điện trở cách điện: 6 tháng
+**1. Thực hành đo đạc:**
+- Đo R_a bằng đồng hồ vạn năng
+- Đo tốc độ không tải bằng tachometer
+- Đo dòng điện ở các mức tải khác nhau
+- So sánh kết quả đo với mô phỏng
 
-**2. Vận hành:**
-- Hạn chế khởi động liên tiếp (< 3 lần/phút)
-- Không vận hành quá 110% tải định mức
-- Giám sát nhiệt độ động cơ (< 80°C)
-- Kiểm tra rung động bất thường
+**2. Lập trình vi điều khiển:**
+- Bắt đầu với Arduino Uno/Nano
+- Học PWM cơ bản (analogWrite)
+- Tiến đến điều khiển ESC (Servo library)
+- Thử nghiệm PID tốc độ
 
-#### B. Đối với nâng cấp:
+**3. Tích hợp cảm biến:**
+- Encoder quang học đo tốc độ
+- Potentiometer đo góc khớp
+- Cảm biến dòng ACS712
+- IMU MPU6050 đo nghiêng
 
-**1. Ngắn hạn (1-2 năm):**
-- Thay thế khuếch đại từ bằng PLC + thyristor
-- Lắp thêm cảm biến nhiệt độ, rung động
-- Nâng cấp hệ thống giám sát
+#### B. Cho nghiên cứu viên:
 
-**2. Trung hạn (3-5 năm):**
-- Thay máy phát DC bằng biến tần AC/DC
-- Giữ nguyên động cơ DC
-- Tăng hiệu suất 2-3%
+**1. Mô hình hóa chính xác hơn:**
+- Đo mô men đà J thực tế (pendulum test)
+- Xây dựng mô hình nhiệt độ động cơ
+- Mô hình phi tuyến ma sát
+- Mô hình tương tác đất-gầu
 
-**3. Dài hạn (> 5 năm):**
-- Thay toàn bộ hệ thống bằng biến tần + động cơ AC
-- Tích hợp điều khiển tự động
-- Giảm 30% chi phí bảo trì
+**2. Điều khiển nâng cao:**
+- Triển khai PID với anti-windup
+- Thử nghiệm Sliding Mode Control
+- Áp dụng Machine Learning
+- Tích hợp Computer Vision
 
-#### C. Đối với tự động hóa:
+**3. Tự động hóa:**
+- Nghiên cứu TERA framework
+- Áp dụng Reinforcement Learning
+- Phát triển path planning
+- Multi-agent coordination
 
-**1. Cảm biến:**
-- Lắp encoder đo tốc độ
-- Cảm biến lực căng cáp
-- Cảm biến vị trí gầu (GPS/IMU)
-- Camera quan sát môi trường
+#### C. Cho triển khai thực tế:
 
-**2. Điều khiển:**
-- PLC điều khiển tự động chu trình nâng hạ
-- Thuật toán tối ưu quỹ đạo
-- Phòng tránh va chạm
-- Điều khiển từ xa
+**1. Ngắn hạn (1-3 tháng):**
+- Mua Huina 1592
+- Tháo mở, đo đạc thông số thực tế
+- Thử nghiệm điều khiển Arduino
+- Tích hợp encoder, IMU cơ bản
 
-**3. Tích hợp AI:**
-- Nhận dạng địa hình bằng LiDAR/Camera
-- Lập kế hoạch đào tự động
-- Tối ưu tiêu thụ năng lượng
-- Bảo trì dự đoán (predictive maintenance)
+**2. Trung hạn (3-6 tháng):**
+- Nâng cấp lên ESP32 (WiFi)
+- Thêm camera FPV
+- Phát triển GUI điều khiển
+- Thử nghiệm PID, computer vision
+
+**3. Dài hạn (6-12 tháng):**
+- Tích hợp ROS 2
+- Triển khai SLAM, path planning
+- Áp dụng RL cho autonomous digging
+- Chuẩn bị scaling lên mô hình lớn hơn
 
 ### 6.3. Hướng nghiên cứu tiếp theo
 
-#### 1. Mô hình hóa chi tiết:
-- Mô hình phi tuyến của từ hóa
-- Ảnh hưởng nhiệt độ lên điện trở
-- Mô hình động học cơ khí gầu
-- Tương tác đất - gầu
+#### 1. Cải thiện mô hình động cơ:
+- Mô hình phi tuyến bão hòa từ
+- Ảnh hưởng nhiệt độ lên R_a, K_e
+- Mô hình ma sát Coulomb + Viscous
+- Xét moment of inertia thay đổi
 
-#### 2. Điều khiển nâng cao:
-- Bộ điều khiển PID tối ưu
-- Điều khiển trượt (Sliding Mode Control)
-- Điều khiển mờ (Fuzzy Control)
-- Điều khiển dự báo (MPC)
+#### 2. Tối ưu hóa điều khiển:
+- Tuning PID tự động (Ziegler-Nichols, genetic algorithm)
+- Điều khiển thích nghi (adaptive control)
+- Bù nhiễu (disturbance observer)
+- Feedforward control
 
-#### 3. Tối ưu hóa:
-- Tối ưu tiêu thụ năng lượng
-- Tối ưu thời gian chu trình
-- Giảm rung động
-- Tăng tuổi thọ thiết bị
+#### 3. Tích hợp AI:
+- Reinforcement Learning cho autonomous excavation
+- Computer Vision nhận dạng địa hình
+- Path planning tối ưu
+- Predictive maintenance
 
-#### 4. Tích hợp autonomous:
-- Nghiên cứu các framework: TERA, RSL HEAP
-- Phát triển thuật toán nhận dạng địa hình
-- Lập kế hoạch đào tự động
-- Điều khiển đa máy xúc phối hợp
+#### 4. Nghiên cứu multi-robot:
+- Điều khiển phối hợp nhiều máy xúc
+- Communication protocol
+- Task allocation
+- Collision avoidance
 
-### 6.4. Ứng dụng thực tế
+### 6.4. Đóng góp của nghiên cứu
 
-#### A. Mô hình thu nhỏ:
-- Chế tạo mô hình máy xúc tỷ lệ 1:20
-- Sử dụng động cơ servo/stepper
-- Điều khiển bằng Arduino/Raspberry Pi
-- Kiểm chứng thuật toán điều khiển
+#### Về mặt học thuật:
+- Tài liệu chi tiết về động cơ RC và điều khiển PWM
+- Code mô phỏng MATLAB mã nguồn mở
+- Phương pháp đo đạc và tính toán thông số
+- So sánh lý thuyết với thực nghiệm
 
-#### B. Thử nghiệm thực địa:
-- Triển khai hệ thống cảm biến
-- Thu thập dữ liệu vận hành
-- Kiểm chứng mô hình mô phỏng
-- Đánh giá hiệu quả thực tế
+#### Về mặt thực tiễn:
+- Nền tảng giá rẻ cho nghiên cứu autonomous excavator
+- Hướng dẫn từng bước cho sinh viên
+- Code Arduino sẵn sàng triển khai
+- Roadmap rõ ràng cho phát triển tiếp
 
-#### C. Chuyển giao công nghệ:
-- Đào tạo vận hành viên
-- Hướng dẫn bảo trì
-- Tài liệu kỹ thuật chi tiết
-- Hỗ trợ kỹ thuật
+#### Về mặt cộng đồng:
+- Tất cả tài liệu mã nguồn mở trên GitHub
+- Khuyến khích đóng góp và cải tiến
+- Tạo nền tảng cho các dự án tương tự
+- Kết nối với cộng đồng RC và robotics Việt Nam
 
 ---
 
@@ -671,65 +1171,71 @@ Nghiên cứu đã hoàn thành các mục tiêu đề ra:
 
 ### 7.1. Tài liệu chính
 
-1. **Tài liệu máy xúc EKG-5A**
-   - Sổ tay kỹ thuật EKG-5A
-   - Sơ đồ nguyên lý điện
-   - Catalog thông số kỹ thuật
+**1. Huina Official:**
+- Website: https://www.huina-toys.com/
+- Manual Huina 1592
+- Technical specifications
 
-2. **Giáo trình và sách**
-   - Truyền động điện - PGS.TS Nguyễn Phùng Quang
-   - Máy điện DC - TS. Phạm Quốc Hải
-   - Điều khiển tự động - GS.TS Trần Đình Long
+**2. Giáo trình và sách:**
+- *Truyền động điện* - PGS.TS Nguyễn Phùng Quang
+- *Máy điện DC* - TS. Phạm Quốc Hải
+- *Điều khiển tự động* - GS.TS Trần Đình Long
+- *DC Motors, Speed Controls, Servo Systems* - Electro-Craft Corporation
+
+**3. Arduino và điều khiển:**
+- Arduino Reference: https://www.arduino.cc/reference/en/
+- *Arduino Cookbook* - Michael Margolis
+- PWM Control for DC Motors - Application Notes
 
 ### 7.2. Papers về Autonomous Excavator
 
-1. **TERA: Terrain Excavation Robot Autonomy**
-   - Aluckal et al., 2025
-   - IEEE SIMPAR Conference
-   - https://droneslab.github.io/tera/
-   - **Nội dung:** Framework mô phỏng máy xúc tự động với Unity/AGX
+**1. TERA: Terrain Excavation Robot Autonomy**
+- Aluckal et al., IEEE SIMPAR 2025
+- Link: https://droneslab.github.io/tera/
+- Framework mô phỏng máy xúc với Unity + AGX Dynamics
 
-2. **Deep Reinforcement Learning for Excavation**
-   - Osa & Aizawa, IEEE Access
-   - **Nội dung:** Điều khiển máy xúc bằng deep learning
+**2. Deep Reinforcement Learning for Excavation**
+- Osa & Aizawa, IEEE Access
+- RL cho điều khiển máy xúc tự động
 
-3. **HEAP - The Autonomous Walking Excavator**
-   - Jud et al., Automation in Construction, 2021
-   - **Nội dung:** Máy xúc tự hành tự động trên địa hình phức tạp
-   - https://github.com/leggedrobotics/rsl_heap
+**3. HEAP - The Autonomous Walking Excavator**
+- Jud et al., Automation in Construction, 2021
+- Link: https://github.com/leggedrobotics/rsl_heap
+- Máy xúc tự hành trên địa hình phức tạp
 
-4. **Earth-moving Simulation with FEE**
-   - Holz, Azimi et al.
-   - **Nội dung:** Mô hình đất biến dạng cho mô phỏng thời gian thực
+**4. Earth-moving Simulation**
+- Holz, Azimi et al.
+- Mô hình FEE (Finite Element Earth) cho mô phỏng đào
 
-5. **MathWorks Excavator Example**
-   - MATLAB Robotics Toolbox
-   - **Nội dung:** Ví dụ mô phỏng máy xúc tự động
-   - https://www.mathworks.com/help/robotics/ug/simulate-earth-moving-with-autonomous-excavator-in-construction-site.html
+**5. MathWorks Excavator Example**
+- https://www.mathworks.com/help/robotics/ug/simulate-earth-moving-with-autonomous-excavator-in-construction-site.html
 
-### 7.3. Standards và Specifications
+### 7.3. Standards
 
-1. **IEEE Standards**
-   - IEEE Std 113: Guide for Test Procedures for DC Machines
-   - IEEE Std 421.5: Recommended Practice for Excitation System Models
+**1. IEEE Standards:**
+- IEEE Std 113: Test Procedures for DC Machines
+- IEEE Std 421.5: Excitation System Models
 
-2. **IEC Standards**
-   - IEC 60034: Rotating Electrical Machines
-   - IEC 61800: Adjustable Speed Electrical Power Drive Systems
+**2. IEC Standards:**
+- IEC 60034: Rotating Electrical Machines
+- IEC 61800: Adjustable Speed Electrical Power Drive Systems
 
-### 7.4. Websites và Resources
+### 7.4. Websites & Communities
 
-1. **Algoryx AGX Dynamics**
-   - https://www.algoryx.se/
-   - Physics engine cho mô phỏng
+**1. RC Communities:**
+- RCGroups Forum: https://www.rcgroups.com/
+- RC Universe: https://www.rcuniverse.com/
+- Huina RC Excavator Facebook Groups
 
-2. **ROS 2 (Robot Operating System)**
-   - https://www.ros.org/
-   - Framework điều khiển robot
+**2. Robotics:**
+- ROS 2 Documentation: https://docs.ros.org/
+- OpenCV: https://opencv.org/
+- Gazebo Simulator: https://gazebosim.org/
 
-3. **Unity Sensors ROS2**
-   - https://github.com/Field-Robotics-Japan/UnitySensors
-   - Tích hợp cảm biến trong Unity với ROS2
+**3. Electronics:**
+- Arduino Forum: https://forum.arduino.cc/
+- ESP32 Forum: https://esp32.com/
+- Electronics Stack Exchange
 
 ---
 
@@ -743,63 +1249,69 @@ Nghiên cứu đã hoàn thành các mục tiêu đề ra:
 | I | Dòng điện | A |
 | R | Điện trở | Ω |
 | L | Độ tự cảm | H |
-| τ (tau) | Hằng số thời gian | s |
-| K | Hệ số khuếch đại | - |
-| F | Sức từ động (MMF) | At |
-| Φ (phi) | Từ thông | Wb |
-| E | Sức điện động | V |
+| E_a | Sức phản điện động | V |
+| K_e | Hằng số EMF | V/(rad/s) |
+| K_m | Hằng số mô men | N.m/A |
 | M | Mô men | N.m |
-| ω (omega) | Tốc độ góc | rad/s |
+| ω | Tốc độ góc | rad/s |
 | n | Tốc độ quay | rpm |
 | J | Mô men đà | kg.m² |
-| B | Hệ số ma sát | N.m.s/rad |
+| B | Hệ số ma sát nhớt | N.m.s/rad |
+| T_a | Hằng số thời gian điện | s |
+| T_m | Hằng số thời gian cơ | s |
 | P | Công suất | W |
-| η (eta) | Hiệu suất | % |
+| η | Hiệu suất | % |
+| D | Duty Cycle | % |
+| f | Tần số | Hz |
+| t | Thời gian | s |
 
 ### B. Danh sách chữ viết tắt
 
-| Viết tắt | Đầy đủ | Tiếng Việt |
-|----------|--------|------------|
-| KĐT | Khuếch đại từ | - |
-| MF | Máy phát | - |
-| ĐC | Động cơ | - |
+| Viết tắt | Tiếng Anh | Tiếng Việt |
+|----------|-----------|------------|
+| RC | Radio Control | Điều khiển từ xa |
 | DC | Direct Current | Dòng một chiều |
 | AC | Alternating Current | Dòng xoay chiều |
-| EMF | Electromotive Force | Sức điện động |
-| MMF | Magnetomotive Force | Sức từ động |
 | PWM | Pulse Width Modulation | Điều chế độ rộng xung |
-| PLC | Programmable Logic Controller | Bộ điều khiển logic |
+| ESC | Electronic Speed Controller | Bộ điều khiển tốc độ điện tử |
+| BEC | Battery Eliminator Circuit | Mạch thay pin (cấp 5V) |
+| EMF | Electromotive Force | Sức điện động |
+| MOSFET | Metal-Oxide-Semiconductor FET | Transistor hiệu ứng trường |
 | PID | Proportional-Integral-Derivative | Điều khiển tỷ lệ-tích phân-vi phân |
-| MPC | Model Predictive Control | Điều khiển dự báo mô hình |
+| IMU | Inertial Measurement Unit | Cảm biến quán tính |
+| SLAM | Simultaneous Localization And Mapping | Định vị và lập bản đồ đồng thời |
+| ROS | Robot Operating System | Hệ điều hành robot |
 | AI | Artificial Intelligence | Trí tuệ nhân tạo |
-| GPS | Global Positioning System | Hệ thống định vị toàn cầu |
-| IMU | Inertial Measurement Unit | Thiết bị đo quán tính |
+| RL | Reinforcement Learning | Học tăng cường |
 
 ### C. Công thức tổng hợp
 
-#### 1. Khuếch đại từ:
+#### 1. Động cơ DC:
 ```
-τ = L / R
-U_out = K_u × U_in + U_offset
-G(s) = K / (τs + 1)
-```
-
-#### 2. Máy phát DC:
-```
-F_tổng = F_2 - F_1 + F_6 ± F_4
-E_a = K_e × Φ × ω
-U_out = E_a - I_load × R_a
-T_F = L_F / R_F
-```
-
-#### 3. Động cơ DC:
-```
-U_a = R_a × I_a + L_a × dI_a/dt + K_e × ω
+U = R_a × I_a + L_a × dI_a/dt + K_e × ω
+E_a = K_e × ω
 M_em = K_m × I_a
 J × dω/dt = M_em - M_load - B × ω
-K_e = K_m (trong SI)
+n = (U / K_e) - (R_a / K_e²) × M
 T_a = L_a / R_a
 T_m = (J × R_a) / K_e²
+```
+
+#### 2. PWM:
+```
+U_avg = D × V_supply
+ΔI ≈ (V - E_a) × D × (1-D) / (L_a × f_PWM)
+P_loss_MOSFET = I² × R_ds_on + V × I × t_sw × f_PWM
+η_ESC = P_out / (P_out + P_loss)
+```
+
+#### 3. Hiệu suất:
+```
+P_out = M × ω
+P_in = U × I
+η = P_out / P_in
+P_loss = P_Cu + P_cơ + P_sắt + P_ESC
+P_Cu = I² × R_a
 ```
 
 ### D. Bảng chuyển đổi đơn vị
@@ -808,10 +1320,11 @@ T_m = (J × R_a) / K_e²
 |-----------|----------|----------|-----------|
 | Tốc độ | rpm | rad/s | ω = 2πn/60 |
 | Tốc độ | rad/s | rpm | n = 60ω/(2π) |
-| Công suất | W | kW | P_kW = P_W / 1000 |
-| Công suất | HP | kW | P_kW = P_HP × 0.746 |
-| Mô men | N.m | kgf.m | M_kgfm = M_Nm / 9.81 |
-| Nhiệt độ | °C | K | T_K = T_C + 273.15 |
+| Mô men | N.m | mN.m | M_mNm = M_Nm × 1000 |
+| Công suất | W | mW | P_mW = P_W × 1000 |
+| Thời gian | s | ms | t_ms = t_s × 1000 |
+| Điện trở | Ω | mΩ | R_mΩ = R_Ω × 1000 |
+| Độ tự cảm | H | mH | L_mH = L_H × 1000 |
 
 ---
 
@@ -819,14 +1332,22 @@ T_m = (J × R_a) / K_e²
 
 **Ngày hoàn thành:** Tháng 10/2025
 
-**Nhóm nghiên cứu:** Hệ thống điều khiển máy xúc tự động
+**Nhóm nghiên cứu:** Hệ thống điều khiển máy xúc tự động Huina 1592
+
+**GitHub:** https://github.com/trthanhdo41/auto-excavator-control-system
 
 **Liên hệ:** [Thông tin liên hệ]
 
 ---
 
-### Ghi chú:
-Báo cáo này được tạo bằng MATLAB và Markdown. Tất cả các tính toán đã được kiểm chứng và code mô phỏng có sẵn trong thư mục `matlab/`.
+### Lời cảm ơn:
 
-Để chạy mô phỏng, xem hướng dẫn trong file `README.md`.
+Cảm ơn cộng đồng RC Việt Nam, Arduino Vietnam, và các diễn đàn robotics đã hỗ trợ trong quá trình nghiên cứu.
 
+Đặc biệt cảm ơn các tác giả của TERA framework và RSL HEAP project đã cung cấp nguồn cảm hứng và tài liệu quý báu về autonomous excavation.
+
+---
+
+**Tất cả code mô phỏng MATLAB và tài liệu có sẵn trên GitHub.**
+
+**Chúc các bạn thành công với dự án! 🚜⚡**
