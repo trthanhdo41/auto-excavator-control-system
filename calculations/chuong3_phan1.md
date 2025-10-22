@@ -1,1093 +1,852 @@
-# CHƯƠNG 3 - PHẦN 1: XÁC ĐỊNH CÁC THÔNG SỐ (3.1.1 - 3.1.6)
+# CHƯƠNG 3 - PHẦN 1: XÁC ĐỊNH CÁC THÔNG SỐ ĐỘNG CƠ HUINA 1592
 
-## 3.1.1 - Xác định hệ số Kᵢᵢ
+## GIỚI THIỆU
+
+Chương này tập trung vào việc xác định và tính toán các thông số của hệ thống điều khiển động cơ DC trong máy xúc mô hình Huina 1592. Khác với máy xúc công nghiệp sử dụng hệ thống phức tạp với khuếch đại từ và máy phát DC, Huina 1592 sử dụng hệ thống đơn giản hơn với động cơ DC Brushed 540/550 và điều khiển PWM.
+
+## 3.1.1 - Xác định điện trở phần ứng động cơ (R_a)
 
 ### Khái niệm
-Hệ số Kᵢᵢ là hệ số khuếch đại của từng khâu trong hệ thống điều khiển máy xúc.
+
+Điện trở phần ứng R_a là điện trở của cuộn dây phần ứng động cơ DC, là một thông số quan trọng ảnh hưởng đến:
+- Dòng khởi động
+- Tổn thất công suất
+- Hiệu suất động cơ
+- Đặc tính cơ
 
 **GIẢI THÍCH CHI TIẾT:**
 
-Hệ số khuếch đại là một đại lượng **không thứ nguyên** (không có đơn vị) cho biết mức độ khuếch đại của hệ thống. Trong khuếch đại từ ПДД-1,5B, hệ số này đặc trưng cho khả năng biến đổi tín hiệu điện áp nhỏ thành tín hiệu điện áp lớn để điều khiển máy phát.
+Trong động cơ DC, điện trở phần ứng bao gồm:
+- Điện trở của dây đồng cuộn phần ứng
+- Điện trở tiếp xúc chổi than
+- Điện trở dây nối
 
-**Ý nghĩa vật lý:** Khi đầu vào thay đổi 1 đơn vị, đầu ra sẽ thay đổi Kᵢᵢ đơn vị. Ví dụ Kᵢᵢ = 22 có nghĩa là khi điện áp đầu vào tăng 1V thì điện áp đầu ra tăng 22V.
+Đối với động cơ 540/550 trong Huina 1592, R_a thường nằm trong khoảng 0.5 - 1.5Ω.
+
+**Ý nghĩa vật lý:**
+- R_a nhỏ → Dòng khởi động lớn, hiệu suất cao, nhưng khó điều khiển
+- R_a lớn → Dòng khởi động nhỏ, an toàn hơn, nhưng hiệu suất thấp
+- R_a tăng theo nhiệt độ (hệ số nhiệt độ α ≈ 0.004/°C cho đồng)
 
 ### Công thức tính
-Hệ số khuếch đại tổng quát:
+
+**1. Phương pháp đo trực tiếp (Đề xuất):**
+
 ```
-Kᵢᵢ = ΔY_out / ΔX_in
-```
-
-**GIẢI THÍCH TỪNG KÝ HIỆU:**
-- `Kᵢᵢ`: Hệ số khuếch đại tổng quát (không đơn vị)
-- `ΔY_out`: Độ biến thiên tín hiệu đầu ra (V, A, hoặc W)
-- `ΔX_in`: Độ biến thiên tín hiệu đầu vào (V, A, hoặc W)
-
-**VÍ DỤ TÍNH TOÁN TỪNG BƯỚC:**
-
-**Bước 1:** Đo điện áp đầu vào tại 2 điểm
-```
-U_in1 = 0V (không có tín hiệu)
-U_in2 = 5V (tín hiệu điều khiển)
-ΔU_in = U_in2 - U_in1 = 5 - 0 = 5V
-```
-
-**Bước 2:** Đo điện áp đầu ra tương ứng
-```
-U_out1 = 15V (điện áp dư do từ tính dư)
-U_out2 = 125V (điện áp khi có tín hiệu)
-ΔU_out = U_out2 - U_out1 = 125 - 15 = 110V
-```
-
-**Bước 3:** Tính hệ số khuếch đại
-```
-K_u = ΔU_out / ΔU_in = 110 / 5 = 22
-```
-
-**KIỂM TRA KẾT QUẢ:**
-- K_u = 22 có nghĩa là hệ thống khuếch đại điện áp lên 22 lần
-- Điều này phù hợp với đặc tính của ПДД-1,5B
-- Cho phép điều khiển máy phát từ tín hiệu nhỏ (0-10V) thành điện áp lớn (0-240V)
-
-**ÁP DỤNG THỰC TẾ:**
-- **Thiết kế:** Cần K_u = 22 để đảm bảo điều khiển đầy đủ máy phát
-- **Kiểm tra:** Đo thực tế để đảm bảo K_u ≈ 22 ± 10%
-- **Điều chỉnh:** Thay đổi số vòng dây hoặc từ thông để điều chỉnh K_u
-- **Bảo trì:** K_u giảm có thể do lão hóa hoặc hỏng hóc
-
-### Đối với hệ thống khuếch đại từ kép ПДД-1,5B:
-
-**1. Hệ số khuếch đại điện áp (K_u):**
-```
-K_u = U_out / U_in
-```
-
-**2. Hệ số khuếch đại dòng điện (K_i):**
-```
-K_i = I_out / I_in
-```
-
-**3. Hệ số khuếch đại công suất (K_p):**
-```
-K_p = P_out / P_in = K_u × K_i
-```
-
-### Thông số điển hình cho ПДД-1,5B:
-
-| Thông số | Giá trị | Đơn vị |
-|----------|---------|--------|
-| Điện áp đầu vào | 0-10 | V |
-| Điện áp đầu ra | 0-220 | V |
-| Dòng điện đầu ra | 0-1.5 | A |
-| Hệ số K_u | 22 | - |
-| Hệ số K_i | ~100 | - |
-| Hệ số K_p | ~2200 | - |
-
-### Tính toán cụ thể:
-
-**Ví dụ tính toán:**
-```
-Cho: U_in = 5V, U_out = 110V
-=> K_u = 110/5 = 22
-
-Cho: I_in = 0.01A, I_out = 1.0A
-=> K_i = 1.0/0.01 = 100
-
-=> K_p = 22 × 100 = 2200
-```
-
-### Ý nghĩa:
-- Hệ số K_u cho biết khả năng khuếch đại điện áp của khuếch đại từ
-- Hệ số K_i cho biết khả năng khuếch đại dòng điện
-- Hệ số K_p thể hiện khả năng khuếch đại công suất tổng thể
-
----
-
-## 3.1.2 - Xác định hằng số thời gian của các cuộn dây trong khuếch đại từ kép ПДД-1,5B
-
-### Khái niệm
-Hằng số thời gian (τ) đặc trưng cho độ trễ của hệ thống khi có tín hiệu đầu vào thay đổi.
-
-**GIẢI THÍCH CHI TIẾT:**
-
-Hằng số thời gian τ là một đại lượng quan trọng trong phân tích động học của hệ thống điện từ. Nó cho biết hệ thống cần bao lâu để đạt được 63.2% giá trị cuối cùng khi có tín hiệu đầu vào thay đổi đột ngột.
-
-**Ý nghĩa vật lý:** 
-- τ nhỏ → Hệ thống đáp ứng nhanh, nhạy cảm với thay đổi
-- τ lớn → Hệ thống đáp ứng chậm, có quán tính lớn
-- Trong khuếch đại từ, τ phụ thuộc vào cấu trúc từ và điện của cuộn dây
-
-**Nguyên lý hoạt động:**
-Khi có điện áp đặt vào cuộn dây, dòng điện không tăng ngay lập tức mà tăng dần theo hàm mũ do hiện tượng tự cảm. Hằng số thời gian τ quyết định tốc độ tăng này.
-
-### Công thức tổng quát:
-```
-τ = L / R
+R_a = U_test / I_test
 ```
 
 **GIẢI THÍCH TỪNG KÝ HIỆU:**
-- `τ` (tau): Hằng số thời gian (giây)
-- `L`: Độ tự cảm của cuộn dây (Henry)
-- `R`: Điện trở của cuộn dây (Ohm)
+- `R_a`: Điện trở phần ứng (Ω)
+- `U_test`: Điện áp DC nhỏ đặt vào động cơ (V) - khuyến nghị 1-2V
+- `I_test`: Dòng điện đo được (A)
 
-**CƠ SỞ VẬT LÝ:**
-Công thức τ = L/R xuất phát từ phương trình vi phân của mạch RL:
+**Lưu ý:** Phải đo ở điện áp nhỏ để động cơ không quay (tránh sức phản điện động)
+
+**2. Phương pháp từ thông số kỹ thuật:**
+
 ```
-L × (dI/dt) + R × I = U
+R_a = (U_rated - U_no_load × 0.9) / I_rated
 ```
-Nghiệm của phương trình này có dạng:
-```
-I(t) = (U/R) × [1 - e^(-t/τ)]
-```
-Trong đó τ = L/R là hằng số thời gian.
 
 **VÍ DỤ TÍNH TOÁN TỪNG BƯỚC:**
 
-**Cuộn điều khiển:**
+**Bước 1: Đo trực tiếp bằng đồng hồ vạn năng**
+
 ```
-Cho: L_control = 1.5 H
-     R_control = 300 Ω
+Chuẩn bị:
+- Đồng hồ vạn năng (multimeter)
+- Nguồn DC 2V (hoặc 2 pin AA)
+- Ampe kế (hoặc multimeter thứ 2)
 
-Bước 1: Áp dụng công thức
-τ_control = L_control / R_control
-
-Bước 2: Thay số
-τ_control = 1.5 / 300 = 0.005 s
-
-Bước 3: Chuyển đổi đơn vị
-τ_control = 0.005 s = 5 ms
-```
-
-**Cuộn công suất:**
-```
-Cho: L_power = 10 H
-     R_power = 100 Ω
-
-Bước 1: Áp dụng công thức
-τ_power = L_power / R_power
-
-Bước 2: Thay số
-τ_power = 10 / 100 = 0.1 s
-
-Bước 3: Chuyển đổi đơn vị
-τ_power = 0.1 s = 100 ms
+Thực hiện:
+1. Ngắt kết nối động cơ khỏi mạch
+2. Đặt điện áp 2V vào 2 cực động cơ
+3. Đo dòng điện: I_test = 2.5A
+4. Tính R_a = 2 / 2.5 = 0.8Ω
 ```
 
-**KIỂM TRA KẾT QUẢ:**
-- τ_control = 5ms << τ_power = 100ms
-- Cuộn điều khiển đáp ứng nhanh hơn 20 lần
-- Phù hợp với yêu cầu điều khiển nhanh, công suất ổn định
+**Bước 2: Kiểm tra bằng công thức**
 
-**ÁP DỤNG THỰC TẾ:**
-- **Thiết kế:** Chọn L và R phù hợp để có τ mong muốn
-- **Điều khiển:** τ nhỏ cho điều khiển nhanh, τ lớn cho ổn định
-- **Bảo trì:** τ thay đổi có thể do hỏng hóc hoặc lão hóa
-- **Tối ưu:** Cân bằng giữa tốc độ đáp ứng và độ ổn định
-
-### Các cuộn dây trong ПДД-1,5B:
-
-#### 1. Cuộn điều khiển (Control Winding):
 ```
-τ_control = L_control / R_control
+Cho: 
+- U_rated = 7.4V
+- I_rated = 4A
+- I_no_load = 0.5A
+
+Ước tính:
+R_a ≈ (U_rated - E_a) / I_rated
+R_a ≈ (7.4 - 6.5) / 4 = 0.225Ω (chỉ tính rơi áp)
+
+R_a thực tế ≈ 0.8Ω (gần với kết quả đo)
 ```
 
-**Thông số điển hình:**
-- L_control = 0.5 - 2.0 H
-- R_control = 100 - 500 Ω
-- **τ_control ≈ 0.005 - 0.010 s** (5-10 ms)
+**Bước 3: So sánh với datasheet**
 
-#### 2. Cuộn công suất (Power Winding):
 ```
-τ_power = L_power / R_power
+Động cơ 540: R_a = 0.5 - 1.0Ω
+Động cơ 550: R_a = 0.7 - 1.5Ω
+→ R_a = 0.8Ω hợp lý cho động cơ 550
 ```
 
-**Thông số điển hình:**
-- L_power = 5.0 - 15.0 H
-- R_power = 50 - 200 Ω
-- **τ_power ≈ 0.05 - 0.15 s** (50-150 ms)
+### Thông số động cơ Huina 1592
 
-### Tính toán cụ thể:
+| Động cơ | R_a (Ω) | Ghi chú |
+|---------|---------|---------|
+| 540 Motor | 0.5 - 1.0 | Nhỏ hơn, hiệu suất cao |
+| 550 Motor | 0.7 - 1.5 | Phổ biến trong Huina 1592 |
+| 555 Motor | 1.0 - 2.0 | Lớn hơn, ít dùng |
 
-**Ví dụ 1: Cuộn điều khiển**
+**Giá trị sử dụng trong tính toán:** R_a = **0.8Ω**
+
+### Ảnh hưởng của nhiệt độ
+
 ```
-Cho: L_control = 1.5 H
-     R_control = 300 Ω
+R_t = R_20 × [1 + α(T - 20)]
 
-τ_control = 1.5 / 300 = 0.005 s = 5 ms
-```
+Với α = 0.004 /°C (đồng)
 
-**Ví dụ 2: Cuộn công suất**
-```
-Cho: L_power = 10 H
-     R_power = 100 Ω
+Ví dụ:
+R_20 = 0.8Ω ở 20°C
+T = 60°C (khi hoạt động)
+R_60 = 0.8 × [1 + 0.004×(60-20)] = 0.928Ω
 
-τ_power = 10 / 100 = 0.1 s = 100 ms
-```
-
-### Đặc tính quá độ:
-
-**Hàm truyền bậc 1:**
-```
-G(s) = K / (τs + 1)
+→ Tăng 16% khi nóng!
 ```
 
-**Đáp ứng bước (Step Response):**
+### Ứng dụng thực tế
+
+**1. Tính dòng khởi động:**
+
 ```
-y(t) = K × (1 - e^(-t/τ))
+I_start = U_supply / R_a = 7.4 / 0.8 = 9.25A
+
+→ Rất lớn! Cần ESC (Electronic Speed Controller) để hạn chế
 ```
 
-Trong đó:
-- Tại t = τ: y = 63.2% × K
-- Tại t = 3τ: y = 95% × K
-- Tại t = 5τ: y = 99.3% × K (coi như ổn định)
+**2. Tính tổn thất công suất:**
 
-### Thời gian đáp ứng:
+```
+P_loss = I² × R_a = 4² × 0.8 = 12.8W
 
-| Cuộn dây | τ (ms) | 3τ (ms) | 5τ (ms) |
-|----------|--------|---------|---------|
-| Điều khiển | 5 | 15 | 25 |
-| Công suất | 100 | 300 | 500 |
+→ ~40% công suất (30W) mất qua R_a!
+```
 
-### Ý nghĩa:
-- Hằng số thời gian nhỏ → Hệ thống đáp ứng nhanh
-- Cuộn điều khiển có τ nhỏ → Điều khiển linh hoạt
-- Cuộn công suất có τ lớn hơn → Ổn định nguồn ra
+**3. Điều khiển PWM:**
+
+```
+Duty cycle để đạt I_avg = 3A:
+D = (I_avg × R_a + E_a) / U_supply
+D = (3 × 0.8 + 6.0) / 7.4 = 0.946 = 94.6%
+```
 
 ---
 
-## 3.1.3 - Xác định diện áp ra của khuếch đại từ ở trạng thái ổn định
+## 3.1.2 - Xác định hằng số sức phản điện động (K_e)
 
 ### Khái niệm
-Điện áp ra ở trạng thái ổn định là điện áp đầu ra của khuếch đại từ khi hệ thống đã ổn định (không còn quá độ).
+
+Hằng số sức phản điện động K_e (Back-EMF constant) là hệ số tỷ lệ giữa sức phản điện động (E_a) và tốc độ góc (ω) của động cơ.
 
 **GIẢI THÍCH CHI TIẾT:**
 
-Trạng thái ổn định là trạng thái mà tất cả các đại lượng điện từ trong hệ thống đã đạt giá trị không đổi theo thời gian. Trong khuếch đại từ ПДД-1,5B, điều này có nghĩa là từ thông, dòng điện và điện áp đã ổn định sau khi có tín hiệu đầu vào.
+Khi động cơ quay, cuộn dây phần ứng cắt từ trường, sinh ra sức điện động ngược chiều với điện áp cấp (định luật Faraday). Đây gọi là sức phản điện động (Back-EMF).
 
 **Ý nghĩa vật lý:**
-- Điện áp ra ổn định phụ thuộc vào từ thông tổng hợp trong lõi từ
-- Từ thông này được tạo bởi tổng hợp từ trường của các cuộn dây
-- Do hiện tượng từ tính dư, ngay cả khi không có tín hiệu đầu vào, vẫn có điện áp ra nhỏ
+- K_e lớn → Tốc độ không tải thấp, mô men lớn (động cơ mạnh)
+- K_e nhỏ → Tốc độ không tải cao, mô men nhỏ (động cơ nhanh)
+- K_e = K_m (trong đơn vị SI) - quan hệ quan trọng!
 
-**Đặc điểm quan trọng:**
-- Điện áp ra không tỷ lệ tuyến tính hoàn toàn với đầu vào do bão hòa từ
-- Có điện áp lệch (offset) do từ tính dư của lõi từ
-- Phụ thuộc vào nhiệt độ và tần số từ hóa
+### Công thức tính
 
-### Công thức tính:
+**1. Từ định luật Faraday:**
 
-**1. Công thức tổng quát:**
 ```
-U_out = K_u × U_in
+E_a = K_e × ω
 ```
 
 **GIẢI THÍCH TỪNG KÝ HIỆU:**
-- `U_out`: Điện áp đầu ra ở trạng thái ổn định (V)
-- `K_u`: Hệ số khuếch đại điện áp (không đơn vị)
-- `U_in`: Điện áp đầu vào (V)
+- `E_a`: Sức phản điện động (V)
+- `K_e`: Hằng số EMF (V/(rad/s) hoặc V/krpm)
+- `ω`: Tốc độ góc (rad/s)
 
-**2. Công thức chi tiết hơn:**
-```
-U_out = (N₂/N₁) × √(Φ₁² + Φ₂² + 2×Φ₁×Φ₂×cos(θ))
-```
+**2. Từ thông số định mức:**
 
-**GIẢI THÍCH TỪNG KÝ HIỆU:**
-- `N₁, N₂`: Số vòng dây cuộn sơ cấp và thứ cấp (vòng)
-- `Φ₁, Φ₂`: Từ thông các cuộn (Wb)
-- `θ`: Góc pha giữa các từ thông (rad)
-
-**CƠ SỞ VẬT LÝ:**
-Công thức này xuất phát từ định luật Faraday về cảm ứng điện từ:
 ```
-E = -N × (dΦ/dt)
+K_e = (U_rated - I_rated × R_a) / ω_rated
 ```
-Trong đó từ thông tổng hợp Φ được tính từ tổng vector của các từ thông thành phần.
 
 **VÍ DỤ TÍNH TOÁN TỪNG BƯỚC:**
 
-**Trường hợp đơn giản (bỏ qua góc pha):**
-```
-Cho: N₁ = 100 vòng, N₂ = 2200 vòng
-     Φ₁ = 0.01 Wb, Φ₂ = 0.22 Wb
-     θ = 0° (cùng pha)
-
-Bước 1: Tính tỷ số vòng dây
-N₂/N₁ = 2200/100 = 22
-
-Bước 2: Tính từ thông tổng hợp
-Φ_tổng = Φ₁ + Φ₂ = 0.01 + 0.22 = 0.23 Wb
-
-Bước 3: Tính điện áp ra
-U_out = (N₂/N₁) × Φ_tổng = 22 × 0.23 = 5.06 V
-```
-
-**Trường hợp có góc pha:**
-```
-Cho: Φ₁ = 0.1 Wb, Φ₂ = 0.2 Wb, θ = 30°
-
-Bước 1: Tính thành phần cos
-cos(30°) = 0.866
-
-Bước 2: Tính từ thông tổng hợp
-Φ_tổng = √(0.1² + 0.2² + 2×0.1×0.2×0.866)
-Φ_tổng = √(0.01 + 0.04 + 0.0346) = √0.0846 = 0.291 Wb
-
-Bước 3: Tính điện áp ra
-U_out = 22 × 0.291 = 6.4 V
-```
-
-**KIỂM TRA KẾT QUẢ:**
-- Điện áp ra tăng khi từ thông tăng
-- Góc pha ảnh hưởng đến từ thông tổng hợp
-- Tỷ số vòng dây quyết định hệ số khuếch đại
-
-**ÁP DỤNG THỰC TẾ:**
-- **Thiết kế:** Chọn số vòng dây phù hợp để có điện áp ra mong muốn
-- **Điều chỉnh:** Thay đổi từ thông để điều chỉnh điện áp ra
-- **Kiểm tra:** Đo điện áp ra để đảm bảo hệ thống hoạt động đúng
-- **Bảo trì:** Điện áp ra giảm có thể do lão hóa lõi từ hoặc hỏng cuộn dây
-
-### Đối với ПДД-1,5B:
-
-**Chế độ làm việc tuyến tính:**
-```
-U_out = K_u × U_in + U_offset
-```
-
-Trong đó:
-- K_u = 22 (hệ số khuếch đại)
-- U_offset = 10-20V (điện áp lệch do từ tính dư)
-
-### Tính toán cụ thể:
-
-**Trường hợp 1: Không tải (no-load)**
-```
-U_in = 0V
-U_out = U_offset ≈ 15V
-```
-
-**Trường hợp 2: Tải định mức (rated load)**
-```
-U_in = 10V
-U_out = 22 × 10 + 15 = 235V
-```
-
-**Trường hợp 3: Tải 50%**
-```
-U_in = 5V
-U_out = 22 × 5 + 15 = 125V
-```
-
-### Đồ thị đặc tính:
+**Bước 1: Đo tốc độ không tải**
 
 ```
-U_out (V)
-   |
-240|        ●
-   |       /
-   |      /
-   |     /
-120|    ●
-   |   /
-   |  /
- 15| ●___________
-   |_____________ U_in (V)
-   0    5      10
+Cho động cơ 550 của Huina 1592:
+- U_supply = 7.4V
+- I_no_load = 0.5A
+- n_no_load = 12000 rpm (đo bằng tachometer)
+
+Chuyển đổi sang rad/s:
+ω_no_load = 2π × n_no_load / 60
+ω_no_load = 2π × 12000 / 60 = 1256.6 rad/s
 ```
 
-### Công thức xét đến bão hòa từ:
+**Bước 2: Tính E_a không tải**
 
 ```
-U_out = U_max × tanh(K_u × U_in / U_max)
+E_a_no_load = U_supply - I_no_load × R_a
+E_a_no_load = 7.4 - 0.5 × 0.8 = 7.0V
 ```
 
-Trong đó:
-- U_max ≈ 240V (điện áp bão hòa)
-- tanh: hàm tangent hyperbolic
+**Bước 3: Tính K_e**
 
-### Bảng tra điện áp ra theo điện áp vào:
+```
+K_e = E_a_no_load / ω_no_load
+K_e = 7.0 / 1256.6 = 0.00557 V/(rad/s)
 
-| U_in (V) | U_out lý tưởng (V) | U_out thực tế (V) | Ghi chú |
-|----------|-------------------|-------------------|---------|
-| 0 | 0 | 15 | Điện áp dư |
-| 1 | 22 | 37 | Vùng tuyến tính |
-| 2 | 44 | 59 | Vùng tuyến tính |
-| 3 | 66 | 81 | Vùng tuyến tính |
-| 4 | 88 | 103 | Vùng tuyến tính |
-| 5 | 110 | 125 | Vùng tuyến tính |
-| 6 | 132 | 147 | Vùng tuyến tính |
-| 7 | 154 | 169 | Vùng tuyến tính |
-| 8 | 176 | 191 | Vùng tuyến tính |
-| 9 | 198 | 213 | Bắt đầu bão hòa |
-| 10 | 220 | 235 | Gần bão hòa |
+Hoặc đổi sang V/krpm:
+K_e = 7.0 / 12 = 0.583 V/krpm
+```
 
-### Ý nghĩa:
-- Điện áp ra tỷ lệ tuyến tính với điện áp vào trong vùng làm việc
-- Có điện áp lệch do từ tính dư
-- Cần tính đến hiện tượng bão hòa từ ở điện áp cao
+**Bước 4: Kiểm tra ở tải định mức**
+
+```
+Ở tải định mức:
+n_rated = 8000 rpm
+I_rated = 4A
+
+E_a_rated = U_supply - I_rated × R_a
+E_a_rated = 7.4 - 4 × 0.8 = 4.2V
+
+ω_rated = 2π × 8000 / 60 = 837.8 rad/s
+
+K_e_check = 4.2 / 837.8 = 0.00501 V/(rad/s)
+
+→ Gần với K_e = 0.00557 (sai số do ma sát)
+```
+
+### Quan hệ K_e và K_m
+
+```
+K_m = K_e (trong đơn vị SI)
+
+Chứng minh:
+P_cơ = E_a × I_a = M × ω
+
+M = E_a × I_a / ω = (K_e × ω) × I_a / ω = K_e × I_a
+
+Vậy: K_m = M / I_a = K_e
+```
+
+### Bảng tra K_e các động cơ phổ biến
+
+| Động cơ | K_e (V/(rad/s)) | K_e (V/krpm) | Ghi chú |
+|---------|----------------|--------------|---------|
+| 540 Motor 12000KV | 0.00796 | 0.796 | Cao tốc |
+| 550 Motor 8000KV | 0.00557 | 0.583 | **Huina 1592** |
+| 555 Motor 6000KV | 0.00418 | 0.418 | Mô men cao |
+
+**KV rating** = Tốc độ (rpm) trên 1V
+```
+K_e (V/krpm) ≈ 1 / KV × 1000
+```
+
+### Ứng dụng thực tế
+
+**1. Tính tốc độ tối đa:**
+
+```
+Khi I_a → 0 (không tải):
+E_a ≈ U_supply
+ω_max = U_supply / K_e = 7.4 / 0.00557 = 1328 rad/s
+n_max = ω_max × 60 / 2π = 12686 rpm
+
+→ Gần với datasheet 12000 rpm!
+```
+
+**2. Tính tốc độ ở tải bất kỳ:**
+
+```
+Cho I_a = 3A:
+E_a = U_supply - I_a × R_a = 7.4 - 3×0.8 = 4.6V
+ω = E_a / K_e = 4.6 / 0.00557 = 826 rad/s
+n = 7886 rpm
+```
+
+**3. Điều khiển tốc độ PWM:**
+
+```
+Muốn n = 6000 rpm:
+ω = 6000 × 2π/60 = 628.3 rad/s
+E_a_cần = K_e × ω = 0.00557 × 628.3 = 3.5V
+
+U_cần = E_a + I_a × R_a = 3.5 + 3×0.8 = 5.9V
+Duty = U_cần / U_supply = 5.9 / 7.4 = 80%
+```
 
 ---
 
-## 3.1.4 - Xác định sức từ động của cuộn dây điều khiển YCM-2 (F₂)
+## 3.1.3 - Xác định hằng số mô men (K_m)
 
 ### Khái niệm
-Sức từ động (Magnetomotive Force - MMF) là đại lượng đặc trưng cho khả năng tạo ra từ trường của cuộn dây.
+
+Hằng số mô men K_m (Torque constant) là hệ số tỷ lệ giữa mô men (M) và dòng điện phần ứng (I_a).
 
 **GIẢI THÍCH CHI TIẾT:**
 
-Sức từ động F là một đại lượng cơ bản trong từ học, tương tự như sức điện động trong điện học. Nó đặc trưng cho khả năng của cuộn dây tạo ra từ trường trong mạch từ.
+Khi dòng điện chạy qua cuộn dây phần ứng trong từ trường, xuất hiện lực từ tạo ra mô men xoắn (định luật Ampère). Mô men này tỷ lệ thuận với dòng điện.
 
 **Ý nghĩa vật lý:**
-- F càng lớn → Từ trường càng mạnh → Từ thông càng lớn
-- F tỷ lệ thuận với số vòng dây và dòng điện
-- F là nguyên nhân tạo ra từ trường, tương tự như điện áp tạo ra dòng điện
+- K_m lớn → Mô men lớn với cùng dòng điện (động cơ mạnh)
+- K_m nhỏ → Cần dòng điện lớn để tạo mô men (hiệu suất thấp)
+- K_m = K_e (đơn vị SI) - nguyên lý bảo toàn năng lượng
 
-**Đơn vị đo:**
-- Ampere-turn (At) hoặc A.vòng
-- 1 At = 1 A × 1 vòng dây
-- Đây là đơn vị chuẩn trong tính toán từ học
+### Công thức tính
 
-**Nguyên lý hoạt động:**
-Khi có dòng điện chạy qua cuộn dây, nó tạo ra từ trường theo định luật Ampère. Sức từ động F chính là "áp lực" đẩy từ thông đi qua mạch từ.
+**1. Từ định nghĩa:**
 
-### Công thức tính:
-
-**1. Công thức cơ bản:**
 ```
-F₂ = N₂ × I₂
+M = K_m × I_a
 ```
 
 **GIẢI THÍCH TỪNG KÝ HIỆU:**
-- `F₂`: Sức từ động cuộn YCM-2 (At)
-- `N₂`: Số vòng dây cuộn YCM-2 (vòng)
-- `I₂`: Dòng điện qua cuộn YCM-2 (A)
+- `M`: Mô men (N.m)
+- `K_m`: Hằng số mô men (N.m/A)
+- `I_a`: Dòng điện phần ứng (A)
 
-**CƠ SỞ VẬT LÝ:**
-Công thức này xuất phát từ định luật Ampère:
+**2. Từ công suất:**
+
 ```
-∮H·dl = I_total
+K_m = P_rated / (ω_rated × I_rated)
 ```
-Trong đó I_total = N × I là tổng dòng điện đi qua tất cả các vòng dây.
 
 **VÍ DỤ TÍNH TOÁN TỪNG BƯỚC:**
 
-**Ví dụ 1: Tính trực tiếp từ dòng điện**
-```
-Cho: N₂ = 1000 vòng
-     I₂ = 1.0 A
-
-Bước 1: Áp dụng công thức cơ bản
-F₂ = N₂ × I₂
-
-Bước 2: Thay số
-F₂ = 1000 × 1.0 = 1000 At
-
-Bước 3: Kiểm tra kết quả
-F₂ = 1000 At có nghĩa là cuộn dây tạo ra sức từ động 1000 Ampere-turn
-```
-
-**Ví dụ 2: Tính từ điện áp và điện trở**
-```
-Cho: U₂ = 220V
-     R₂ = 220 Ω
-     N₂ = 1000 vòng
-
-Bước 1: Tính dòng điện theo định luật Ohm
-I₂ = U₂ / R₂ = 220 / 220 = 1.0 A
-
-Bước 2: Tính sức từ động
-F₂ = N₂ × I₂ = 1000 × 1.0 = 1000 At
-
-Bước 3: Kiểm tra logic
-Dòng điện 1A qua 1000 vòng dây tạo ra F₂ = 1000 At ✓
-```
-
-**Ví dụ 3: Tính với dòng điện khác**
-```
-Cho: N₂ = 1000 vòng
-     I₂ = 0.5 A (50% tải)
-
-Bước 1: Áp dụng công thức
-F₂ = N₂ × I₂
-
-Bước 2: Thay số
-F₂ = 1000 × 0.5 = 500 At
-
-Bước 3: So sánh với định mức
-F₂_50% = 500 At = 50% × F₂_định_mức ✓
-```
-
-**KIỂM TRA KẾT QUẢ:**
-- F₂ tỷ lệ thuận với cả N₂ và I₂
-- Đơn vị At = A × vòng
-- Giá trị hợp lý cho cuộn điều khiển máy phát
-
-**ÁP DỤNG THỰC TẾ:**
-- **Thiết kế:** Chọn N₂ và I₂ để có F₂ mong muốn
-- **Điều khiển:** Thay đổi U₂ để điều chỉnh I₂ và F₂
-- **Kiểm tra:** Đo I₂ để tính F₂ và đánh giá hiệu suất
-- **Bảo trì:** F₂ giảm có thể do hỏng cuộn dây hoặc giảm điện áp nguồn
-
-### Thông số cuộn YCM-2:
-
-**Thông số điển hình:**
-- Số vòng dây: N₂ = 800 - 1200 vòng
-- Dòng điện định mức: I₂ = 0.5 - 1.5 A
-- Điện áp định mức: U₂ = 220V
-- Điện trở: R₂ = 150 - 300 Ω
-
-### Tính toán cụ thể:
-
-**Ví dụ 1: Chế độ định mức**
-```
-Cho: N₂ = 1000 vòng
-     I₂ = 1.0 A
-
-F₂ = 1000 × 1.0 = 1000 At
-```
-
-**Ví dụ 2: Từ điện áp định mức**
-```
-Cho: U₂ = 220V
-     R₂ = 220 Ω
-     
-I₂ = U₂ / R₂ = 220 / 220 = 1.0 A
-
-F₂ = N₂ × I₂ = 1000 × 1.0 = 1000 At
-```
-
-### Quan hệ F₂ với điện áp điều khiển:
+**Bước 1: Tính công suất cơ học**
 
 ```
-F₂ = N₂ × (U₂/R₂) = (N₂/R₂) × U₂
+Cho:
+- U_supply = 7.4V
+- I_rated = 4A
+- n_rated = 8000 rpm
+- η = 75% (hiệu suất ước tính)
+
+P_điện = U × I = 7.4 × 4 = 29.6W
+P_cơ = P_điện × η = 29.6 × 0.75 = 22.2W
 ```
 
-Đặt: K_F2 = N₂/R₂ (hệ số sức từ động)
+**Bước 2: Tính mô men định mức**
 
 ```
-F₂ = K_F2 × U₂
+ω_rated = 2π × 8000 / 60 = 837.8 rad/s
+
+M_rated = P_cơ / ω_rated = 22.2 / 837.8 = 0.0265 N.m
 ```
 
-### Ví dụ tính toán K_F2:
+**Bước 3: Tính K_m**
 
 ```
-Cho: N₂ = 1000 vòng
-     R₂ = 220 Ω
+K_m = M_rated / I_rated = 0.0265 / 4 = 0.00663 N.m/A
 
-K_F2 = 1000 / 220 = 4.545 At/V
-
-Khi U₂ = 220V:
-F₂ = 4.545 × 220 = 1000 At
+Hoặc: 6.63 mN.m/A
 ```
 
-### Đặc tính F₂ theo điện áp:
+**Bước 4: Kiểm tra với K_e**
 
-| U₂ (V) | I₂ (A) | F₂ (At) | % F_max |
-|--------|--------|---------|---------|
-| 0 | 0 | 0 | 0% |
-| 50 | 0.227 | 227 | 22.7% |
-| 100 | 0.455 | 455 | 45.5% |
-| 150 | 0.682 | 682 | 68.2% |
-| 200 | 0.909 | 909 | 90.9% |
-| 220 | 1.000 | 1000 | 100% |
-
-### Ảnh hưởng của F₂ đến hệ thống:
-
-**1. Điều khiển từ thông máy phát:**
 ```
-Φ_MF = f(F₂ - F₁)
+K_e = 0.00557 V/(rad/s)
+K_m = 0.00663 N.m/A
+
+Sai số = (0.00663 - 0.00557) / 0.00557 × 100% = 19%
+
+→ Sai số do:
+  - Tổn thất cơ học
+  - Hiệu suất động cơ < 100%
+  - Sai số đo
 ```
 
-**2. Điều khiển điện áp máy phát:**
+### Quan hệ K_m = K_e
+
+**Chứng minh từ bảo toàn năng lượng:**
+
 ```
-U_MF = K_Φ × Φ_MF = K_Φ × f(F₂ - F₁)
+Công suất điện vào = Công suất cơ ra (lý tưởng)
+
+E_a × I_a = M × ω
+
+(K_e × ω) × I_a = M × ω
+
+K_e × I_a = M
+
+M / I_a = K_e
+
+→ K_m = K_e
 ```
 
-### Ý nghĩa:
-- F₂ tỷ lệ thuận với dòng điện qua cuộn YCM-2
-- F₂ điều khiển từ thông và điện áp máy phát
-- Cuộn YCM-2 là cuộn điều khiển chính trong hệ thống
+**Trong thực tế:**
+```
+K_m ≈ K_e / η
+
+Với η = 0.75 - 0.85 cho động cơ Brushed
+```
+
+### Bảng tra K_m các động cơ
+
+| Động cơ | K_m (N.m/A) | K_m (mN.m/A) | Ghi chú |
+|---------|-------------|--------------|---------|
+| 540 Motor | 0.005 | 5.0 | Nhỏ, cao tốc |
+| 550 Motor | 0.0066 | 6.6 | **Huina 1592** |
+| 555 Motor | 0.008 | 8.0 | Lớn, mô men cao |
+
+### Ứng dụng thực tế
+
+**1. Tính mô men ở dòng điện bất kỳ:**
+
+```
+Khi I_a = 3A:
+M = K_m × I_a = 0.0066 × 3 = 0.0198 N.m = 19.8 mN.m
+```
+
+**2. Tính dòng điện cần thiết:**
+
+```
+Muốn M = 0.03 N.m:
+I_a = M / K_m = 0.03 / 0.0066 = 4.55A
+
+→ Kiểm tra: 4.55A > I_rated (4A)
+→ Động cơ bị quá tải 14%
+```
+
+**3. Tính mô men khởi động tối đa:**
+
+```
+I_start_max = 2 × I_rated = 8A (giới hạn ESC)
+M_start_max = K_m × I_start_max = 0.0066 × 8 = 0.053 N.m
+
+→ Gấp đôi mô men định mức!
+```
+
+**4. Tính lực nâng gầu:**
+
+```
+Giả sử:
+- Đường kính trống kéo: D = 20mm = 0.02m
+- Hiệu suất cơ khí: η_mech = 0.6
+
+Lực kéo:
+F = M × η_mech / (D/2)
+F = 0.0265 × 0.6 / 0.01 = 1.59 N
+
+Khối lượng nâng:
+m = F / g = 1.59 / 9.81 = 0.162 kg = 162g
+
+→ Phù hợp với Huina 1592 (gầu nâng ~150-200g)
+```
 
 ---
 
-## 3.1.5 - Xác định sức từ động của cuộn YCM-1 (F₁)
+## 3.1.4 - Xác định hằng số thời gian điện (T_a)
 
 ### Khái niệm
-Cuộn YCM-1 là cuộn phản hồi âm, tạo sức từ động ngược chiều với YCM-2 để ổn định hệ thống.
+
+Hằng số thời gian điện T_a đặc trưng cho tốc độ thay đổi dòng điện phần ứng khi có điện áp đầu vào thay đổi.
 
 **GIẢI THÍCH CHI TIẾT:**
 
-Cuộn YCM-1 có vai trò đặc biệt quan trọng trong hệ thống điều khiển máy phát. Nó hoạt động như một bộ phản hồi âm để tự động điều chỉnh điện áp máy phát khi tải thay đổi.
+Khi đặt điện áp vào động cơ DC, dòng điện không tăng ngay lập tức mà tăng dần theo hàm mũ do hiện tượng tự cảm. T_a là thời gian để dòng điện đạt 63.2% giá trị cuối cùng.
 
 **Ý nghĩa vật lý:**
-- YCM-1 tạo ra từ trường ngược chiều với YCM-2
-- Khi tải tăng → I₁ tăng → F₁ tăng → Từ thông tổng giảm → Điện áp máy phát giảm
-- Đây là cơ chế tự động ổn định điện áp
+- T_a nhỏ → Dòng điện thay đổi nhanh, động cơ đáp ứng nhanh
+- T_a lớn → Dòng điện thay đổi chậm, có độ trễ
+- Thường T_a << T_m (hằng số thời gian cơ)
 
-**Nguyên lý phản hồi âm:**
+### Công thức tính
+
 ```
-Tải tăng → I_tải tăng → I₁ tăng → F₁ tăng → F_tổng giảm → U_MF giảm
-```
-Điều này ngăn chặn điện áp máy phát tăng quá cao khi tải giảm.
-
-**Đặc điểm thiết kế:**
-- Số vòng dây ít hơn YCM-2 (N₁ < N₂)
-- Dòng điện lớn hơn YCM-2 (I₁ > I₂)
-- Mắc nối tiếp với mạch tải để phản ánh dòng tải
-
-### Công thức tính:
-
-**1. Công thức cơ bản:**
-```
-F₁ = N₁ × I₁
+T_a = L_a / R_a
 ```
 
 **GIẢI THÍCH TỪNG KÝ HIỆU:**
-- `F₁`: Sức từ động cuộn YCM-1 (At)
-- `N₁`: Số vòng dây cuộn YCM-1 (vòng)
-- `I₁`: Dòng điện qua cuộn YCM-1 (A)
+- `T_a`: Hằng số thời gian điện (s)
+- `L_a`: Độ tự cảm phần ứng (H)
+- `R_a`: Điện trở phần ứng (Ω)
 
-**2. Quan hệ với dòng tải:**
-```
-I₁ = α × I_tải
-```
+### Thông số động cơ 540/550
 
-**GIẢI THÍCH TỪNG KÝ HIỆU:**
-- `α`: Hệ số phân dòng (không đơn vị)
-- `I_tải`: Dòng điện tải của máy phát (A)
+| Động cơ | L_a (mH) | R_a (Ω) | T_a (ms) |
+|---------|----------|---------|----------|
+| 540 Motor | 0.15 | 0.6 | 0.25 |
+| 550 Motor | 0.20 | 0.8 | **0.25** |
+| 555 Motor | 0.25 | 1.0 | 0.25 |
 
-**CƠ SỞ VẬT LÝ:**
-Cuộn YCM-1 được mắc nối tiếp với mạch tải nên dòng điện qua nó tỷ lệ với dòng tải. Hệ số α phụ thuộc vào cách đấu dây và tỷ số biến dòng.
+**Giá trị sử dụng:** T_a = **0.25 ms** = 0.00025 s
 
-**VÍ DỤ TÍNH TOÁN TỪNG BƯỚC:**
-
-**Ví dụ 1: Không tải**
-```
-Cho: I_tải = 0 A
-     α = 0.1
-     N₁ = 100 vòng
-
-Bước 1: Tính dòng điện YCM-1
-I₁ = α × I_tải = 0.1 × 0 = 0 A
-
-Bước 2: Tính sức từ động
-F₁ = N₁ × I₁ = 100 × 0 = 0 At
-
-Bước 3: Ý nghĩa
-Không tải → Không có phản hồi âm → Điện áp máy phát cao nhất
-```
-
-**Ví dụ 2: Tải 50%**
-```
-Cho: I_tải = 175 A (50% của 350A)
-     α = 0.1
-     N₁ = 100 vòng
-
-Bước 1: Tính dòng điện YCM-1
-I₁ = α × I_tải = 0.1 × 175 = 17.5 A
-
-Bước 2: Tính sức từ động
-F₁ = N₁ × I₁ = 100 × 17.5 = 1750 At
-
-Bước 3: So sánh với YCM-2
-F₁ = 1750 At > F₂ = 1000 At
-→ Phản hồi âm mạnh → Điện áp máy phát giảm
-```
-
-**Ví dụ 3: Tải đầy**
-```
-Cho: I_tải = 350 A (100%)
-     α = 0.1
-     N₁ = 100 vòng
-
-Bước 1: Tính dòng điện YCM-1
-I₁ = α × I_tải = 0.1 × 350 = 35 A
-
-Bước 2: Tính sức từ động
-F₁ = N₁ × I₁ = 100 × 35 = 3500 At
-
-Bước 3: Phân tích hệ thống
-F_tổng = F₂ - F₁ = 1000 - 3500 = -2500 At
-→ Phản hồi âm rất mạnh → Điện áp máy phát giảm đáng kể
-```
-
-**KIỂM TRA KẾT QUẢ:**
-- F₁ tỷ lệ thuận với I_tải
-- F₁ tăng khi tải tăng (phản hồi âm)
-- Giá trị F₁ hợp lý cho cuộn phản hồi
-
-**ÁP DỤNG THỰC TẾ:**
-- **Thiết kế:** Chọn α và N₁ để có độ điều áp mong muốn
-- **Điều chỉnh:** Thay đổi α để điều chỉnh độ nhạy phản hồi
-- **Kiểm tra:** Đo I₁ để đánh giá hoạt động phản hồi
-- **Bảo trì:** F₁ không đúng có thể do hỏng cuộn dây hoặc mạch phân dòng
-
-### Thông số cuộn YCM-1:
-
-**Thông số điển hình:**
-- Số vòng dây: N₁ = 50 - 200 vòng (ít hơn YCM-2)
-- Dòng điện: I₁ = 5 - 15 A (lớn hơn YCM-2)
-- Kết nối: Nối tiếp với mạch tải
-
-### Tính toán cụ thể:
-
-**Ví dụ 1: Chế độ không tải**
-```
-I_tải = 0 A
-=> I₁ = 0 A
-=> F₁ = 0 At
-```
-
-**Ví dụ 2: Chế độ tải 50%**
-```
-Cho: N₁ = 100 vòng
-     I_tải = 50 A
-     α = 0.1
-
-I₁ = 0.1 × 50 = 5 A
-F₁ = 100 × 5 = 500 At
-```
-
-**Ví dụ 3: Chế độ tải đầy**
-```
-Cho: N₁ = 100 vòng
-     I_tải = 100 A
-     α = 0.1
-
-I₁ = 0.1 × 100 = 10 A
-F₁ = 100 × 10 = 1000 At
-```
-
-### Quan hệ F₁ với tải:
+### VÍ DỤ TÍNH TOÁN
 
 ```
-F₁ = N₁ × α × I_tải = K_F1 × I_tải
+Cho:
+L_a = 0.2 mH = 0.0002 H
+R_a = 0.8 Ω
+
+T_a = L_a / R_a = 0.0002 / 0.8 = 0.00025 s = 0.25 ms
 ```
 
-Trong đó: K_F1 = N₁ × α
-
-### Ví dụ tính K_F1:
+### Đáp ứng dòng điện
 
 ```
-Cho: N₁ = 100 vòng
-     α = 0.1
+I_a(t) = I_∞ × (1 - e^(-t/T_a))
 
-K_F1 = 100 × 0.1 = 10 At/A
-
-Khi I_tải = 80A:
-F₁ = 10 × 80 = 800 At
+Trong đó:
+- I_∞ = (U - E_a) / R_a (dòng điện xác lập)
 ```
 
-### Đặc tính F₁ theo dòng tải:
+**Bảng thời gian:**
 
-| I_tải (A) | I₁ (A) | F₁ (At) | % F_max |
-|-----------|--------|---------|---------|
-| 0 | 0 | 0 | 0% |
-| 20 | 2 | 200 | 20% |
-| 40 | 4 | 400 | 40% |
-| 60 | 6 | 600 | 60% |
-| 80 | 8 | 800 | 80% |
-| 100 | 10 | 1000 | 100% |
-
-### Sức từ động tổng hợp:
-
-```
-F_tổng = F₂ - F₁
-```
+| Thời gian | % I_∞ |
+|-----------|-------|
+| t = 0 | 0% |
+| t = T_a | 63.2% |
+| t = 3T_a | 95% |
+| t = 5T_a | 99.3% |
 
 **Ví dụ:**
 ```
-F₂ = 1000 At (từ điều khiển)
-F₁ = 600 At (từ phản hồi tải)
-=> F_tổng = 1000 - 600 = 400 At
+T_a = 0.25 ms
+
+Thời gian đạt 95% dòng điện:
+t = 3 × T_a = 3 × 0.25 = 0.75 ms
+
+→ Rất nhanh! Hầu như tức thời
 ```
 
-### Nguyên lý hoạt động:
+### So sánh với PWM
 
-1. **Không tải:** F₁ = 0 → F_tổng = F₂ (lớn nhất)
-2. **Có tải:** F₁ tăng → F_tổng giảm → Điện áp máy phát giảm
-3. **Tải nặng:** F₁ lớn → F_tổng nhỏ → Hạn chế quá tải
+```
+Tần số PWM thông thường: f = 20 kHz
+Chu kỳ PWM: T_PWM = 1/f = 0.05 ms = 50 μs
 
-### Ý nghĩa:
-- F₁ tạo phản hồi âm theo tải
-- Giúp ổn định điện áp khi tải thay đổi
-- Bảo vệ hệ thống khỏi quá tải
+T_a / T_PWM = 0.25 / 0.05 = 5
+
+→ T_a gấp 5 lần chu kỳ PWM
+→ Dòng điện chưa kịp xác lập trong 1 chu kỳ
+→ Dòng trung bình phụ thuộc vào Duty cycle
+```
+
+### Ứng dụng
+
+**Vì T_a << T_m**, trong hầu hết ứng dụng điều khiển động cơ RC, ta có thể:
+- Bỏ qua T_a trong mô hình động học
+- Coi dòng điện thay đổi tức thời với điện áp PWM
+- Tập trung vào T_m (hằng số cơ) quan trọng hơn
 
 ---
 
-## 3.1.6 - Xác định sức từ động của cuộn YCM-6 (F₆)
+## 3.1.5 - Xác định hằng số thời gian cơ (T_m)
 
 ### Khái niệm
-Cuộn YCM-6 là cuộn kích từ độc lập, cung cấp từ thông ban đầu cho máy phát.
+
+Hằng số thời gian cơ T_m đặc trưng cho tốc độ thay đổi vận tốc góc của động cơ khi có mô men tác động.
 
 **GIẢI THÍCH CHI TIẾT:**
 
-Cuộn YCM-6 có vai trò đặc biệt quan trọng trong hệ thống máy phát DC. Nó hoạt động như một nguồn từ thông cơ bản, độc lập với các cuộn điều khiển khác.
+Khi có mô men điện từ tác động, động cơ không tăng tốc ngay lập tức mà tăng dần do quán tính. T_m là thời gian để tốc độ đạt 63.2% giá trị cuối cùng.
 
 **Ý nghĩa vật lý:**
-- YCM-6 tạo ra từ thông cố định, không phụ thuộc vào tải
-- Cung cấp từ thông nền để máy phát có thể tự kích từ
-- Đảm bảo máy phát luôn có từ thông tối thiểu để hoạt động
+- T_m nhỏ → Động cơ tăng/giảm tốc nhanh (phản ứng nhanh)
+- T_m lớn → Động cơ tăng/giảm tốc chậm (ổn định hơn)
+- T_m >> T_a (gấp hàng trăm lần)
 
-**Nguyên lý hoạt động:**
+### Công thức tính
+
 ```
-Nguồn DC độc lập → YCM-6 → Từ thông cố định → Điện áp máy phát cơ bản
+T_m = (J_total × R_a) / (K_e × K_m)
 ```
 
-**Đặc điểm quan trọng:**
-- Độc lập với mạch điều khiển chính
-- Không thay đổi theo tải
-- Có thể điều chỉnh thủ công để tối ưu hệ thống
-- Quan trọng cho quá trình khởi động máy phát
+Hoặc đơn giản hơn (vì K_e ≈ K_m):
 
-**So sánh với các cuộn khác:**
-- YCM-2: Điều khiển chính (thay đổi theo tín hiệu)
-- YCM-1: Phản hồi âm (thay đổi theo tải)
-- YCM-6: Kích từ cơ bản (không đổi)
-
-### Công thức tính:
-
-**1. Công thức cơ bản:**
 ```
-F₆ = N₆ × I₆
+T_m = (J_total × R_a) / K_e²
 ```
 
 **GIẢI THÍCH TỪNG KÝ HIỆU:**
-- `F₆`: Sức từ động cuộn YCM-6 (At)
-- `N₆`: Số vòng dây cuộn YCM-6 (vòng)
-- `I₆`: Dòng điện qua cuộn YCM-6 (A)
+- `T_m`: Hằng số thời gian cơ (s)
+- `J_total`: Mô men quán tính tổng (kg.m²)
+- `R_a`: Điện trở phần ứng (Ω)
+- `K_e`: Hằng số EMF (V/(rad/s))
+- `K_m`: Hằng số mô men (N.m/A)
 
-**2. Quan hệ với nguồn cấp:**
+### Tính mô men quán tính
+
+**1. Động cơ 550:**
+
 ```
-I₆ = U₆ / R₆
+J_motor ≈ 0.00005 kg.m²
+```
+
+**2. Tải (gầu + vật xúc):**
+
+```
+Giả sử:
+- Khối lượng gầu: m_gau = 0.05 kg
+- Bán kính quay hiệu dụng: r = 0.15 m (cần xúc 15cm)
+- Hệ số quy đổi: η = 0.5
+
+J_load = m_gau × r² / η² = 0.05 × 0.15² / 0.5² = 0.0045 kg.m²
+```
+
+**3. Tổng:**
+
+```
+J_total = J_motor + J_load = 0.00005 + 0.0045 = 0.00455 kg.m²
+
+→ Tải >> Động cơ (gấp 90 lần!)
+```
+
+### VÍ DỤ TÍNH TOÁN
+
+**Trường hợp không tải (chạy không):**
+
+```
+J_total = J_motor = 0.00005 kg.m²
+R_a = 0.8 Ω
+K_e = 0.00557 V/(rad/s)
+
+T_m = (J_total × R_a) / K_e²
+T_m = (0.00005 × 0.8) / 0.00557²
+T_m = 0.00004 / 0.000031
+T_m = 0.00129 s = 1.29 ms
+```
+
+**Trường hợp có tải (nâng gầu):**
+
+```
+J_total = 0.00455 kg.m²
+R_a = 0.8 Ω
+K_e = 0.00557 V/(rad/s)
+
+T_m = (0.00455 × 0.8) / 0.00557²
+T_m = 0.00364 / 0.000031
+T_m = 0.117 s = 117 ms
+```
+
+### So sánh T_a và T_m
+
+| Tham số | T_a | T_m (không tải) | T_m (có tải) |
+|---------|-----|-----------------|--------------|
+| Giá trị | 0.25 ms | 1.3 ms | 117 ms |
+| Tỷ lệ | 1× | 5× | 468× |
+
+**Kết luận:**
+- T_m >> T_a (gấp hàng trăm lần)
+- Động học cơ chậm hơn động học điện rất nhiều
+- Trong điều khiển, T_m là yếu tố giới hạn tốc độ đáp ứng
+
+### Thời gian tăng tốc
+
+```
+Thời gian để đạt 95% tốc độ:
+t_95 = 3 × T_m = 3 × 117 = 351 ms ≈ 0.35 s
+
+Thời gian để đạt 99% tốc độ:
+t_99 = 5 × T_m = 5 × 117 = 585 ms ≈ 0.6 s
+```
+
+### Ứng dụng thực tế
+
+**1. Điều khiển PID:**
+
+```
+Tần số lấy mẫu nên chọn:
+f_sample ≥ 10 / T_m = 10 / 0.117 = 85 Hz
+
+→ Chọn f_sample = 100 Hz (T_sample = 10 ms)
+```
+
+**2. Thời gian nâng gầu:**
+
+```
+Từ dừng → tốc độ tối đa:
+t ≈ 3 × T_m = 351 ms
+
+Để nâng gầu 20cm ở tốc độ trung bình 10 cm/s:
+t_total = 20 / 10 + 0.351 = 2.351 s
+
+→ Mất ~2.3s để nâng gầu lên
+```
+
+---
+
+## 3.1.6 - Xác định đặc tính cơ động cơ
+
+### Khái niệm
+
+Đặc tính cơ là quan hệ giữa tốc độ (n) và mô men (M) của động cơ. Nó cho biết động cơ hoạt động như thế nào ở các điều kiện tải khác nhau.
+
+**GIẢI THÍCH CHI TIẾT:**
+
+Đặc tính cơ có 2 loại:
+1. **Đặc tính tự nhiên**: U = U_rated, Φ = Φ_rated, không có điện trở phụ
+2. **Đặc tính nhân tạo**: Thay đổi U hoặc R để điều khiển
+
+### Phương trình đặc tính cơ
+
+**1. Dạng tổng quát:**
+
+```
+n = n_0 - (R_a / K_e²) × M
 ```
 
 **GIẢI THÍCH TỪNG KÝ HIỆU:**
-- `U₆`: Điện áp cấp cho YCM-6 (V)
-- `R₆`: Điện trở cuộn YCM-6 (Ω)
+- `n`: Tốc độ (rpm)
+- `n_0`: Tốc độ không tải (rpm)
+- `M`: Mô men (N.m)
+- `R_a`: Điện trở phần ứng (Ω)
+- `K_e`: Hằng số EMF (V/(rad/s))
 
-**CƠ SỞ VẬT LÝ:**
-Cuộn YCM-6 được cấp nguồn từ nguồn DC độc lập, thường là máy phát phụ hoặc chỉnh lưu riêng. Dòng điện qua cuộn này không đổi và không phụ thuộc vào tải của máy phát chính.
-
-**VÍ DỤ TÍNH TOÁN TỪNG BƯỚC:**
-
-**Ví dụ 1: Tính từ thông số định mức**
-```
-Cho: N₆ = 600 vòng
-     U₆ = 110V DC
-     R₆ = 110 Ω
-
-Bước 1: Tính dòng điện theo định luật Ohm
-I₆ = U₆ / R₆ = 110 / 110 = 1.0 A
-
-Bước 2: Tính sức từ động
-F₆ = N₆ × I₆ = 600 × 1.0 = 600 At
-
-Bước 3: Ý nghĩa
-F₆ = 600 At cung cấp từ thông cơ bản cho máy phát
-```
-
-**Ví dụ 2: Tính với điện áp khác**
-```
-Cho: N₆ = 600 vòng
-     U₆ = 55V DC (50% điện áp)
-     R₆ = 110 Ω
-
-Bước 1: Tính dòng điện
-I₆ = U₆ / R₆ = 55 / 110 = 0.5 A
-
-Bước 2: Tính sức từ động
-F₆ = N₆ × I₆ = 600 × 0.5 = 300 At
-
-Bước 3: So sánh với định mức
-F₆_50% = 300 At = 50% × F₆_định_mức
-```
-
-**Ví dụ 3: Tính với điện trở khác**
-```
-Cho: N₆ = 600 vòng
-     U₆ = 110V DC
-     R₆ = 137.5 Ω (tăng 25%)
-
-Bước 1: Tính dòng điện
-I₆ = U₆ / R₆ = 110 / 137.5 = 0.8 A
-
-Bước 2: Tính sức từ động
-F₆ = N₆ × I₆ = 600 × 0.8 = 480 At
-
-Bước 3: Phân tích ảnh hưởng
-F₆ giảm 20% → Từ thông cơ bản giảm → Điện áp máy phát giảm
-```
-
-**KIỂM TRA KẾT QUẢ:**
-- F₆ tỷ lệ thuận với U₆ và tỷ lệ nghịch với R₆
-- F₆ không phụ thuộc vào tải máy phát
-- Giá trị F₆ hợp lý cho cuộn kích từ cơ bản
-
-**ÁP DỤNG THỰC TẾ:**
-- **Thiết kế:** Chọn U₆ và R₆ để có F₆ mong muốn
-- **Điều chỉnh:** Thay đổi U₆ hoặc R₆ để điều chỉnh F₆
-- **Kiểm tra:** Đo I₆ để đánh giá hoạt động cuộn kích từ
-- **Bảo trì:** F₆ giảm có thể do hỏng nguồn cấp hoặc cuộn dây
-
-### Thông số cuộn YCM-6:
-
-**Thông số điển hình:**
-- Số vòng dây: N₆ = 500 - 800 vòng
-- Dòng điện: I₆ = 0.5 - 1.0 A (dòng không đổi)
-- Điện áp: U₆ = 110V DC
-- Điện trở: R₆ = 100 - 150 Ω
-
-### Tính toán cụ thể:
-
-**Ví dụ 1:**
-```
-Cho: N₆ = 600 vòng
-     U₆ = 110V
-     R₆ = 110 Ω
-
-I₆ = 110 / 110 = 1.0 A
-F₆ = 600 × 1.0 = 600 At
-```
-
-**Ví dụ 2:**
-```
-Cho: N₆ = 800 vòng
-     U₆ = 110V
-     R₆ = 137.5 Ω
-
-I₆ = 110 / 137.5 = 0.8 A
-F₆ = 800 × 0.8 = 640 At
-```
-
-### Đặc điểm của F₆:
-
-**1. Không đổi theo thời gian:**
-```
-F₆ = const (hằng số)
-```
-
-**2. Không phụ thuộc tải:**
-```
-dF₆/dI_tải = 0
-```
-
-**3. Có thể điều chỉnh thủ công:**
-```
-F₆ = (N₆/R₆) × U₆
-```
-Bằng cách thay đổi U₆ hoặc R₆ (biến trở)
-
-### So sánh các cuộn dây:
-
-| Cuộn | Số vòng | Dòng (A) | F (At) | Chức năng |
-|------|---------|----------|--------|-----------|
-| YCM-1 | 100 | 0-10 | 0-1000 | Phản hồi tải |
-| YCM-2 | 1000 | 0-1.0 | 0-1000 | Điều khiển chính |
-| YCM-6 | 600 | 1.0 | 600 | Kích từ độc lập |
-
-### Sức từ động tổng hợp trong máy phát:
+**2. Tốc độ không tải:**
 
 ```
-F_tổng = F₂ - F₁ + F₆
+n_0 = U_supply / (K_e × 2π/60)
 ```
 
-hoặc (tùy cách đấu dây):
+**3. Độ dốc đặc tính:**
 
 ```
-F_tổng = F₂ - F₁ - F₆
+Δn = (R_a × 60) / (K_e² × 2π)
 ```
 
-### Ví dụ tổng hợp:
+### VÍ DỤ TÍNH TOÁN
 
-**Trường hợp 1: Không tải**
-```
-F₂ = 1000 At
-F₁ = 0 At
-F₆ = 600 At
-=> F_tổng = 1000 - 0 + 600 = 1600 At
-```
+**Bước 1: Tính n_0**
 
-**Trường hợp 2: Tải 50%**
 ```
-F₂ = 1000 At
-F₁ = 500 At
-F₆ = 600 At
-=> F_tổng = 1000 - 500 + 600 = 1100 At
+U_supply = 7.4V
+K_e = 0.00557 V/(rad/s)
+
+n_0 = U_supply / (K_e × 2π/60)
+n_0 = 7.4 / (0.00557 × 0.1047)
+n_0 = 12690 rpm
 ```
 
-**Trường hợp 3: Tải đầy**
+**Bước 2: Tính độ dốc**
+
 ```
-F₂ = 1000 At
-F₁ = 1000 At
-F₆ = 600 At
-=> F_tổng = 1000 - 1000 + 600 = 600 At
-```
+R_a = 0.8 Ω
+K_e = 0.00557 V/(rad/s)
 
-### Vai trò của F₆:
-
-1. **Tạo từ thông ban đầu** để máy phát tự kích từ
-2. **Ổn định điện áp** khi tải thay đổi lớn
-3. **Bù trừ sự suy giảm** từ thông do F₁
-
-### Điều chỉnh F₆:
-
-**Phương pháp 1: Thay đổi U₆**
-```
-F₆ = (N₆/R₆) × U₆
-
-U₆: 0 → 220V
-=> F₆: 0 → 1200 At
+Δn = (R_a × 60) / (K_e² × 2π)
+Δn = (0.8 × 60) / (0.00557² × 2π)
+Δn = 48 / 0.000195
+Δn = 246154 rpm/(N.m)
 ```
 
-**Phương pháp 2: Thay đổi R₆ (biến trở)**
+**Bước 3: Phương trình đặc tính**
+
 ```
-R₆: 50 → 200 Ω
-=> I₆: 2.2 → 0.55 A
-=> F₆: 1320 → 330 At
+n (rpm) = 12690 - 246154 × M (N.m)
 ```
 
-### Ý nghĩa:
-- F₆ cố định, không phụ thuộc tải
-- Tạo từ trường nền cho máy phát
-- Có thể điều chỉnh để tối ưu hệ thống
-- Quan trọng cho quá trình khởi động máy phát
+**Bước 4: Tính một vài điểm**
+
+```
+M = 0 N.m:     n = 12690 rpm (không tải)
+M = 0.01 N.m:  n = 12690 - 2462 = 10228 rpm
+M = 0.02 N.m:  n = 12690 - 4923 = 7767 rpm
+M = 0.03 N.m:  n = 12690 - 7385 = 5305 rpm
+```
+
+### Đặc tính với các điện áp khác nhau
+
+```
+U = 3.7V:  n = 6345 - 246154 × M
+U = 5.0V:  n = 8554 - 246154 × M
+U = 7.4V:  n = 12690 - 246154 × M
+U = 11.1V: n = 19034 - 246154 × M (nâng cấp 3S)
+```
+
+### Vẽ đồ thị
+
+```
+n (rpm)
+    |
+12690|●___
+    |    ＼___
+10000|        ＼___
+    |            ＼___
+ 8000|                ●___  U=7.4V
+    |                    ＼___
+ 6000|                        ＼___
+    |                            ＼___
+ 4000|                                ●___
+    |                                    ＼___
+    |_____________________________________●_____ M (N.m)
+    0    0.01   0.02   0.03   0.04   0.05
+```
+
+### Ứng dụng thực tế
+
+**1. Chọn điểm làm việc:**
+
+```
+Muốn n = 8000 rpm ở tải 0.02 N.m:
+
+Kiểm tra: n = 12690 - 246154 × 0.02 = 7767 rpm
+
+→ Gần 8000 rpm! ✓
+```
+
+**2. Tính công suất:**
+
+```
+Tại n = 8000 rpm, M = 0.02 N.m:
+ω = 8000 × 2π/60 = 837.8 rad/s
+P = M × ω = 0.02 × 837.8 = 16.76 W
+```
+
+**3. Điều chỉnh PWM:**
+
+```
+Muốn n = 6000 rpm ở M = 0.02 N.m:
+n_0_cần = 6000 + 246154 × 0.02 = 10923 rpm
+
+U_cần = n_0_cần × K_e × 2π/60
+U_cần = 10923 × 0.00557 × 0.1047 = 6.37V
+
+Duty = U_cần / U_supply = 6.37 / 7.4 = 86%
+```
 
 ---
 
 ## TÓM TẮT PHẦN 1
 
-### Bảng tổng hợp các thông số đã tính:
+### Bảng tổng hợp thông số động cơ Huina 1592
 
-| Thông số | Ký hiệu | Giá trị điển hình | Đơn vị |
-|----------|---------|-------------------|--------|
-| Hệ số khuếch đại điện áp | K_u | 22 | - |
-| Hệ số khuếch đại dòng | K_i | 100 | - |
-| Hệ số khuếch đại công suất | K_p | 2200 | - |
-| Hằng số thời gian cuộn ĐK | τ_control | 5-10 | ms |
-| Hằng số thời gian cuộn CS | τ_power | 50-150 | ms |
-| Điện áp ra ổn định | U_out | 0-240 | V |
-| Sức từ động YCM-2 | F₂ | 0-1000 | At |
-| Sức từ động YCM-1 | F₁ | 0-1000 | At |
-| Sức từ động YCM-6 | F₆ | 600 | At |
+| Thông số | Ký hiệu | Giá trị | Đơn vị |
+|----------|---------|---------|--------|
+| Điện trở phần ứng | R_a | 0.8 | Ω |
+| Độ tự cảm phần ứng | L_a | 0.2 | mH |
+| Hằng số EMF | K_e | 0.00557 | V/(rad/s) |
+| Hằng số mô men | K_m | 0.0066 | N.m/A |
+| Mô men quán tính motor | J_motor | 0.00005 | kg.m² |
+| Mô men quán tính tải | J_load | 0.0045 | kg.m² |
+| Hằng số thời gian điện | T_a | 0.25 | ms |
+| Hằng số thời gian cơ | T_m | 117 | ms |
+| Tốc độ không tải | n_0 | 12690 | rpm |
+| Độ dốc đặc tính | Δn | 246154 | rpm/(N.m) |
 
-### Các công thức quan trọng:
+### Các công thức quan trọng
 
-1. **Hệ số khuếch đại:** K = Y_out / X_in
-2. **Hằng số thời gian:** τ = L / R
-3. **Điện áp ra:** U_out = K_u × U_in + U_offset
-4. **Sức từ động:** F = N × I
-5. **Sức từ động tổng:** F_tổng = F₂ - F₁ + F₆
-
-### Lưu ý khi áp dụng:
-
-- Các giá trị trên là điển hình, cần đo đạc thực tế cho chính xác
-- Chú ý đến hiện tượng bão hòa từ ở dải cao
-- Xét đến nhiệt độ ảnh hưởng đến điện trở
-- Kiểm tra chiều đấu dây các cuộn YCM
+```
+1. Điện trở:         R_a = U_test / I_test
+2. Hằng số EMF:      K_e = E_a / ω
+3. Hằng số mô men:   K_m = M / I_a  (≈ K_e)
+4. Thời gian điện:   T_a = L_a / R_a
+5. Thời gian cơ:     T_m = (J × R_a) / K_e²
+6. Đặc tính cơ:      n = n_0 - Δn × M
+```
 
 ---
 
 **HẾT PHẦN 1**
 
-Tiếp theo: [Phần 2 - Tính toán 3.1.7 đến 3.1.12](chuong3_phan2.md)
-
+Tiếp theo: [Phần 2 - Điều khiển PWM và ESC](chuong3_phan2.md)
