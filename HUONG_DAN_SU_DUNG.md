@@ -9,8 +9,9 @@
 1. [Yêu cầu hệ thống](#1-yêu-cầu-hệ-thống)
 2. [Cấu trúc thư mục](#2-cấu-trúc-thư-mục)
 3. [Hướng dẫn sử dụng](#3-hướng-dẫn-sử-dụng)
-4. [Câu hỏi thường gặp](#4-câu-hỏi-thường-gặp)
-5. [Khắc phục sự cố](#5-khắc-phục-sự-cố)
+4. [Mô phỏng MATLAB](#4-mô-phỏng-matlab)
+5. [Câu hỏi thường gặp](#5-câu-hỏi-thường-gặp)
+6. [Khắc phục sự cố](#6-khắc-phục-sự-cố)
 
 ---
 
@@ -25,8 +26,8 @@
 ### Kiến thức cần có:
 
 - Cơ bản về MATLAB
-- Hiểu biết về máy điện và điều khiển tự động
-- Đọc hiểu sơ đồ điện
+- Hiểu biết về động cơ DC và điều khiển PWM
+- Đọc hiểu sơ đồ mạch điện
 
 ---
 
@@ -35,21 +36,24 @@
 ```
 hệ thống điều khiển máy xúc auto/
 │
-├── README.md                          # Giới thiệu tổng quan
-├── HUONG_DAN_SU_DUNG.md              # File này
+├── README.md                              # Giới thiệu tổng quan
+├── HUONG_DAN_SU_DUNG.md                  # File này
+├── GIOI_THIEU_HUINA_1592.md              # Thông tin Huina 1592
 │
-├── calculations/                      # Tính toán chi tiết
-│   ├── chuong3_phan1.md              # Tính toán 3.1.1 - 3.1.6
-│   └── chuong3_phan2.md              # Tính toán 3.1.7 - 3.1.12
+├── calculations/                          # Tính toán chi tiết
+│   ├── chuong3_phan1.md                  # Thông số động cơ (R_a, K_e, K_m...)
+│   └── chuong3_phan2.md                  # Điều khiển PWM và ESC
 │
-├── matlab/                            # Code MATLAB mô phỏng
-│   ├── mo_phong_thoi_gian_khuech_dai_tu.m
-│   ├── mo_phong_khau_khuech_dai_tu.m
-│   ├── mo_phong_khau_may_phat.m
-│   └── mo_phong_khau_dong_co.m
+├── matlab/                                # Code MATLAB mô phỏng
+│   ├── mo_phong_khau_dong_co.m           # Mô phỏng động cơ DC
+│   ├── mo_phong_dieu_khien_pwm.m         # Điều khiển PWM
+│   ├── mo_phong_dac_tinh_co.m            # Đặc tính cơ n=f(M)
+│   ├── mo_phong_hang_so_thoi_gian.m      # Hằng số T_a và T_m
+│   ├── mo_phong_hieu_suat.m              # Phân tích hiệu suất
+│   └── chay_tat_ca.m                     # Chạy tất cả mô phỏng
 │
-└── docs/                              # Tài liệu
-    └── BAO_CAO_TONG_HOP.md           # Báo cáo tổng hợp
+└── docs/                                  # Tài liệu
+    └── BAO_CAO_TONG_HOP.md               # Báo cáo tổng hợp
 ```
 
 ---
@@ -61,97 +65,67 @@ hệ thống điều khiển máy xúc auto/
 #### Bước 1: Mở file tính toán
 ```
 Vào thư mục: calculations/
-Mở file: chuong3_phan1.md (hoặc phan2)
+Mở file: chuong3_phan1.md (thông số động cơ)
+Mở file: chuong3_phan2.md (điều khiển PWM)
 ```
 
 #### Bước 2: Đọc nội dung
 - Mỗi phần có công thức chi tiết
-- Ví dụ tính toán cụ thể
+- Ví dụ tính toán cụ thể từng bước
 - Bảng tra cứu giá trị
+- Giải thích ý nghĩa vật lý
 
-### 3.2. Chạy mô phỏng MATLAB
+### 3.2. Giới thiệu Huina 1592
 
-#### A. Mô phỏng thời gian khuếch đại từ
+```
+Mở file: GIOI_THIEU_HUINA_1592.md
 
-**File:** `mo_phong_thoi_gian_khuech_dai_tu.m`
+Nội dung:
+- Thông số kỹ thuật
+- So sánh với máy công nghiệp
+- Khả năng nâng cấp
+- Ứng dụng nghiên cứu
+```
 
-**Cách chạy:**
+---
+
+## 4. MÔ PHỎNG MATLAB
+
+### 4.1. Chạy nhanh tất cả mô phỏng
+
+**Cách đơn giản nhất:**
+
 ```matlab
 % Mở MATLAB
 cd 'matlab/'
 
-% Chạy script
-mo_phong_thoi_gian_khuech_dai_tu
+% Chạy tất cả
+chay_tat_ca
 
 % Kết quả:
-% - Đồ thị hiển thị trên màn hình
-% - File ảnh: mo_phong_thoi_gian_khuech_dai_tu.png
-% - File dữ liệu: data_thoi_gian_khuech_dai_tu.mat
+% - Tự động chạy 5 file mô phỏng
+% - Hiển thị đồ thị
+% - Lưu ảnh PNG
+% - Lưu dữ liệu .mat
 ```
 
-**Nội dung mô phỏng:**
-- Đáp ứng bước cuộn điều khiển
-- Đáp ứng bước cuộn công suất
-- So sánh thời gian đáp ứng
-- Phân tích hằng số thời gian τ
+**Thời gian:** ~30-40 giây cho tất cả
 
-**Thời gian chạy:** ~2-3 giây
+---
 
-**Kết quả mong đợi:**
-- Cuộn điều khiển: τ = 5ms
-- Cuộn công suất: τ = 100ms
-- 6 subplot hiển thị đầy đủ
+### 4.2. Chạy từng mô phỏng chi tiết
 
-#### B. Mô phỏng khâu khuếch đại từ
-
-**File:** `mo_phong_khau_khuech_dai_tu.m`
-
-**Cách chạy:**
-```matlab
-cd 'matlab/'
-mo_phong_khau_khuech_dai_tu
-```
-
-**Nội dung mô phỏng:**
-- Đáp ứng tuyến tính vs phi tuyến
-- Đặc tính bão hòa từ
-- Đáp ứng tần số (Bode plot)
-- Đặc tính tĩnh U_out = f(U_in)
-
-**Thời gian chạy:** ~3-4 giây
-
-**Kết quả mong đợi:**
-- 9 subplot
-- Đặc tính bão hòa rõ ràng
-- Tần số cắt ω_c ≈ 10 rad/s
-
-#### C. Mô phỏng khâu máy phát
-
-**File:** `mo_phong_khau_may_phat.m`
-
-**Cách chạy:**
-```matlab
-cd 'matlab/'
-mo_phong_khau_may_phat
-```
-
-**Nội dung mô phỏng:**
-- Ảnh hưởng các MMF (F_2, F_1, F_6, F_4)
-- Từ thông và sức điện động
-- Đặc tính ngoài U = f(I)
-- Đặc tính điều chỉnh
-- Phân tích công suất
-
-**Thời gian chạy:** ~5-6 giây
-
-**Kết quả mong đợi:**
-- 12 subplot
-- Điện áp ổn định ở ~220V
-- Độ điều áp 8-12%
-
-#### D. Mô phỏng khâu động cơ
+#### A. Mô phỏng động cơ 540/550
 
 **File:** `mo_phong_khau_dong_co.m`
+
+**Nội dung:**
+- Đáp ứng với điện áp thay đổi (3.7V, 7.4V)
+- Đáp ứng với mô men tải thay đổi
+- Đặc tính cơ n = f(M)
+- Đặc tính n = f(I)
+- Công suất và hiệu suất
+- Quá trình khởi động
 
 **Cách chạy:**
 ```matlab
@@ -159,118 +133,184 @@ cd 'matlab/'
 mo_phong_khau_dong_co
 ```
 
-**Nội dung mô phỏng:**
-- Quá trình khởi động
-- Đáp ứng với điện áp và tải thay đổi
-- Đặc tính cơ n = f(M)
-- Đặc tính n = f(I_a)
-- Hiệu suất
+**Kết quả mong đợi:**
+- 12 subplot hiển thị đầy đủ
+- Tốc độ định mức: ~8000 rpm @ 7.4V
+- Dòng điện: 2-4A
+- Hiệu suất: 70-80%
+- File lưu: `mo_phong_dong_co_huina_1592.png`
 
-**Thời gian chạy:** ~10-15 giây (do dt nhỏ)
+**Thời gian chạy:** ~5-8 giây
+
+---
+
+#### B. Điều khiển PWM
+
+**File:** `mo_phong_dieu_khien_pwm.m`
+
+**Nội dung:**
+- Đáp ứng với Duty Cycle khác nhau (0%, 50%, 75%, 100%)
+- Tín hiệu PWM chi tiết (20kHz)
+- Dòng gợn sóng ΔI
+- Hiệu suất ESC
+- Quan hệ Duty - Tốc độ
+
+**Cách chạy:**
+```matlab
+mo_phong_dieu_khien_pwm
+```
 
 **Kết quả mong đợi:**
-- 12 subplot
-- Tốc độ định mức ~600 rpm
-- Hiệu suất 95-97%
+- 9 subplot
+- Duty 50% → n ≈ 4000 rpm
+- Duty 100% → n ≈ 8000 rpm
+- Dòng gợn sóng < 100mA
+- Hiệu suất ESC: 95-98%
+- File lưu: `mo_phong_pwm.png`
 
-### 3.3. Chạy tất cả mô phỏng
+**Thời gian chạy:** ~3-4 giây
 
-**Script tự động (tùy chọn):**
+---
 
-Tạo file `chay_tat_ca.m`:
+#### C. Đặc tính cơ
+
+**File:** `mo_phong_dac_tinh_co.m`
+
+**Nội dung:**
+- Đặc tính n = f(M) với nhiều điện áp (3.7V - 11.1V)
+- Quan hệ M = f(I)
+- Quan hệ n = f(I)
+- Công suất P = f(M)
+- Hiệu suất η = f(M)
+- So sánh lý thuyết vs thực tế
+
+**Cách chạy:**
 ```matlab
-%% Chạy tất cả mô phỏng
-clc; clear all; close all;
-
-fprintf('========== CHẠY TẤT CẢ MÔ PHỎNG ==========\n\n');
-
-% 1. Mô phỏng thời gian khuếch đại từ
-fprintf('1. Mô phỏng thời gian khuếch đại từ...\n');
-mo_phong_thoi_gian_khuech_dai_tu;
-pause(2);
-
-% 2. Mô phỏng khâu khuếch đại từ
-fprintf('\n2. Mô phỏng khâu khuếch đại từ...\n');
-mo_phong_khau_khuech_dai_tu;
-pause(2);
-
-% 3. Mô phỏng khâu máy phát
-fprintf('\n3. Mô phỏng khâu máy phát...\n');
-mo_phong_khau_may_phat;
-pause(2);
-
-% 4. Mô phỏng khâu động cơ
-fprintf('\n4. Mô phỏng khâu động cơ...\n');
-mo_phong_khau_dong_co;
-
-fprintf('\n========== HOÀN THÀNH TẤT CẢ ==========\n');
+mo_phong_dac_tinh_co
 ```
 
-Chạy:
+**Kết quả mong đợi:**
+- 6 subplot chi tiết
+- Tốc độ không tải: ~12000 rpm
+- Độ dốc đặc tính: ~450 rpm/(N.m)
+- Hiệu suất max: ~80% @ M = 0.5×M_rated
+- File lưu: `dac_tinh_co_dong_co.png`
+
+**Thời gian chạy:** ~2-3 giây
+
+---
+
+#### D. Hằng số thời gian
+
+**File:** `mo_phong_hang_so_thoi_gian.m`
+
+**Nội dung:**
+- Hằng số thời gian điện T_a (≈0.25ms)
+- Hằng số thời gian cơ T_m (≈117ms)
+- Đáp ứng bước dòng điện
+- Đáp ứng bước tốc độ
+- Ảnh hưởng của mô men đà J
+- Thời gian tăng tốc
+
+**Cách chạy:**
 ```matlab
-chay_tat_ca
+mo_phong_hang_so_thoi_gian
 ```
 
-### 3.4. Xem báo cáo tổng hợp
+**Kết quả mong đợi:**
+- 6 subplot
+- T_a = 0.25ms (rất nhanh)
+- T_m = 117ms (chậm hơn 468 lần)
+- Thời gian đạt 95% tốc độ: ~350ms
+- Khuyến nghị tần số điều khiển: ~10Hz
+- File lưu: `hang_so_thoi_gian.png`
 
+**Thời gian chạy:** ~3-4 giây
+
+---
+
+#### E. Phân tích hiệu suất
+
+**File:** `mo_phong_hieu_suat.m`
+
+**Nội dung:**
+- Hiệu suất động cơ vs tải
+- Tổn thất động cơ (Cu, cơ, sắt)
+- Hiệu suất ESC vs Duty
+- Tổn thất ESC (dẫn, đóng/mở)
+- Hiệu suất toàn hệ thống
+- Phân bố tổn thất (pie chart)
+
+**Cách chạy:**
+```matlab
+mo_phong_hieu_suat
 ```
-Vào thư mục: docs/
-Mở file: BAO_CAO_TONG_HOP.md
 
-Nội dung:
-- Giới thiệu và mục tiêu
-- Cơ sở lý thuyết
-- Tính toán chi tiết
-- Kết quả mô phỏng
-- Đánh giá và khuyến nghị
-```
+**Kết quả mong đợi:**
+- 6 subplot + pie chart
+- Hiệu suất động cơ: 75-85%
+- Hiệu suất ESC: 95-98%
+- Hiệu suất tổng: ~73%
+- Tổn thất chủ yếu: Tổn thất Cu và ma sát
+- File lưu: `phan_tich_hieu_suat.png`
 
-### 3.5. Tùy chỉnh mô phỏng
+**Thời gian chạy:** ~2-3 giây
 
-#### Thay đổi thông số:
+---
 
-**Ví dụ: Thay đổi điện trở phần ứng động cơ**
+### 4.3. Tùy chỉnh mô phỏng
+
+#### Thay đổi thông số động cơ:
+
+**Ví dụ: Thử với động cơ mạnh hơn**
 
 Mở file `mo_phong_khau_dong_co.m`, tìm dòng:
 ```matlab
-R_a = 0.035;            % Điện trở phần ứng [Ohm]
+R_a = 0.8;              % Điện trở [Ohm]
+K_e = 0.00557;          % Hằng số EMF
 ```
 
 Thay đổi thành:
 ```matlab
-R_a = 0.050;            % Thử với giá trị khác
+R_a = 0.5;              % Động cơ tốt hơn
+K_e = 0.006;            % Động cơ nhanh hơn
 ```
 
-Chạy lại script và xem sự thay đổi.
+Chạy lại và so sánh kết quả.
 
-#### Thay đổi tín hiệu đầu vào:
+#### Thay đổi điện áp nguồn:
 
-**Ví dụ: Thay đổi điện áp máy phát**
+**Ví dụ: Thử với pin 3S (11.1V)**
 
-Trong `mo_phong_khau_may_phat.m`, tìm:
+Trong file mô phỏng, tìm:
 ```matlab
-U_2(t >= 0.5 & t < 1.5) = 110;   % 50%
-U_2(t >= 1.5 & t < 2.5) = 220;   % 100%
+U_rated = 7.4;          % Điện áp [V]
 ```
 
-Thay đổi theo ý muốn.
-
-#### Thay đổi thời gian mô phỏng:
-
-Tìm dòng:
+Thay đổi thành:
 ```matlab
-t_sim = 3.0;            % Thời gian mô phỏng [s]
+U_rated = 11.1;         % Pin 3S
 ```
 
-Tăng/giảm theo nhu cầu.
+**Lưu ý:** Tốc độ sẽ tăng ~50%, nhưng dòng điện cũng tăng!
+
+#### Thay đổi tải:
+
+```matlab
+% Tìm dòng định nghĩa mô men tải
+M_load(t >= 1.8) = M_rated;                      % 100% tải
+
+% Thay đổi thành
+M_load(t >= 1.8) = M_rated * 0.5;                % 50% tải (nhẹ hơn)
+```
 
 ---
 
-## 4. CÂU HỎI THƯỜNG GẶP
+## 5. CÂU HỎI THƯỜNG GẶP
 
 ### Q1: MATLAB báo lỗi "Undefined function or variable"?
 
-**Trả lời:** Đảm bảo đang ở đúng thư mục chứa file .m
+**Trả lời:** Đảm bảo đang ở đúng thư mục
 
 ```matlab
 % Kiểm tra thư mục hiện tại
@@ -283,16 +323,20 @@ cd '/đường/dẫn/đến/matlab/'
 addpath('/đường/dẫn/đến/matlab/')
 ```
 
+---
+
 ### Q2: Đồ thị không hiển thị?
 
 **Trả lời:** 
 ```matlab
-% Đảm bảo không có lệnh close all ở đầu
-% Hoặc comment dòng: % close all;
-
 % Kiểm tra figure
 figure(1)
+
+% Bật lại hiển thị
+set(0, 'DefaultFigureVisible', 'on');
 ```
+
+---
 
 ### Q3: Chạy quá lâu?
 
@@ -300,13 +344,15 @@ figure(1)
 
 ```matlab
 % Thay vì
-t_sim = 5.0;
+t_sim = 3.0;
 dt = 0.0001;
 
 % Thử
-t_sim = 2.0;
+t_sim = 1.0;
 dt = 0.001;
 ```
+
+---
 
 ### Q4: Muốn lưu kết quả vào Excel?
 
@@ -314,41 +360,52 @@ dt = 0.001;
 
 ```matlab
 % Tạo bảng dữ liệu
-T = table(t', U_in', U_out', ...
-    'VariableNames', {'Time', 'U_in', 'U_out'});
+T = table(t', U_in', I_a', n', ...
+    'VariableNames', {'Time', 'Voltage', 'Current', 'Speed'});
 
 % Lưu vào Excel
-writetable(T, 'ket_qua.xlsx');
+writetable(T, 'ket_qua_mo_phong.xlsx');
 ```
 
-### Q5: Làm sao so sánh kết quả với lý thuyết?
+---
 
-**Trả lời:** Xem file tính toán trong `calculations/` và so sánh giá trị.
-
-Ví dụ:
-- Lý thuyết: U_out = 220V @ U_in = 10V
-- Mô phỏng: Xem giá trị cuối đồ thị
-
-### Q6: Code có chạy được trên Octave không?
+### Q5: Code có chạy được trên Octave không?
 
 **Trả lời:** Có, nhưng cần chỉnh sửa nhỏ:
-- Thay `sprintf` trong title bằng chuỗi đơn giản
 - Một số hàm plot có thể khác nhau
+- Thay `sprintf` trong title bằng chuỗi đơn giản
+- Kiểm tra compatibility mode
+
+---
+
+### Q6: Làm sao so sánh với thực nghiệm?
+
+**Trả lời:** 
+1. Đo thông số thực tế (R_a, K_e) bằng multimeter
+2. Cập nhật vào code MATLAB
+3. Chạy lại mô phỏng
+4. So sánh đồ thị
+
+Xem file `GIOI_THIEU_HUINA_1592.md` phần "Thực nghiệm"
+
+---
 
 ### Q7: Muốn xuất video animation?
 
 **Trả lời:** Sử dụng VideoWriter:
 
 ```matlab
-v = VideoWriter('mo_phong.avi');
+v = VideoWriter('mo_phong_dong_co.avi');
 open(v);
 
-for i = 1:length(t)
+for i = 1:10:length(t)
     % Vẽ frame
-    plot(t(1:i), U_out(1:i));
+    plot(t(1:i), n(1:i));
+    xlabel('Time (s)');
+    ylabel('Speed (rpm)');
     drawnow;
     
-    % Capture frame
+    % Capture
     frame = getframe(gcf);
     writeVideo(v, frame);
 end
@@ -358,15 +415,18 @@ close(v);
 
 ---
 
-## 5. KHẮC PHỤC SỰ CỐ
+## 6. KHẮC PHỤC SỰ CỐ
 
 ### Sự cố 1: Warning về singular matrix
 
-**Nguyên nhân:** Thông số không hợp lý (R = 0, L = 0, etc.)
+**Nguyên nhân:** Thông số không hợp lý (R = 0, L = 0)
 
 **Giải pháp:**
 - Kiểm tra lại các thông số
 - Đảm bảo không có giá trị 0 ở mẫu số
+- Dùng giá trị nhỏ thay vì 0 (ví dụ: B = 1e-6)
+
+---
 
 ### Sự cố 2: Kết quả không ổn định (oscillation)
 
@@ -375,7 +435,11 @@ close(v);
 **Giải pháp:**
 ```matlab
 dt = 0.0001;  % Giảm bước thời gian
+% Hoặc dùng ode45
+[t, y] = ode45(@motor_dynamics, [0 3], [0 0]);
 ```
+
+---
 
 ### Sự cố 3: Out of memory
 
@@ -386,22 +450,34 @@ dt = 0.0001;  % Giảm bước thời gian
 % Giảm thời gian hoặc tăng dt
 t_sim = 2.0;
 dt = 0.001;
+
+% Hoặc lưu dữ liệu mỗi N bước
+if mod(i, 10) == 0
+    data(j) = value;
+end
 ```
 
-### Sự cố 4: Đồ thị bị méo
+---
+
+### Sự cố 4: Đồ thị bị méo hoặc có NaN
 
 **Nguyên nhân:** Dữ liệu có NaN hoặc Inf
 
 **Giải pháp:**
 ```matlab
-% Kiểm tra dữ liệu
-any(isnan(U_out))
-any(isinf(U_out))
+% Kiểm tra
+any(isnan(I_a))
+any(isinf(I_a))
 
 % Loại bỏ
-U_out(isnan(U_out)) = 0;
-U_out(isinf(U_out)) = 0;
+I_a(isnan(I_a)) = 0;
+I_a(isinf(I_a)) = 0;
+
+% Hoặc giới hạn
+I_a = min(max(I_a, 0), 10);  % Giới hạn 0-10A
 ```
+
+---
 
 ### Sự cố 5: Không lưu được file
 
@@ -409,89 +485,116 @@ U_out(isinf(U_out)) = 0;
 
 **Giải pháp:**
 ```matlab
-% Chuyển sang thư mục có quyền ghi
+% Chuyển sang thư mục có quyền
 cd('~/Desktop/')
 saveas(gcf, 'hinh_anh.png');
+
+% Hoặc kiểm tra quyền
+fileattrib(pwd)
 ```
 
 ---
 
-## 6. MẸO VÀ THỦ THUẬT
+## 7. MẸO VÀ THỦ THUẬT
 
 ### Mẹo 1: Zoom vào vùng quan tâm
 
 ```matlab
 % Sau khi plot
-xlim([0.5 1.0]);  % Zoom vùng 0.5-1.0s
+xlim([0.5 1.0]);  % Zoom thời gian 0.5-1.0s
 ylim([0 250]);    % Giới hạn trục y
 ```
+
+---
 
 ### Mẹo 2: So sánh nhiều trường hợp
 
 ```matlab
-% Chạy với R_a = 0.035
-R_a1 = 0.035;
-% ... mô phỏng
-U_out_1 = U_out;
+% Chạy với R_a = 0.8
+R_a = 0.8;
+run('mo_phong_khau_dong_co.m');
+n1 = n;
 
-% Chạy với R_a = 0.050
-R_a2 = 0.050;
-% ... mô phỏng
-U_out_2 = U_out;
+% Chạy với R_a = 0.5
+R_a = 0.5;
+run('mo_phong_khau_dong_co.m');
+n2 = n;
 
 % So sánh
 figure;
-plot(t, U_out_1, 'b-', t, U_out_2, 'r--');
-legend('R_a = 0.035', 'R_a = 0.050');
+plot(t, n1, 'b-', t, n2, 'r--');
+legend('R_a=0.8Ω', 'R_a=0.5Ω');
 ```
 
-### Mẹo 3: Xuất dữ liệu để vẽ bằng Python
+---
+
+### Mẹo 3: In báo cáo PDF tất cả figure
 
 ```matlab
-% Lưu vào CSV
-csvwrite('du_lieu.csv', [t', U_out']);
-```
+% Lấy tất cả figure
+figs = findall(0, 'Type', 'figure');
 
-Trong Python:
-```python
-import pandas as pd
-import matplotlib.pyplot as plt
-
-data = pd.read_csv('du_lieu.csv')
-plt.plot(data.iloc[:, 0], data.iloc[:, 1])
-plt.show()
-```
-
-### Mẹo 4: In báo cáo PDF
-
-```matlab
-% Sau khi có tất cả figure
-figHandles = findall(0, 'Type', 'figure');
-for i = 1:length(figHandles)
-    figure(figHandles(i));
+% Lưu từng figure
+for i = 1:length(figs)
+    figure(figs(i));
     print('-dpdf', sprintf('figure_%d.pdf', i));
 end
+
+% Hoặc ghép thành 1 file
+print('-dpdf', '-fillpage', 'bao_cao_day_du.pdf', figs);
 ```
 
-### Mẹo 5: Debug khi kết quả sai
+---
+
+### Mẹo 4: Debug khi kết quả sai
 
 ```matlab
 % Thêm điểm dừng
 keyboard
 
 % Hoặc in giá trị
-fprintf('U_out tại t=1s: %.2f V\n', U_out(find(t>=1, 1)));
+fprintf('n @ t=1s: %.0f rpm\n', n(find(t>=1, 1)));
+
+% Plot từng bước
+for i = 1:100:length(t)
+    plot(t(1:i), n(1:i));
+    pause(0.1);
+end
 ```
 
 ---
 
-## 7. HỖ TRỢ
+### Mẹo 5: Xuất dữ liệu sang Python
+
+```matlab
+% Lưu CSV
+csvwrite('data.csv', [t', I_a', n']);
+
+% Hoặc MAT file
+save('data.mat', 't', 'I_a', 'n');
+```
+
+Trong Python:
+```python
+import pandas as pd
+import scipy.io
+
+# Từ CSV
+data = pd.read_csv('data.csv')
+
+# Từ MAT
+mat = scipy.io.loadmat('data.mat')
+```
+
+---
+
+## 8. HỖ TRỢ
 
 ### Liên hệ:
 
-- **Email:** [địa chỉ email]
-- **GitHub:** [link repository]
-- **Documentation:** Xem file `docs/BAO_CAO_TONG_HOP.md`
+- **GitHub**: [github.com/trthanhdo41/auto-excavator-control-system](https://github.com/trthanhdo41/auto-excavator-control-system)
+- **Issues**: Báo lỗi tại GitHub Issues
+- **Documentation**: Xem file `BAO_CAO_TONG_HOP.md`
 
 ### Báo lỗi:
 
@@ -500,12 +603,14 @@ Nếu phát hiện lỗi, vui lòng báo cáo với thông tin:
 2. Thông báo lỗi (copy toàn bộ)
 3. Phiên bản MATLAB
 4. Hệ điều hành
+5. Thông số đã thay đổi (nếu có)
 
 ---
 
-## 8. CẬP NHẬT VÀ BẢN QUYỀN
+## 9. CẬP NHẬT
 
 ### Phiên bản:
+- **v2.0** - Tháng 10/2025: Viết lại hoàn toàn cho Huina 1592
 - **v1.0** - Tháng 10/2025: Phiên bản đầu tiên
 
 ### Bản quyền:
@@ -518,4 +623,3 @@ Chào mừng mọi đóng góp để cải thiện dự án!
 ---
 
 **Chúc các bạn sử dụng thành công! 🚜⚡**
-
