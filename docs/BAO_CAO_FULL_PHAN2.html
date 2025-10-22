@@ -1,432 +1,326 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 13pt;
-            line-height: 1.8;
-            margin: 2.54cm 3.17cm;
-            text-align: justify;
-        }
-        h1 { font-size: 18pt; font-weight: bold; text-align: center; margin: 24pt 0 18pt; text-transform: uppercase; }
-        h2 { font-size: 16pt; font-weight: bold; margin: 18pt 0 12pt; }
-        h3 { font-size: 14pt; font-weight: bold; margin: 14pt 0 10pt; }
-        h4 { font-size: 13pt; font-weight: bold; margin: 12pt 0 8pt; }
-        p { text-indent: 1cm; margin: 6pt 0; }
-        .no-indent { text-indent: 0; }
-        table { border-collapse: collapse; width: 100%; margin: 12pt 0; font-size: 12pt; }
-        th, td { border: 1px solid black; padding: 8pt; }
-        th { background-color: #e8e8e8; font-weight: bold; text-align: center; }
-        pre, code { font-family: 'Courier New'; background: #f5f5f5; padding: 2pt 6pt; font-size: 11pt; }
-        pre { padding: 12pt; border: 1px solid #ddd; margin: 12pt 0; white-space: pre-wrap; }
-        ul, ol { margin-left: 2cm; }
-        li { margin-bottom: 6pt; }
-        strong { font-weight: bold; }
-        em { font-style: italic; }
-    </style>
+<meta charset="UTF-8">
+<title>Báo cáo Huina 1592</title>
+<style>
+body { font-family: 'Times New Roman'; font-size: 13pt; line-height: 1.8; margin: 2.54cm 3.17cm; text-align: justify; }
+h1 { font-size: 18pt; font-weight: bold; text-align: center; margin: 24pt 0 18pt; text-transform: uppercase; }
+h2 { font-size: 16pt; font-weight: bold; margin: 18pt 0 12pt; }
+h3 { font-size: 14pt; font-weight: bold; margin: 14pt 0 10pt; }
+h4 { font-size: 13pt; font-weight: bold; margin: 12pt 0 8pt; }
+p { text-indent: 1cm; margin: 6pt 0; }
+.no-indent { text-indent: 0; }
+table { border-collapse: collapse; width: 100%; margin: 12pt 0; }
+th, td { border: 1px solid black; padding: 8pt; }
+th { background-color: #e8e8e8; font-weight: bold; text-align: center; }
+pre { font-family: 'Courier New'; background: #f5f5f5; padding: 12pt; border: 1px solid #ddd; white-space: pre-wrap; }
+ul, ol { margin-left: 2cm; }
+li { margin-bottom: 6pt; }
+</style>
 </head>
 <body>
-</pre>
-<p class="no-indent"><strong>Tính chính xác hơn:</strong></p>
+<p>T_m = (J_total × R_a) / K_e²</p>
 <pre>
-E_a = U - I_no_load × R_a
-I_no_load = 0.5A (đo được)
-E_a = 7.4 - 0.5 × 0.8 = 7.0V
-
-K_e = 7.0 / 1256.6 = 0.00557 V/(rad/s)
-</pre>
-<p class="no-indent"><strong>Giá trị tham khảo:</strong> K<sub>e</sub> = <strong>0.00557 V/(rad/s)</strong></p>
+<p>Đặc trưng cho tốc độ đáp ứng của tốc độ góc.</p>
+<p class="no-indent"><strong>Ví dụ với Huina 1592:<strong></p>
+<ul class="no-indent">
+<li>J_total = 0.00025 kg.m² (motor + tải)</li>
+<ul class="no-indent">
+<li>R_a = 0.8 Ω</li>
+<ul class="no-indent">
+<li>K_e = 0.00557 V/(rad/s)</li>
+<pre>
+<p>T_m = (0.00025 × 0.8) / (0.00557 × 0.0066)</p>
+<p>T_m = 0.117 s = 117 ms</p>
+<pre>
+<p class="no-indent"><strong>Ý nghĩa:<strong> Tốc độ đạt 63.2% giá trị cuối trong 117ms</p>
+<h4>2.5.3. So sánh T_a và T_m</h4>
+<pre>
+<p>T_m / T_a = 117 / 0.25 = 468 lần</p>
+<pre>
+<p class="no-indent"><strong>Kết luận:<strong></p>
+<ul class="no-indent">
+<li>T_a << T_m → Dòng điện đáp ứng rất nhanh</li>
+<ul class="no-indent">
+<li>T_m quyết định tốc độ đáp ứng của hệ thống</li>
+<ul class="no-indent">
+<li>Có thể bỏ qua động học điện trong nhiều ứng dụng</li>
+<hr style="border:1px solid #ccc;margin:18pt 0">
+<h2>3. TÍNH TOÁN CÁC THÔNG SỐ</h2>
+<h3>3.1. Thông số động cơ 540/550</h3>
+<h4>3.1.1. Điện trở phần ứng (R_a)</h4>
+<p class="no-indent"><strong>Phương pháp 1: Đo trực tiếp<strong></p>
+<pre>
+<p>Dùng đồng hồ vạn năng ở chế độ Ohm</p>
+<p>R_a = 0.8 Ω (đo được)</p>
+<pre>
+<p class="no-indent"><strong>Phương pháp 2: Từ tổn thất đồng<strong></p>
+<pre>
+<p>Chạy động cơ ở định mức, đo I_rated</p>
+<p>P_Cu = I²_rated × R_a</p>
+<p>→ R_a = P_Cu / I²_rated</p>
+<pre>
+<p class="no-indent"><strong>Ví dụ:<strong></p>
+<ul class="no-indent">
+<li>I_rated = 4A</li>
+<ul class="no-indent">
+<li>P_Cu = 12.8W (ước tính từ hiệu suất)</li>
+<pre>
+<p>R_a = 12.8 / 4² = 0.8 Ω</p>
+<pre>
+<p class="no-indent"><strong>Ảnh hưởng nhiệt độ:<strong></p>
+<pre>
+<p>R_a(T) = R_a(25°C) × [1 + α × (T - 25)]</p>
+<p>α_đồng = 0.00393 /°C</p>
+<pre>
+<p>Ví dụ ở 60°C:</p>
+<pre>
+<p>R_a(60°C) = 0.8 × [1 + 0.00393 × (60 - 25)]</p>
+<p>R_a(60°C) = 0.8 × 1.138 = 0.91 Ω (tăng 14%)</p>
+<pre>
+<h4>3.1.2. Hằng số EMF (K_e)</h4>
+<p class="no-indent"><strong>Phương pháp: Đo tốc độ không tải<strong></p>
+<pre>
+<p>Chạy động cơ ở U = 7.4V</p>
+<p>Đo tốc độ n_no_load = 12000 rpm</p>
+<pre>
+<p>Tính:</p>
+<pre>
+<p>ω_no_load = 12000 × 2π/60 = 1256.6 rad/s</p>
+<p>E_a ≈ U (vì I ≈ 0 ở không tải)</p>
+<p>K_e = U / ω = 7.4 / 1256.6</p>
+<p>K_e = 0.00589 V/(rad/s)</p>
+<pre>
+<p class="no-indent"><strong>Tính chính xác hơn:<strong></p>
+<pre>
+<p>E_a = U - I_no_load × R_a</p>
+<p>I_no_load = 0.5A (đo được)</p>
+<p>E_a = 7.4 - 0.5 × 0.8 = 7.0V</p>
+<p>K_e = 7.0 / 1256.6 = 0.00557 V/(rad/s)</p>
+<pre>
+<p class="no-indent"><strong>Giá trị tham khảo:<strong> K_e = <strong>0.00557 V/(rad/s)<strong></p>
 <h4>3.1.3. Hằng số mô men (K_m)</h4>
-<p class="no-indent"><strong>Trong hệ SI:</strong> K<sub>m</sub> = K<sub>e</sub> (về lý thuyết)</p>
+<p class="no-indent"><strong>Trong hệ SI:<strong> K_m = K_e (về lý thuyết)</p>
 <pre>
-K_m = 0.00557 N.m/A (giá trị lý thuyết)
-</pre>
-<p class="no-indent"><strong>Kiểm chứng từ định mức:</strong></p>
+<p>K_m = 0.00557 N.m/A (giá trị lý thuyết)</p>
 <pre>
-Công suất định mức: P = 30W
-Dòng định mức: I_rated = 4A
-Tốc độ có tải: n_rated = 8000 rpm
-</pre>
+<p class="no-indent"><strong>Kiểm chứng từ định mức:<strong></p>
+<pre>
+<p>Công suất định mức: P = 30W</p>
+<p>Dòng định mức: I_rated = 4A</p>
+<p>Tốc độ có tải: n_rated = 8000 rpm</p>
+<pre>
 <p>Tính mô men định mức:</p>
 <pre>
-ω_rated = 8000 × 2π/60 = 837.8 rad/s
-M_rated = P / ω = 30 / 837.8
-M_rated = 0.0358 N.m = 35.8 mN.m
-</pre>
-<p>Tính K<sub>m</sub>:</p>
+<p>ω_rated = 8000 × 2π/60 = 837.8 rad/s</p>
+<p>M_rated = P / ω = 30 / 837.8</p>
+<p>M_rated = 0.0358 N.m = 35.8 mN.m</p>
 <pre>
-K_m = M_rated / I_rated = 0.0358 / 4
-K_m = 0.00895 N.m/A
-</pre>
-<p class="no-indent"><strong>Lưu ý:</strong> Giá trị thực tế K<sub>m</sub> > K<sub>e</sub> do tổn thất cơ. Sử dụng:</p>
+<p>Tính K_m:</p>
+<pre>
+<p>K_m = M_rated / I_rated = 0.0358 / 4</p>
+<p>K_m = 0.00895 N.m/A</p>
+<pre>
+<p class="no-indent"><strong>Lưu ý:<strong> Giá trị thực tế K_m > K_e do tổn thất cơ. Sử dụng:</p>
 <ul class="no-indent">
-<li><strong>K_e = 0.00557 V/(rad/s)</strong> (từ EMF)</li>
-<li><strong>K_m = 0.0066 N.m/A</strong> (giá trị hiệu dụng, có tính tổn thất)</li>
-</ul>
+<li><strong>K_e = 0.00557 V/(rad/s)<strong> (từ EMF)</li>
+<ul class="no-indent">
+<li><strong>K_m = 0.0066 N.m/A<strong> (giá trị hiệu dụng, có tính tổn thất)</li>
 <h4>3.1.4. Hằng số thời gian điện (T_a)</h4>
-<p class="no-indent"><strong>Độ tự cảm:</strong> Động cơ 540/550 thường có L<sub>a</sub> = 0.15 - 0.25 mH</p>
-<p>Chọn: <strong>L<sub>a</sub> = 0.2 mH = 0.0002 H</strong></p>
+<p class="no-indent"><strong>Độ tự cảm:<strong> Động cơ 540/550 thường có L_a = 0.15 - 0.25 mH</p>
+<p>Chọn: <strong>L_a = 0.2 mH = 0.0002 H<strong></p>
 <pre>
-T_a = L_a / R_a = 0.0002 / 0.8
-T_a = 0.00025 s = 0.25 ms
-</pre>
-<p class="no-indent"><strong>So sánh với chu kỳ PWM:</strong></p>
+<p>T_a = L_a / R_a = 0.0002 / 0.8</p>
+<p>T_a = 0.00025 s = 0.25 ms</p>
 <pre>
-T_PWM = 1/20000 = 0.05 ms
-T_a / T_PWM = 0.25 / 0.05 = 5 lần
-
-→ Trong 1 chu kỳ PWM, dòng điện thay đổi ~18% (1 - e^(-1/5))
-→ Phù hợp!
-</pre>
+<p class="no-indent"><strong>So sánh với chu kỳ PWM:<strong></p>
+<pre>
+<p>T_PWM = 1/20000 = 0.05 ms</p>
+<p>T_a / T_PWM = 0.25 / 0.05 = 5 lần</p>
+<p>→ Trong 1 chu kỳ PWM, dòng điện thay đổi ~18% (1 - e^(-1/5))</p>
+<p>→ Phù hợp!</p>
+<pre>
 <h4>3.1.5. Hằng số thời gian cơ (T_m)</h4>
-<p class="no-indent"><strong>Mô men đà:</strong></p>
+<p class="no-indent"><strong>Mô men đà:<strong></p>
 <ul class="no-indent">
 <li>J_motor = 0.00005 kg.m² (động cơ)</li>
+<ul class="no-indent">
 <li>J_load = 0.0002 kg.m² (gầu + vật xúc)</li>
+<ul class="no-indent">
 <li>J_total = 0.00025 kg.m²</li>
-</ul>
 <pre>
-T_m = (J_total × R_a) / (K_e × K_m)
-T_m = (0.00025 × 0.8) / (0.00557 × 0.0066)
-T_m = 0.117 s = 117 ms
-</pre>
-<p class="no-indent"><strong>Ý nghĩa:</strong></p>
+<p>T_m = (J_total × R_a) / (K_e × K_m)</p>
+<p>T_m = (0.00025 × 0.8) / (0.00557 × 0.0066)</p>
+<p>T_m = 0.117 s = 117 ms</p>
+<pre>
+<p class="no-indent"><strong>Ý nghĩa:<strong></p>
 <ul class="no-indent">
 <li>Thời gian đạt 63.2% tốc độ: 117 ms</li>
+<ul class="no-indent">
 <li>Thời gian đạt 95% tốc độ: 3 × T_m = 351 ms</li>
+<ul class="no-indent">
 <li>Thời gian đạt 99% tốc độ: 5 × T_m = 585 ms</li>
-</ul>
 <h4>3.1.6. Đặc tính cơ động cơ</h4>
-<p class="no-indent"><strong>Phương trình:</strong></p>
+<p class="no-indent"><strong>Phương trình:<strong></p>
 <pre>
-n = n_0 - Δn × M
-</pre>
+<p>n = n_0 - Δn × M</p>
+<pre>
 <p>Trong đó:</p>
 <pre>
-n_0 = U / (K_e × 2π/60) [rpm]
-Δn = (R_a × 60) / (K_e² × 2π) [rpm/(N.m)]
-</pre>
-<p class="no-indent"><strong>Tính toán với U = 7.4V:</strong></p>
+<p>n_0 = U / (K_e × 2π/60) [rpm]</p>
+<p>Δn = (R_a × 60) / (K_e² × 2π) [rpm/(N.m)]</p>
 <pre>
-n_0 = 7.4 / (0.00557 × 0.1047) = 12688 rpm
-Δn = (0.8 × 60) / (0.00557² × 6.283) = 2347 rpm/(N.m)
-</pre>
-<p class="no-indent"><strong>Đặc tính cơ tự nhiên:</strong></p>
+<p class="no-indent"><strong>Tính toán với U = 7.4V:<strong></p>
 <pre>
-n = 12688 - 2347 × M  [rpm, N.m]
-</pre>
-<p class="no-indent"><strong>Tại định mức (M = 0.0265 N.m):</strong></p>
+<p>n_0 = 7.4 / (0.00557 × 0.1047) = 12688 rpm</p>
+<p>Δn = (0.8 × 60) / (0.00557² × 6.283) = 2347 rpm/(N.m)</p>
 <pre>
-n = 12688 - 2347 × 0.0265 = 12026 rpm (lý thuyết)
-</pre>
-<p>Thực tế: n<sub>rated</sub> ≈ 8000 rpm (do tổn thất cơ cao hơn)</p>
+<p class="no-indent"><strong>Đặc tính cơ tự nhiên:<strong></p>
+<pre>
+<p>n = 12688 - 2347 × M  [rpm, N.m]</p>
+<pre>
+<p class="no-indent"><strong>Tại định mức (M = 0.0265 N.m):<strong></p>
+<pre>
+<p>n = 12688 - 2347 × 0.0265 = 12026 rpm (lý thuyết)</p>
+<pre>
+<p>Thực tế: n_rated ≈ 8000 rpm (do tổn thất cơ cao hơn)</p>
 <h3>3.2. Tính toán mạch PWM</h3>
 <h4>3.2.1. Dòng gợn sóng</h4>
-<p class="no-indent"><strong>Công thức:</strong></p>
+<p class="no-indent"><strong>Công thức:<strong></p>
 <pre>
-ΔI = (V_supply - E_a) × D × (1-D) / (L_a × f_PWM)
-</pre>
-<p class="no-indent"><strong>Tính toán tại D = 50%, n = 4000 rpm:</strong></p>
+<p>ΔI = (V_supply - E_a) × D × (1-D) / (L_a × f_PWM)</p>
 <pre>
-ω = 4000 × 2π/60 = 418.9 rad/s
-E_a = K_e × ω = 0.00557 × 418.9 = 2.33V
-V_supply = 7.4V
-L_a = 0.0002H
-f_PWM = 20000 Hz
-
-ΔI = (7.4 - 2.33) × 0.5 × 0.5 / (0.0002 × 20000)
-ΔI = 0.317 A = 317 mA
-</pre>
-<p class="no-indent"><strong>Dòng gợn sóng tối đa (tại D = 50%, động cơ chậm):</strong></p>
+<p class="no-indent"><strong>Tính toán tại D = 50%, n = 4000 rpm:<strong></p>
 <pre>
-ΔI_max ≈ 350 mA
-</pre>
+<p>ω = 4000 × 2π/60 = 418.9 rad/s</p>
+<p>E_a = K_e × ω = 0.00557 × 418.9 = 2.33V</p>
+<p>V_supply = 7.4V</p>
+<p>L_a = 0.0002H</p>
+<p>f_PWM = 20000 Hz</p>
+<p>ΔI = (7.4 - 2.33) × 0.5 × 0.5 / (0.0002 × 20000)</p>
+<p>ΔI = 0.317 A = 317 mA</p>
+<pre>
+<p class="no-indent"><strong>Dòng gợn sóng tối đa (tại D = 50%, động cơ chậm):<strong></p>
+<pre>
+<p>ΔI_max ≈ 350 mA</p>
+<pre>
 <h4>3.2.2. Tổn thất MOSFET</h4>
-<p class="no-indent"><strong>Tổn thất dẫn:</strong></p>
+<p class="no-indent"><strong>Tổn thất dẫn:<strong></p>
 <pre>
-P_cond = I²_rms × R_ds_on
-</pre>
-<p>Với R<sub>ds_on</sub> = 0.02 Ω, I<sub>rms</sub> = 4A:</p>
+<p>P_cond = I²_rms × R_ds_on</p>
 <pre>
-P_cond = 4² × 0.02 = 0.32W (mỗi MOSFET)
-Tổng (4 MOSFET): 1.28W
-</pre>
-<p class="no-indent"><strong>Tổn thất đóng/mở:</strong></p>
+<p>Với R_ds_on = 0.02 Ω, I_rms = 4A:</p>
 <pre>
-P_sw = 0.5 × V × I × t_sw × f_PWM
-</pre>
-<p>Với t<sub>sw</sub> = 100ns, V = 7.4V, I = 4A, f = 20kHz:</p>
+<p>P_cond = 4² × 0.02 = 0.32W (mỗi MOSFET)</p>
+<p>Tổng (4 MOSFET): 1.28W</p>
 <pre>
-P_sw = 0.5 × 7.4 × 4 × 100e-9 × 20000
-P_sw = 0.0296W ≈ 30mW (mỗi MOSFET)
-Tổng (4 MOSFET): 0.12W
-</pre>
-<p class="no-indent"><strong>Tổn thất tổng:</strong></p>
+<p class="no-indent"><strong>Tổn thất đóng/mở:<strong></p>
 <pre>
-P_loss_total = 1.28 + 0.12 = 1.4W
-</pre>
-<p class="no-indent"><strong>Hiệu suất ESC:</strong></p>
+<p>P_sw = 0.5 × V × I × t_sw × f_PWM</p>
 <pre>
-P_motor = 7.4 × 4 = 29.6W
-η_ESC = 29.6 / (29.6 + 1.4) × 100% = 95.5%
-</pre>
+<p>Với t_sw = 100ns, V = 7.4V, I = 4A, f = 20kHz:</p>
+<pre>
+<p>P_sw = 0.5 × 7.4 × 4 × 100e-9 × 20000</p>
+<p>P_sw = 0.0296W ≈ 30mW (mỗi MOSFET)</p>
+<p>Tổng (4 MOSFET): 0.12W</p>
+<pre>
+<p class="no-indent"><strong>Tổn thất tổng:<strong></p>
+<pre>
+<p>P_loss_total = 1.28 + 0.12 = 1.4W</p>
+<pre>
+<p class="no-indent"><strong>Hiệu suất ESC:<strong></p>
+<pre>
+<p>P_motor = 7.4 × 4 = 29.6W</p>
+<p>η_ESC = 29.6 / (29.6 + 1.4) × 100% = 95.5%</p>
+<pre>
 <h4>3.2.3. Tản nhiệt</h4>
-<p class="no-indent"><strong>Nhiệt độ MOSFET:</strong></p>
+<p class="no-indent"><strong>Nhiệt độ MOSFET:<strong></p>
 <pre>
-T_junction = T_ambient + R_th × P_loss
-</pre>
-<p>Với R<sub>th</sub> = 50°C/W (không tản nhiệt), T<sub>ambient</sub> = 25°C:</p>
+<p>T_junction = T_ambient + R_th × P_loss</p>
 <pre>
-T_junction = 25 + 50 × 0.32 = 41°C (OK!)
-</pre>
-<p class="no-indent"><strong>Kết luận:</strong> Không cần tản nhiệt với công suất 30W</p>
+<p>Với R_th = 50°C/W (không tản nhiệt), T_ambient = 25°C:</p>
+<pre>
+<p>T_junction = 25 + 50 × 0.32 = 41°C (OK!)</p>
+<pre>
+<p class="no-indent"><strong>Kết luận:<strong> Không cần tản nhiệt với công suất 30W</p>
 <h3>3.3. Bảng tổng hợp thông số</h3>
-<table>
-<tr><th>STT</th><th>Thông số</th><th>Ký hiệu</th><th>Giá trị</th><th>Đơn vị</th><th>Ghi chú</th></tr>
-<tr><td>**ĐỘNG CƠ**</td></tr>
-<tr><td>1</td><td>Loại</td><td>-</td><td>540/550 Brushed</td><td>-</td><td>DC có chổi than</td></tr>
-<tr><td>2</td><td>Điện áp định mức</td><td>U_rated</td><td>7.4</td><td>V</td><td>Pin 2S Li-ion</td></tr>
-<tr><td>3</td><td>Dòng định mức</td><td>I_rated</td><td>3-5</td><td>A</td><td>Phụ thuộc tải</td></tr>
-<tr><td>4</td><td>Công suất</td><td>P</td><td>20-50</td><td>W</td><td>Phụ thuộc tải</td></tr>
-<tr><td>5</td><td>Tốc độ không tải</td><td>n_0</td><td>12000</td><td>rpm</td><td>@ 7.4V</td></tr>
-<tr><td>6</td><td>Tốc độ có tải</td><td>n_rated</td><td>8000</td><td>rpm</td><td>@ tải định mức</td></tr>
-<tr><td>7</td><td>Mô men định mức</td><td>M_rated</td><td>26.5</td><td>mN.m</td><td>0.0265 N.m</td></tr>
-<tr><td>8</td><td>Điện trở phần ứng</td><td>R_a</td><td>0.8</td><td>Ω</td><td>@ 25°C</td></tr>
-<tr><td>9</td><td>Độ tự cảm phần ứng</td><td>L_a</td><td>0.2</td><td>mH</td><td>0.0002 H</td></tr>
-<tr><td>10</td><td>Hằng số EMF</td><td>K_e</td><td>0.00557</td><td>V/(rad/s)</td><td>Đo được</td></tr>
-<tr><td>11</td><td>Hằng số mô men</td><td>K_m</td><td>0.0066</td><td>N.m/A</td><td>Có tổn thất</td></tr>
-<tr><td>12</td><td>Mô men đà motor</td><td>J_motor</td><td>0.00005</td><td>kg.m²</td><td>Ước tính</td></tr>
-<tr><td>13</td><td>Mô men đà tải</td><td>J_load</td><td>0.0002</td><td>kg.m²</td><td>Gầu + vật</td></tr>
-<tr><td>14</td><td>Mô men đà tổng</td><td>J_total</td><td>0.00025</td><td>kg.m²</td><td>J_m + J_l</td></tr>
-<tr><td>15</td><td>Hệ số ma sát</td><td>B</td><td>0.0001</td><td>N.m.s/rad</td><td>Ước tính</td></tr>
-<tr><td>16</td><td>Hằng số thời gian điện</td><td>T_a</td><td>0.25</td><td>ms</td><td>Rất nhanh</td></tr>
-<tr><td>17</td><td>Hằng số thời gian cơ</td><td>T_m</td><td>117</td><td>ms</td><td>Chậm hơn 468x</td></tr>
-<tr><td>**ĐIỀU KHIỂN PWM**</td></tr>
-<tr><td>18</td><td>Điện áp nguồn</td><td>V_supply</td><td>7.4</td><td>V</td><td>Pin 2S</td></tr>
-<tr><td>19</td><td>Tần số PWM</td><td>f_PWM</td><td>20</td><td>kHz</td><td>Không nghe thấy</td></tr>
-<tr><td>20</td><td>Chu kỳ PWM</td><td>T_PWM</td><td>50</td><td>μs</td><td>1/f_PWM</td></tr>
-<tr><td>21</td><td>Điện áp @ D=50%</td><td>U_avg</td><td>3.7</td><td>V</td><td>V × 0.5</td></tr>
-<tr><td>22</td><td>Điện áp @ D=75%</td><td>U_avg</td><td>5.55</td><td>V</td><td>V × 0.75</td></tr>
-<tr><td>23</td><td>Dòng gợn sóng max</td><td>ΔI</td><td>350</td><td>mA</td><td>@ D=50%</td></tr>
-<tr><td>**ESC / MOSFET**</td></tr>
-<tr><td>24</td><td>Điện trở dẫn</td><td>R_ds_on</td><td>0.02</td><td>Ω</td><td>Typical</td></tr>
-<tr><td>25</td><td>Thời gian đóng/mở</td><td>t_sw</td><td>100</td><td>ns</td><td>Typical</td></tr>
-<tr><td>26</td><td>Tổn thất dẫn</td><td>P_cond</td><td>1.28</td><td>W</td><td>4 MOSFET</td></tr>
-<tr><td>27</td><td>Tổn thất đóng/mở</td><td>P_sw</td><td>0.12</td><td>W</td><td>4 MOSFET</td></tr>
-<tr><td>28</td><td>Hiệu suất ESC</td><td>η_ESC</td><td>95-98</td><td>%</td><td>Rất cao</td></tr>
-<tr><td>**HIỆU SUẤT**</td></tr>
-<tr><td>29</td><td>Hiệu suất động cơ</td><td>η_motor</td><td>75-85</td><td>%</td><td>Phụ thuộc tải</td></tr>
-<tr><td>30</td><td>Hiệu suất tổng</td><td>η_total</td><td>70-80</td><td>%</td><td>Motor × ESC</td></tr>
-</table>
-<hr style="border: 1px solid #ccc; margin: 18pt 0;">
+<hr style="border:1px solid #ccc;margin:18pt 0">
 <h2>4. MÔ PHỎNG MATLAB</h2>
 <h3>4.1. Danh sách các mô phỏng</h3>
-<p>Dự án bao gồm <strong>6 file mô phỏng MATLAB</strong> chi tiết:</p>
+<p>Dự án bao gồm <strong>6 file mô phỏng MATLAB<strong> chi tiết:</p>
 <ol>
 <li>`mo_phong_khau_dong_co.m` - Mô phỏng động cơ 540/550</li>
+<ol>
 <li>`mo_phong_dieu_khien_pwm.m` - Điều khiển PWM</li>
 <ol>
 <li>`mo_phong_dac_tinh_co.m` - Đặc tính cơ n=f(M)</li>
+<ol>
 <li>`mo_phong_hang_so_thoi_gian.m` - Phân tích T_a và T_m</li>
 <ol>
 <li>`mo_phong_hieu_suat.m` - Hiệu suất toàn hệ thống</li>
-<li>`chay_tat_ca.m` - Script tự động chạy tất cả</li>
-</ul>
-<p class="no-indent"><strong>Tổng cộng:</strong> ~2000 dòng code MATLAB, đầy đủ comment tiếng Việt</p>
+<p>6. `chay_tat_ca.m` - Script tự động chạy tất cả</p>
+<p class="no-indent"><strong>Tổng cộng:<strong> ~2000 dòng code MATLAB, đầy đủ comment tiếng Việt</p>
 <h3>4.2. Mô phỏng động cơ (mo_phong_khau_dong_co.m)</h3>
 <h4>Mục đích:</h4>
 <p>Mô phỏng toàn diện động cơ 540/550 với các điều kiện vận hành khác nhau.</p>
 <h4>Nội dung mô phỏng:</h4>
 <ul class="no-indent">
 <li>Quá trình khởi động từ tốc độ 0</li>
+<ul class="no-indent">
 <li>Đáp ứng với điện áp thay đổi (3.7V, 7.4V, 5V)</li>
+<ul class="no-indent">
 <li>Đáp ứng với mô men tải thay đổi (0%, 50%, 100%)</li>
+<ul class="no-indent">
 <li>Đặc tính cơ n = f(M) với nhiều điện áp</li>
+<ul class="no-indent">
 <li>Đặc tính n = f(I_a)</li>
+<ul class="no-indent">
 <li>Công suất đầu vào và đầu ra</li>
+<ul class="no-indent">
 <li>Hiệu suất η = f(tải)</li>
-</ul>
 <h4>Kết quả chính:</h4>
-<p class="no-indent"><strong>Điểm làm việc @ 7.4V, tải định mức:</strong></p>
+<p class="no-indent"><strong>Điểm làm việc @ 7.4V, tải định mức:<strong></p>
 <pre>
-Tốc độ: 8000 rpm
-Dòng điện: 4.0 A
-Mô men: 26.5 mN.m
-Công suất: 30 W
-Hiệu suất: 75-80%
-</pre>
-<p class="no-indent"><strong>Thời gian đáp ứng:</strong></p>
+<p>Tốc độ: 8000 rpm</p>
+<p>Dòng điện: 4.0 A</p>
+<p>Mô men: 26.5 mN.m</p>
+<p>Công suất: 30 W</p>
+<p>Hiệu suất: 75-80%</p>
 <pre>
-Thời gian đạt 90% tốc độ: ~300ms (≈ 2.5 × T_m)
-Thời gian đạt 95% tốc độ: ~350ms (≈ 3 × T_m)
-Dòng khởi động max: ~8A (giới hạn bởi ESC)
-</pre>
-<p class="no-indent"><strong>Đặc tính cơ:</strong></p>
+<p class="no-indent"><strong>Thời gian đáp ứng:<strong></p>
 <pre>
-Tốc độ không tải @ 7.4V: n_0 ≈ 12000 rpm
-Độ sụt tốc (không tải → định mức): ~33%
-Đặc tính tương đối mềm (do R_a lớn)
-</pre>
+<p>Thời gian đạt 90% tốc độ: ~300ms (≈ 2.5 × T_m)</p>
+<p>Thời gian đạt 95% tốc độ: ~350ms (≈ 3 × T_m)</p>
+<p>Dòng khởi động max: ~8A (giới hạn bởi ESC)</p>
+<pre>
+<p class="no-indent"><strong>Đặc tính cơ:<strong></p>
+<pre>
+<p>Tốc độ không tải @ 7.4V: n_0 ≈ 12000 rpm</p>
+<p>Độ sụt tốc (không tải → định mức): ~33%</p>
+<p>Đặc tính tương đối mềm (do R_a lớn)</p>
+<pre>
 <h3>4.3. Mô phỏng điều khiển PWM (mo_phong_dieu_khien_pwm.m)</h3>
 <h4>Mục đích:</h4>
 <p>Phân tích chi tiết điều khiển PWM và tín hiệu thực tế.</p>
 <h4>Nội dung mô phỏng:</h4>
 <ul class="no-indent">
 <li>Đáp ứng với Duty Cycle thay đổi (0%, 50%, 75%, 100%)</li>
+<ul class="no-indent">
 <li>Quan hệ tuyến tính Duty - Tốc độ</li>
+<ul class="no-indent">
 <li>Tín hiệu PWM chi tiết (1 chu kỳ)</li>
+<ul class="no-indent">
 <li>Phân tích dòng gợn sóng ΔI</li>
+<ul class="no-indent">
 <li>Hiệu suất ESC vs Duty Cycle</li>
+<ul class="no-indent">
 <li>Tổn thất MOSFET</li>
-</ul>
 <h4>Kết quả chính:</h4>
-<p class="no-indent"><strong>Quan hệ Duty - Tốc độ:</strong></p>
+<p class="no-indent"><strong>Quan hệ Duty - Tốc độ:<strong></p>
 <pre>
-D = 0%   → n ≈ 0 rpm
-D = 25%  → n ≈ 2000 rpm
-D = 50%  → n ≈ 4000 rpm
-D = 75%  → n ≈ 6000 rpm
-D = 100% → n ≈ 8000 rpm
-
-→ Quan hệ gần như tuyến tính!
-</pre>
-<p class="no-indent"><strong>Dòng gợn sóng:</strong></p>
-<pre>
-ΔI_max ≈ 350 mA @ D = 50%
-ΔI_min ≈ 0 mA @ D = 0% hoặc 100%
-</pre>
-<p class="no-indent"><strong>Hiệu suất ESC:</strong></p>
-<pre>
-η_ESC ≈ 95-98% (rất ổn định)
-Tổn thất chủ yếu từ R_ds_on (dẫn)
-Tổn thất đóng/mở nhỏ (~30mW)
-</pre>
-<h3>4.4. Mô phỏng đặc tính cơ (mo_phong_dac_tinh_co.m)</h3>
-<h4>Mục đích:</h4>
-<p>Phân tích chi tiết đặc tính cơ với nhiều điện áp.</p>
-<h4>Nội dung mô phỏng:</h4>
-<ul class="no-indent">
-<li>Đặc tính n = f(M) với 5 mức điện áp (3.7V - 11.1V)</li>
-<li>Quan hệ M = f(I) - tuyến tính</li>
-<li>Quan hệ n = f(I)</li>
-<li>Công suất P = f(M)</li>
-<li>Hiệu suất η = f(M)</li>
-<li>So sánh lý thuyết vs thực tế</li>
-</ul>
-<h4>Kết quả chính:</h4>
-<p class="no-indent"><strong>Đặc tính n = f(M) @ 7.4V:</strong></p>
-<pre>
-n_0 = 12000 rpm (không tải)
-Độ dốc: ~450 rpm/(mN.m)
-n @ M_rated: 8000 rpm
-Độ sụt tốc: 33%
-</pre>
-<p class="no-indent"><strong>Hiệu suất:</strong></p>
-<pre>
-η_max ≈ 80% @ M = 0.5 × M_rated
-η @ M_rated ≈ 75%
-η @ M &gt; 1.2 × M_rated → giảm nhanh (quá tải)
-</pre>
-<p class="no-indent"><strong>Công suất max:</strong></p>
-<pre>
-P_max ≈ 35W @ n ≈ 6000 rpm, M ≈ 35 mN.m
-</pre>
-<h3>4.5. Mô phỏng hằng số thời gian (mo_phong_hang_so_thoi_gian.m)</h3>
-<h4>Mục đích:</h4>
-<p>Phân tích chi tiết T<sub>a</sub> và T<sub>m</sub>.</p>
-<h4>Nội dung mô phỏng:</h4>
-<ul class="no-indent">
-<li>Đáp ứng bước dòng điện (T_a)</li>
-<li>Đáp ứng bước tốc độ (T_m)</li>
-<li>So sánh T_a vs T_m</li>
-<li>Ảnh hưởng của mô men đà J</li>
-<li>Thời gian tăng tốc đạt các mức (63%, 86%, 95%, 99%)</li>
-<li>Bảo toàn năng lượng (E_magnetic vs E_kinetic)</li>
-</ul>
-<h4>Kết quả chính:</h4>
-<p class="no-indent"><strong>Hằng số thời gian:</strong></p>
-<pre>
-T_a = 0.25 ms (điện - rất nhanh)
-T_m_motor = 24 ms (không tải)
-T_m_load = 117 ms (có tải)
-Tỷ lệ: T_m / T_a = 468 lần
-</pre>
-<p class="no-indent"><strong>Thời gian đạt tốc độ (có tải):</strong></p>
-<pre>
-63.2%: 117 ms (1 × T_m)
-86.5%: 234 ms (2 × T_m)
-95.0%: 351 ms (3 × T_m)
-98.2%: 468 ms (4 × T_m)
-99.3%: 585 ms (5 × T_m)
-</pre>
-<p class="no-indent"><strong>Khuyến nghị điều khiển:</strong></p>
-<pre>
-Tần số lấy mẫu: ≥ 100 Hz (10ms)
-Chu kỳ điều khiển PID: 20-50 ms
-Băng thông: ~1.4 Hz
-</pre>
-<h3>4.6. Mô phỏng hiệu suất (mo_phong_hieu_suat.m)</h3>
-<h4>Mục đích:</h4>
-<p>Phân tích hiệu suất toàn hệ thống (Motor + ESC).</p>
-<h4>Nội dung mô phỏng:</h4>
-<ul class="no-indent">
-<li>Hiệu suất động cơ vs tải</li>
-<li>Phân tích tổn thất (Cu, cơ, sắt từ)</li>
-<li>Hiệu suất ESC vs Duty Cycle</li>
-<li>Tổn thất ESC (dẫn, đóng/mở)</li>
-<li>Hiệu suất tổng = η_motor × η_ESC</li>
-<li>Pie chart phân bố tổn thất</li>
-</ul>
-<h4>Kết quả chính:</h4>
-<p class="no-indent"><strong>Tại điểm định mức (M = 26.5 mN.m):</strong></p>
-<pre>
-Công suất ra: 22.2 W
-Tổn thất Cu: 12.8 W (58%)
-Tổn thất cơ: 0.5 W (2%)
-Tổn thất sắt: 0.2 W (1%)
-Tổn thất ESC: 1.4 W (6%)
-Tổng tổn thất: 15 W
-
-Hiệu suất động cơ: 76%
-Hiệu suất ESC: 96%
-Hiệu suất tổng: 73%
-</pre>
-<p class="no-indent"><strong>Phân bố tổn thất:</strong></p>
-<pre>
-Tổn thất Cu (I²R): 85% tổng tổn thất
-Tổn thất cơ (ma sát): 3%
-Tổn thất ESC: 9%
-Tổn thất sắt từ: 1%
-Khác: 2%
-</pre>
-<p class="no-indent"><strong>Kết luận:</strong></p>
-<ul class="no-indent">
-<li>Tổn thất chủ yếu từ điện trở R_a</li>
-<li>Để tăng hiệu suất: giảm R_a (dây đồng to hơn)</li>
-<li>ESC rất hiệu quả (96%), không cần cải thiện</li>
-</ul>
-<h3>4.7. Bảng so sánh lý thuyết và mô phỏng</h3>
-<table>
-<tr><th>Thông số</th><th>Lý thuyết</th><th>Mô phỏng</th><th>Sai số</th><th>Ghi chú</th></tr>
-<tr><td>**ĐỘNG CƠ**</td></tr>
-<tr><td>n @ 7.4V, không tải</td><td>12000 rpm</td><td>11850 rpm</td><td>1.25%</td><td>Rất tốt</td></tr>
-<tr><td>n @ 7.4V, M_rated</td><td>8000 rpm</td><td>7920 rpm</td><td>1.0%</td><td>Tốt</td></tr>
-<tr><td>I @ M_rated</td><td>4.0 A</td><td>4.05 A</td><td>1.25%</td><td>Tốt</td></tr>
-<tr><td>T_m (có tải)</td><td>117 ms</td><td>120 ms</td><td>2.6%</td><td>Tốt</td></tr>
-<tr><td>η @ định mức</td><td>75%</td><td>73%</td><td>2.7%</td><td>Chấp nhận được</td></tr>
-<tr><td>**PWM**</td></tr>
-<tr><td>U_avg @ D=50%</td><td>3.7 V</td><td>3.7 V</td><td>0%</td><td>Chính xác</td></tr>
-<tr><td>ΔI @ D=50%</td><td>350 mA</td><td>347 mA</td><td>0.9%</td><td>Rất tốt</td></tr>
-<tr><td>η_ESC @ tải đầy</td><td>96%</td><td>95.5%</td><td>0.5%</td><td>Rất tốt</td></tr>
-<tr><td>**ĐÁP ỨNG**</td></tr>
-<tr><td>Thời gian 90%</td><td>300 ms</td><td>305 ms</td><td>1.7%</td><td>Tốt</td></tr>
-<tr><td>Dòng khởi động max</td><td>8 A</td><td>7.95 A</td><td>0.6%</td><td>Rất tốt</td></tr>
-</table>
-<p class="no-indent"><strong>Kết luận:</strong></p>
-<ul class="no-indent">
-<li>Mô phỏng phù hợp rất tốt với lý thuyết</li>
-<li>Sai số < 3% cho tất cả thông số quan trọng</li>
+<p>D = 0%   → n ≈ 0 rpm</p>
+<p>D = 25%  → n ≈ 2000 rpm</p>
+<p>D = 50%  → n ≈ 4000 rpm</p>
 </body>
 </html>

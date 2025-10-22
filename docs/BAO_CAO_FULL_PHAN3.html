@@ -1,432 +1,326 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 13pt;
-            line-height: 1.8;
-            margin: 2.54cm 3.17cm;
-            text-align: justify;
-        }
-        h1 { font-size: 18pt; font-weight: bold; text-align: center; margin: 24pt 0 18pt; text-transform: uppercase; }
-        h2 { font-size: 16pt; font-weight: bold; margin: 18pt 0 12pt; }
-        h3 { font-size: 14pt; font-weight: bold; margin: 14pt 0 10pt; }
-        h4 { font-size: 13pt; font-weight: bold; margin: 12pt 0 8pt; }
-        p { text-indent: 1cm; margin: 6pt 0; }
-        .no-indent { text-indent: 0; }
-        table { border-collapse: collapse; width: 100%; margin: 12pt 0; font-size: 12pt; }
-        th, td { border: 1px solid black; padding: 8pt; }
-        th { background-color: #e8e8e8; font-weight: bold; text-align: center; }
-        pre, code { font-family: 'Courier New'; background: #f5f5f5; padding: 2pt 6pt; font-size: 11pt; }
-        pre { padding: 12pt; border: 1px solid #ddd; margin: 12pt 0; white-space: pre-wrap; }
-        ul, ol { margin-left: 2cm; }
-        li { margin-bottom: 6pt; }
-        strong { font-weight: bold; }
-        em { font-style: italic; }
-    </style>
+<meta charset="UTF-8">
+<title>Báo cáo Huina 1592</title>
+<style>
+body { font-family: 'Times New Roman'; font-size: 13pt; line-height: 1.8; margin: 2.54cm 3.17cm; text-align: justify; }
+h1 { font-size: 18pt; font-weight: bold; text-align: center; margin: 24pt 0 18pt; text-transform: uppercase; }
+h2 { font-size: 16pt; font-weight: bold; margin: 18pt 0 12pt; }
+h3 { font-size: 14pt; font-weight: bold; margin: 14pt 0 10pt; }
+h4 { font-size: 13pt; font-weight: bold; margin: 12pt 0 8pt; }
+p { text-indent: 1cm; margin: 6pt 0; }
+.no-indent { text-indent: 0; }
+table { border-collapse: collapse; width: 100%; margin: 12pt 0; }
+th, td { border: 1px solid black; padding: 8pt; }
+th { background-color: #e8e8e8; font-weight: bold; text-align: center; }
+pre { font-family: 'Courier New'; background: #f5f5f5; padding: 12pt; border: 1px solid #ddd; white-space: pre-wrap; }
+ul, ol { margin-left: 2cm; }
+li { margin-bottom: 6pt; }
+</style>
 </head>
 <body>
+<p>D = 75%  → n ≈ 6000 rpm</p>
+<p>D = 100% → n ≈ 8000 rpm</p>
+<p>→ Quan hệ gần như tuyến tính!</p>
+<pre>
+<p class="no-indent"><strong>Dòng gợn sóng:<strong></p>
+<pre>
+<p>ΔI_max ≈ 350 mA @ D = 50%</p>
+<p>ΔI_min ≈ 0 mA @ D = 0% hoặc 100%</p>
+<pre>
+<p class="no-indent"><strong>Hiệu suất ESC:<strong></p>
+<pre>
+<p>η_ESC ≈ 95-98% (rất ổn định)</p>
+<p>Tổn thất chủ yếu từ R_ds_on (dẫn)</p>
+<p>Tổn thất đóng/mở nhỏ (~30mW)</p>
+<pre>
+<h3>4.4. Mô phỏng đặc tính cơ (mo_phong_dac_tinh_co.m)</h3>
+<h4>Mục đích:</h4>
+<p>Phân tích chi tiết đặc tính cơ với nhiều điện áp.</p>
+<h4>Nội dung mô phỏng:</h4>
+<ul class="no-indent">
+<li>Đặc tính n = f(M) với 5 mức điện áp (3.7V - 11.1V)</li>
+<ul class="no-indent">
+<li>Quan hệ M = f(I) - tuyến tính</li>
+<ul class="no-indent">
+<li>Quan hệ n = f(I)</li>
+<ul class="no-indent">
+<li>Công suất P = f(M)</li>
+<ul class="no-indent">
+<li>Hiệu suất η = f(M)</li>
+<ul class="no-indent">
+<li>So sánh lý thuyết vs thực tế</li>
+<h4>Kết quả chính:</h4>
+<p class="no-indent"><strong>Đặc tính n = f(M) @ 7.4V:<strong></p>
+<pre>
+<p>n_0 = 12000 rpm (không tải)</p>
+<p>Độ dốc: ~450 rpm/(mN.m)</p>
+<p>n @ M_rated: 8000 rpm</p>
+<p>Độ sụt tốc: 33%</p>
+<pre>
+<p class="no-indent"><strong>Hiệu suất:<strong></p>
+<pre>
+<p>η_max ≈ 80% @ M = 0.5 × M_rated</p>
+<p>η @ M_rated ≈ 75%</p>
+<p>η @ M > 1.2 × M_rated → giảm nhanh (quá tải)</p>
+<pre>
+<p class="no-indent"><strong>Công suất max:<strong></p>
+<pre>
+<p>P_max ≈ 35W @ n ≈ 6000 rpm, M ≈ 35 mN.m</p>
+<pre>
+<h3>4.5. Mô phỏng hằng số thời gian (mo_phong_hang_so_thoi_gian.m)</h3>
+<h4>Mục đích:</h4>
+<p>Phân tích chi tiết T_a và T_m.</p>
+<h4>Nội dung mô phỏng:</h4>
+<ul class="no-indent">
+<li>Đáp ứng bước dòng điện (T_a)</li>
+<ul class="no-indent">
+<li>Đáp ứng bước tốc độ (T_m)</li>
+<ul class="no-indent">
+<li>So sánh T_a vs T_m</li>
+<ul class="no-indent">
+<li>Ảnh hưởng của mô men đà J</li>
+<ul class="no-indent">
+<li>Thời gian tăng tốc đạt các mức (63%, 86%, 95%, 99%)</li>
+<ul class="no-indent">
+<li>Bảo toàn năng lượng (E_magnetic vs E_kinetic)</li>
+<h4>Kết quả chính:</h4>
+<p class="no-indent"><strong>Hằng số thời gian:<strong></p>
+<pre>
+<p>T_a = 0.25 ms (điện - rất nhanh)</p>
+<p>T_m_motor = 24 ms (không tải)</p>
+<p>T_m_load = 117 ms (có tải)</p>
+<p>Tỷ lệ: T_m / T_a = 468 lần</p>
+<pre>
+<p class="no-indent"><strong>Thời gian đạt tốc độ (có tải):<strong></p>
+<pre>
+<p>63.2%: 117 ms (1 × T_m)</p>
+<p>86.5%: 234 ms (2 × T_m)</p>
+<p>95.0%: 351 ms (3 × T_m)</p>
+<p>98.2%: 468 ms (4 × T_m)</p>
+<p>99.3%: 585 ms (5 × T_m)</p>
+<pre>
+<p class="no-indent"><strong>Khuyến nghị điều khiển:<strong></p>
+<pre>
+<p>Tần số lấy mẫu: ≥ 100 Hz (10ms)</p>
+<p>Chu kỳ điều khiển PID: 20-50 ms</p>
+<p>Băng thông: ~1.4 Hz</p>
+<pre>
+<h3>4.6. Mô phỏng hiệu suất (mo_phong_hieu_suat.m)</h3>
+<h4>Mục đích:</h4>
+<p>Phân tích hiệu suất toàn hệ thống (Motor + ESC).</p>
+<h4>Nội dung mô phỏng:</h4>
+<ul class="no-indent">
+<li>Hiệu suất động cơ vs tải</li>
+<ul class="no-indent">
+<li>Phân tích tổn thất (Cu, cơ, sắt từ)</li>
+<ul class="no-indent">
+<li>Hiệu suất ESC vs Duty Cycle</li>
+<ul class="no-indent">
+<li>Tổn thất ESC (dẫn, đóng/mở)</li>
+<ul class="no-indent">
+<li>Hiệu suất tổng = η_motor × η_ESC</li>
+<ul class="no-indent">
+<li>Pie chart phân bố tổn thất</li>
+<h4>Kết quả chính:</h4>
+<p class="no-indent"><strong>Tại điểm định mức (M = 26.5 mN.m):<strong></p>
+<pre>
+<p>Công suất ra: 22.2 W</p>
+<p>Tổn thất Cu: 12.8 W (58%)</p>
+<p>Tổn thất cơ: 0.5 W (2%)</p>
+<p>Tổn thất sắt: 0.2 W (1%)</p>
+<p>Tổn thất ESC: 1.4 W (6%)</p>
+<p>Tổng tổn thất: 15 W</p>
+<p>Hiệu suất động cơ: 76%</p>
+<p>Hiệu suất ESC: 96%</p>
+<p>Hiệu suất tổng: 73%</p>
+<pre>
+<p class="no-indent"><strong>Phân bố tổn thất:<strong></p>
+<pre>
+<p>Tổn thất Cu (I²R): 85% tổng tổn thất</p>
+<p>Tổn thất cơ (ma sát): 3%</p>
+<p>Tổn thất ESC: 9%</p>
+<p>Tổn thất sắt từ: 1%</p>
+<p>Khác: 2%</p>
+<pre>
+<p class="no-indent"><strong>Kết luận:<strong></p>
+<ul class="no-indent">
+<li>Tổn thất chủ yếu từ điện trở R_a</li>
+<ul class="no-indent">
+<li>Để tăng hiệu suất: giảm R_a (dây đồng to hơn)</li>
+<ul class="no-indent">
+<li>ESC rất hiệu quả (96%), không cần cải thiện</li>
+<h3>4.7. Bảng so sánh lý thuyết và mô phỏng</h3>
+<p class="no-indent"><strong>Kết luận:<strong></p>
+<ul class="no-indent">
+<li>Mô phỏng phù hợp rất tốt với lý thuyết</li>
+<ul class="no-indent">
+<li>Sai số < 3% cho tất cả thông số quan trọng</li>
+<ul class="no-indent">
 <li>Có thể tin cậy để phân tích và thiết kế điều khiển</li>
-</ul>
-<hr style="border: 1px solid #ccc; margin: 18pt 0;">
+<hr style="border:1px solid #ccc;margin:18pt 0">
 <h2>5. KẾT QUẢ VÀ ĐÁNH GIÁ</h2>
 <h3>5.1. Ưu điểm của hệ thống Huina 1592</h3>
 <h4>A. Về mặt kỹ thuật:</h4>
-<p class="no-indent"><strong>Động cơ 540/550:</strong></p>
+<p class="no-indent"><strong>Động cơ 540/550:<strong></p>
 <ul class="no-indent">
 <li>✅ Phổ biến, dễ kiếm phụ tùng thay thế</li>
+<ul class="no-indent">
 <li>✅ Giá rẻ (~50k VNĐ/motor)</li>
+<ul class="no-indent">
 <li>✅ Mô men tốt cho kích thước nhỏ</li>
+<ul class="no-indent">
 <li>✅ Đáp ứng nhanh (T_m = 117ms)</li>
+<ul class="no-indent">
 <li>✅ Hiệu suất chấp nhận được (75-80%)</li>
-</ul>
-<p class="no-indent"><strong>Điều khiển PWM:</strong></p>
+<p class="no-indent"><strong>Điều khiển PWM:<strong></p>
 <ul class="no-indent">
 <li>✅ Hiệu suất cao (96%)</li>
+<ul class="no-indent">
 <li>✅ Điều khiển chính xác</li>
+<ul class="no-indent">
 <li>✅ Dễ tích hợp với vi điều khiển</li>
+<ul class="no-indent">
 <li>✅ Tần số cao (20kHz) - không ồn</li>
+<ul class="no-indent">
 <li>✅ Dòng gợn sóng nhỏ</li>
-</ul>
-<p class="no-indent"><strong>Pin Li-ion 7.4V:</strong></p>
+<p class="no-indent"><strong>Pin Li-ion 7.4V:<strong></p>
 <ul class="no-indent">
 <li>✅ Mật độ năng lượng cao</li>
+<ul class="no-indent">
 <li>✅ Nhẹ (~150g)</li>
+<ul class="no-indent">
 <li>✅ Sạc nhanh (~1h)</li>
+<ul class="no-indent">
 <li>✅ Thời gian hoạt động: 20-30 phút</li>
-</ul>
 <h4>B. Về mặt nghiên cứu:</h4>
 <ul class="no-indent">
 <li>✅ Chi phí thấp (~3-5 triệu VNĐ)</li>
+<ul class="no-indent">
 <li>✅ An toàn cho thử nghiệm</li>
+<ul class="no-indent">
 <li>✅ Kích thước vừa phải cho lab</li>
+<ul class="no-indent">
 <li>✅ Dễ tích hợp cảm biến, camera</li>
+<ul class="no-indent">
 <li>✅ Cộng đồng RC lớn - nhiều tài liệu</li>
+<ul class="no-indent">
 <li>✅ Có thể nâng cấp (brushless, 3S, encoder...)</li>
-</ul>
 <h3>5.2. Nhược điểm và hạn chế</h3>
 <h4>A. Động cơ Brushed:</h4>
 <ul class="no-indent">
 <li>⚠️ Chổi than mòn → cần thay (500h)</li>
+<ul class="no-indent">
 <li>⚠️ Hiệu suất thấp hơn brushless (85-90%)</li>
+<ul class="no-indent">
 <li>⚠️ Tạo nhiễu điện từ</li>
+<ul class="no-indent">
 <li>⚠️ R_a cao → tổn thất đồng lớn</li>
-</ul>
 <h4>B. Tỉ lệ nhỏ (1:14):</h4>
 <ul class="no-indent">
 <li>⚠️ Khó mô phỏng chính xác động lực học đất</li>
+<ul class="no-indent">
 <li>⚠️ Không scaling trực tiếp lên máy thật</li>
+<ul class="no-indent">
 <li>⚠️ Giới hạn tải trọng (~0.5 kg)</li>
+<ul class="no-indent">
 <li>⚠️ Bánh xích nhựa - độ bám kém</li>
-</ul>
 <h4>C. Pin hạn chế:</h4>
 <ul class="no-indent">
 <li>⚠️ Thời gian hoạt động ngắn (20-30 phút)</li>
+<ul class="no-indent">
 <li>⚠️ Điện áp giảm khi xả → hiệu suất giảm</li>
+<ul class="no-indent">
 <li>⚠️ Cần nhiều pin để thử nghiệm dài</li>
-</ul>
 <h3>5.3. So sánh với các lựa chọn khác</h3>
 <h4>Bảng so sánh:</h4>
-<table>
-<tr><th>Đặc điểm</th><th>Huina 1592 (Brushed)</th><th>Nâng cấp Brushless</th><th>Máy công nghiệp</th></tr>
-<tr><td>**Chi phí**</td><td>3-5 triệu</td><td>6-8 triệu</td><td>> 20 tỷ</td></tr>
-<tr><td>**Động cơ**</td><td>540 Brushed</td><td>540 Brushless</td><td>AC 75kW</td></tr>
-<tr><td>**Điện áp**</td><td>7.4V (2S)</td><td>11.1V (3S)</td><td>220V DC</td></tr>
-<tr><td>**Công suất**</td><td>30W</td><td>60W</td><td>75000W</td></tr>
-<tr><td>**Hiệu suất motor**</td><td>75-80%</td><td>85-90%</td><td>95-97%</td></tr>
-<tr><td>**Hiệu suất ESC**</td><td>96%</td><td>98%</td><td>98%</td></tr>
-<tr><td>**Bảo trì**</td><td>Trung bình</td><td>Thấp</td><td>Cao</td></tr>
-<tr><td>**Tuổi thọ**</td><td>500h</td><td>2000h</td><td>10000h</td></tr>
-<tr><td>**Độ chính xác**</td><td>Trung bình</td><td>Cao</td><td>Rất cao</td></tr>
-<tr><td>**Tốc độ đáp ứng**</td><td>Nhanh (117ms)</td><td>Rất nhanh (50ms)</td><td>Trung bình</td></tr>
-<tr><td>**Tích hợp cảm biến**</td><td>Dễ</td><td>Dễ</td><td>Khó</td></tr>
-<tr><td>**An toàn thử nghiệm**</td><td>Cao</td><td>Cao</td><td>Thấp</td></tr>
-</table>
-<p class="no-indent"><strong>Kết luận:</strong></p>
+<p class="no-indent"><strong>Kết luận:<strong></p>
 <ul class="no-indent">
 <li>Huina 1592 Brushed: Tốt nhất cho nghiên cứu/giáo dục</li>
+<ul class="no-indent">
 <li>Nâng cấp Brushless: Nếu cần hiệu suất cao hơn</li>
+<ul class="no-indent">
 <li>Máy công nghiệp: Chỉ khi triển khai thực tế</li>
-</ul>
 <h3>5.4. Khả năng nâng cấp</h3>
 <h4>Hardware có thể nâng cấp:</h4>
-<p class="no-indent"><strong>1. Động cơ:</strong></p>
+<p class="no-indent"><strong>1. Động cơ:<strong></p>
 <ul class="no-indent">
 <li>❌ Giữ nguyên Brushed 540 (đủ cho nghiên cứu)</li>
+<ul class="no-indent">
 <li>✅ Nâng cấp lên Brushless 540 (↑20% hiệu suất, ↑50% tuổi thọ)</li>
-</ul>
-<p class="no-indent"><strong>2. Pin:</strong></p>
+<p class="no-indent"><strong>2. Pin:<strong></p>
 <ul class="no-indent">
 <li>❌ Giữ 7.4V 2S (an toàn)</li>
+<ul class="no-indent">
 <li>⚠️ Nâng lên 11.1V 3S (↑50% công suất, ⚠️ động cơ dễ cháy)</li>
-</ul>
-<p class="no-indent"><strong>3. Cảm biến:</strong></p>
+<p class="no-indent"><strong>3. Cảm biến:<strong></p>
 <ul class="no-indent">
 <li>✅ Encoder đo tốc độ (AS5600)</li>
+<ul class="no-indent">
 <li>✅ IMU 9-axis (MPU9250)</li>
+<ul class="no-indent">
 <li>✅ Camera ESP32-CAM</li>
+<ul class="no-indent">
 <li>✅ GPS module (NEO-6M)</li>
+<ul class="no-indent">
 <li>✅ Cảm biến lực (Load cell)</li>
-</ul>
-<p class="no-indent"><strong>4. Vi điều khiển:</strong></p>
+<p class="no-indent"><strong>4. Vi điều khiển:<strong></p>
 <ul class="no-indent">
 <li>✅ Arduino Mega 2560 (nhiều pin, UART)</li>
+<ul class="no-indent">
 <li>✅ ESP32 (WiFi, Bluetooth, dual-core)</li>
+<ul class="no-indent">
 <li>✅ Raspberry Pi 4 (ROS, OpenCV, AI)</li>
-</ul>
 <h4>Software có thể phát triển:</h4>
-<p class="no-indent"><strong>1. Điều khiển cơ bản:</strong></p>
+<p class="no-indent"><strong>1. Điều khiển cơ bản:<strong></p>
 <ul class="no-indent">
 <li>✅ PID tốc độ động cơ</li>
+<ul class="no-indent">
 <li>✅ PID vị trí khớp</li>
+<ul class="no-indent">
 <li>✅ Giới hạn an toàn (overcurrent, position limit)</li>
+<ul class="no-indent">
 <li>✅ Soft start/stop</li>
-</ul>
-<p class="no-indent"><strong>2. Điều khiển nâng cao:</strong></p>
+<p class="no-indent"><strong>2. Điều khiển nâng cao:<strong></p>
 <ul class="no-indent">
 <li>☐ Adaptive PID</li>
+<ul class="no-indent">
 <li>☐ Sliding Mode Control</li>
+<ul class="no-indent">
 <li>☐ Fuzzy Logic Control</li>
+<ul class="no-indent">
 <li>☐ Model Predictive Control (MPC)</li>
-</ul>
-<p class="no-indent"><strong>3. Tự động hóa:</strong></p>
+<p class="no-indent"><strong>3. Tự động hóa:<strong></p>
 <ul class="no-indent">
 <li>☐ SLAM (Simultaneous Localization and Mapping)</li>
+<ul class="no-indent">
 <li>☐ Path planning (A*, RRT)</li>
+<ul class="no-indent">
 <li>☐ Computer Vision (OpenCV, YOLO)</li>
+<ul class="no-indent">
 <li>☐ Reinforcement Learning (DQN, PPO)</li>
-</ul>
-<p class="no-indent"><strong>4. Tích hợp:</strong></p>
+<p class="no-indent"><strong>4. Tích hợp:<strong></p>
 <ul class="no-indent">
 <li>☐ ROS 2 Humble</li>
+<ul class="no-indent">
 <li>☐ Telemetry qua WiFi</li>
+<ul class="no-indent">
 <li>☐ GUI điều khiển (Qt, Web)</li>
+<ul class="no-indent">
 <li>☐ Data logging</li>
-</ul>
-<hr style="border: 1px solid #ccc; margin: 18pt 0;">
+<hr style="border:1px solid #ccc;margin:18pt 0">
 <h2>6. KẾT LUẬN VÀ KHUYẾN NGHỊ</h2>
 <h3>6.1. Kết luận</h3>
 <p>Nghiên cứu đã hoàn thành các mục tiêu đề ra:</p>
 <h4>1. Xác định thông số động cơ:</h4>
 <ul class="no-indent">
 <li>✅ Xác định đầy đủ 30 thông số quan trọng</li>
+<ul class="no-indent">
 <li>✅ Đo đạc và tính toán chi tiết R_a, K_e, K_m, T_a, T_m</li>
+<ul class="no-indent">
 <li>✅ Phân tích ảnh hưởng của từng thông số</li>
-</ul>
 <h4>2. Thiết kế điều khiển PWM:</h4>
 <ul class="no-indent">
-<li>✅ Tính toán tần số PWM tối ưu (20kHz)</li>
-<li>✅ Phân tích dòng gợn sóng, tổn thất MOSFET</li>
-<li>✅ Thiết kế mạch cầu H</li>
-<li>✅ Cung cấp code Arduino thực tế</li>
-</ul>
-<h4>3. Mô phỏng MATLAB:</h4>
-<ul class="no-indent">
-<li>✅ Xây dựng 5 chương trình mô phỏng hoàn chỉnh</li>
-<li>✅ Kết quả phù hợp với lý thuyết (sai số < 3%)</li>
-<li>✅ Phân tích đặc tính tĩnh và động</li>
-<li>✅ ~2000 dòng code, đầy đủ comment tiếng Việt</li>
-</ul>
-<h4>4. Đánh giá hệ thống:</h4>
-<ul class="no-indent">
-<li>✅ Xác định ưu nhược điểm</li>
-<li>✅ So sánh với các lựa chọn khác</li>
-<li>✅ Đề xuất hướng nâng cấp và cải tiến</li>
-</ul>
-<h3>6.2. Khuyến nghị</h3>
-<h4>A. Cho sinh viên/người học:</h4>
-<p class="no-indent"><strong>1. Thực hành đo đạc:</strong></p>
-<ul class="no-indent">
-<li>Đo R_a bằng đồng hồ vạn năng</li>
-<li>Đo tốc độ không tải bằng tachometer</li>
-<li>Đo dòng điện ở các mức tải khác nhau</li>
-<li>So sánh kết quả đo với mô phỏng</li>
-</ul>
-<p class="no-indent"><strong>2. Lập trình vi điều khiển:</strong></p>
-<ul class="no-indent">
-<li>Bắt đầu với Arduino Uno/Nano</li>
-<li>Học PWM cơ bản (analogWrite)</li>
-<li>Tiến đến điều khiển ESC (Servo library)</li>
-<li>Thử nghiệm PID tốc độ</li>
-</ul>
-<p class="no-indent"><strong>3. Tích hợp cảm biến:</strong></p>
-<ul class="no-indent">
-<li>Encoder quang học đo tốc độ</li>
-<li>Potentiometer đo góc khớp</li>
-<li>Cảm biến dòng ACS712</li>
-<li>IMU MPU6050 đo nghiêng</li>
-</ul>
-<h4>B. Cho nghiên cứu viên:</h4>
-<p class="no-indent"><strong>1. Mô hình hóa chính xác hơn:</strong></p>
-<ul class="no-indent">
-<li>Đo mô men đà J thực tế (pendulum test)</li>
-<li>Xây dựng mô hình nhiệt độ động cơ</li>
-<li>Mô hình phi tuyến ma sát</li>
-<li>Mô hình tương tác đất-gầu</li>
-</ul>
-<p class="no-indent"><strong>2. Điều khiển nâng cao:</strong></p>
-<ul class="no-indent">
-<li>Triển khai PID với anti-windup</li>
-<li>Thử nghiệm Sliding Mode Control</li>
-<li>Áp dụng Machine Learning</li>
-<li>Tích hợp Computer Vision</li>
-</ul>
-<p class="no-indent"><strong>3. Tự động hóa:</strong></p>
-<ul class="no-indent">
-<li>Nghiên cứu TERA framework</li>
-<li>Áp dụng Reinforcement Learning</li>
-<li>Phát triển path planning</li>
-<li>Multi-agent coordination</li>
-</ul>
-<h4>C. Cho triển khai thực tế:</h4>
-<p class="no-indent"><strong>1. Ngắn hạn (1-3 tháng):</strong></p>
-<ul class="no-indent">
-<li>Mua Huina 1592</li>
-<li>Tháo mở, đo đạc thông số thực tế</li>
-<li>Thử nghiệm điều khiển Arduino</li>
-<li>Tích hợp encoder, IMU cơ bản</li>
-</ul>
-<p class="no-indent"><strong>2. Trung hạn (3-6 tháng):</strong></p>
-<ul class="no-indent">
-<li>Nâng cấp lên ESP32 (WiFi)</li>
-<li>Thêm camera FPV</li>
-<li>Phát triển GUI điều khiển</li>
-<li>Thử nghiệm PID, computer vision</li>
-</ul>
-<p class="no-indent"><strong>3. Dài hạn (6-12 tháng):</strong></p>
-<ul class="no-indent">
-<li>Tích hợp ROS 2</li>
-<li>Triển khai SLAM, path planning</li>
-<li>Áp dụng RL cho autonomous digging</li>
-<li>Chuẩn bị scaling lên mô hình lớn hơn</li>
-</ul>
-<h3>6.3. Hướng nghiên cứu tiếp theo</h3>
-<h4>1. Cải thiện mô hình động cơ:</h4>
-<ul class="no-indent">
-<li>Mô hình phi tuyến bão hòa từ</li>
-<li>Ảnh hưởng nhiệt độ lên R_a, K_e</li>
-<li>Mô hình ma sát Coulomb + Viscous</li>
-<li>Xét moment of inertia thay đổi</li>
-</ul>
-<h4>2. Tối ưu hóa điều khiển:</h4>
-<ul class="no-indent">
-<li>Tuning PID tự động (Ziegler-Nichols, genetic algorithm)</li>
-<li>Điều khiển thích nghi (adaptive control)</li>
-<li>Bù nhiễu (disturbance observer)</li>
-<li>Feedforward control</li>
-</ul>
-<h4>3. Tích hợp AI:</h4>
-<ul class="no-indent">
-<li>Reinforcement Learning cho autonomous excavation</li>
-<li>Computer Vision nhận dạng địa hình</li>
-<li>Path planning tối ưu</li>
-<li>Predictive maintenance</li>
-</ul>
-<h4>4. Nghiên cứu multi-robot:</h4>
-<ul class="no-indent">
-<li>Điều khiển phối hợp nhiều máy xúc</li>
-<li>Communication protocol</li>
-<li>Task allocation</li>
-<li>Collision avoidance</li>
-</ul>
-<h3>6.4. Đóng góp của nghiên cứu</h3>
-<h4>Về mặt học thuật:</h4>
-<ul class="no-indent">
-<li>Tài liệu chi tiết về động cơ RC và điều khiển PWM</li>
-<li>Code mô phỏng MATLAB mã nguồn mở</li>
-<li>Phương pháp đo đạc và tính toán thông số</li>
-<li>So sánh lý thuyết với thực nghiệm</li>
-</ul>
-<h4>Về mặt thực tiễn:</h4>
-<ul class="no-indent">
-<li>Nền tảng giá rẻ cho nghiên cứu autonomous excavator</li>
-<li>Hướng dẫn từng bước cho sinh viên</li>
-<li>Code Arduino sẵn sàng triển khai</li>
-<li>Roadmap rõ ràng cho phát triển tiếp</li>
-</ul>
-<h4>Về mặt cộng đồng:</h4>
-<ul class="no-indent">
-<li>Tất cả tài liệu mã nguồn mở trên GitHub</li>
-<li>Khuyến khích đóng góp và cải tiến</li>
-<li>Tạo nền tảng cho các dự án tương tự</li>
-<li>Kết nối với cộng đồng RC và robotics Việt Nam</li>
-</ul>
-<hr style="border: 1px solid #ccc; margin: 18pt 0;">
-<h2>7. TÀI LIỆU THAM KHẢO</h2>
-<h3>7.1. Tài liệu chính</h3>
-<p class="no-indent"><strong>1. Huina Official:</strong></p>
-<ul class="no-indent">
-<li>Website: https://www.huina-toys.com/</li>
-<li>Manual Huina 1592</li>
-<li>Technical specifications</li>
-</ul>
-<p class="no-indent"><strong>2. Giáo trình và sách:</strong></p>
-<ul class="no-indent">
-<li>*Truyền động điện* - PGS.TS Nguyễn Phùng Quang</li>
-<li>*Máy điện DC* - TS. Phạm Quốc Hải</li>
-<li>*Điều khiển tự động* - GS.TS Trần Đình Long</li>
-<li>*DC Motors, Speed Controls, Servo Systems* - Electro-Craft Corporation</li>
-</ul>
-<p class="no-indent"><strong>3. Arduino và điều khiển:</strong></p>
-<ul class="no-indent">
-<li>Arduino Reference: https://www.arduino.cc/reference/en/</li>
-<li>*Arduino Cookbook* - Michael Margolis</li>
-<li>PWM Control for DC Motors - Application Notes</li>
-</ul>
-<h3>7.2. Papers về Autonomous Excavator</h3>
-<p class="no-indent"><strong>1. TERA: Terrain Excavation Robot Autonomy</strong></p>
-<ul class="no-indent">
-<li>Aluckal et al., IEEE SIMPAR 2025</li>
-<li>Link: https://droneslab.github.io/tera/</li>
-<li>Framework mô phỏng máy xúc với Unity + AGX Dynamics</li>
-</ul>
-<p class="no-indent"><strong>2. Deep Reinforcement Learning for Excavation</strong></p>
-<ul class="no-indent">
-<li>Osa & Aizawa, IEEE Access</li>
-<li>RL cho điều khiển máy xúc tự động</li>
-</ul>
-<p class="no-indent"><strong>3. HEAP - The Autonomous Walking Excavator</strong></p>
-<ul class="no-indent">
-<li>Jud et al., Automation in Construction, 2021</li>
-<li>Link: https://github.com/leggedrobotics/rsl_heap</li>
-<li>Máy xúc tự hành trên địa hình phức tạp</li>
-</ul>
-<p class="no-indent"><strong>4. Earth-moving Simulation</strong></p>
-<ul class="no-indent">
-<li>Holz, Azimi et al.</li>
-<li>Mô hình FEE (Finite Element Earth) cho mô phỏng đào</li>
-</ul>
-<p class="no-indent"><strong>5. MathWorks Excavator Example</strong></p>
-<ul class="no-indent">
-<li>https://www.mathworks.com/help/robotics/ug/simulate-earth-moving-with-autonomous-excavator-in-construction-site.html</li>
-</ul>
-<h3>7.3. Standards</h3>
-<p class="no-indent"><strong>1. IEEE Standards:</strong></p>
-<ul class="no-indent">
-<li>IEEE Std 113: Test Procedures for DC Machines</li>
-<li>IEEE Std 421.5: Excitation System Models</li>
-</ul>
-<p class="no-indent"><strong>2. IEC Standards:</strong></p>
-<ul class="no-indent">
-<li>IEC 60034: Rotating Electrical Machines</li>
-<li>IEC 61800: Adjustable Speed Electrical Power Drive Systems</li>
-</ul>
-<h3>7.4. Websites & Communities</h3>
-<p class="no-indent"><strong>1. RC Communities:</strong></p>
-<ul class="no-indent">
-<li>RCGroups Forum: https://www.rcgroups.com/</li>
-<li>RC Universe: https://www.rcuniverse.com/</li>
-<li>Huina RC Excavator Facebook Groups</li>
-</ul>
-<p class="no-indent"><strong>2. Robotics:</strong></p>
-<ul class="no-indent">
-<li>ROS 2 Documentation: https://docs.ros.org/</li>
-<li>OpenCV: https://opencv.org/</li>
-<li>Gazebo Simulator: https://gazebosim.org/</li>
-</ul>
-<p class="no-indent"><strong>3. Electronics:</strong></p>
-<ul class="no-indent">
-<li>Arduino Forum: https://forum.arduino.cc/</li>
-<li>ESP32 Forum: https://esp32.com/</li>
-<li>Electronics Stack Exchange</li>
-</ul>
-<hr style="border: 1px solid #ccc; margin: 18pt 0;">
-<h2>PHỤ LỤC</h2>
-<h3>A. Danh sách ký hiệu</h3>
-<table>
-<tr><th>Ký hiệu</th><th>Ý nghĩa</th><th>Đơn vị</th></tr>
-<tr><td>U</td><td>Điện áp</td><td>V</td></tr>
-<tr><td>I</td><td>Dòng điện</td><td>A</td></tr>
-<tr><td>R</td><td>Điện trở</td><td>Ω</td></tr>
-<tr><td>L</td><td>Độ tự cảm</td><td>H</td></tr>
-<tr><td>E_a</td><td>Sức phản điện động</td><td>V</td></tr>
-<tr><td>K_e</td><td>Hằng số EMF</td><td>V/(rad/s)</td></tr>
-<tr><td>K_m</td><td>Hằng số mô men</td><td>N.m/A</td></tr>
-<tr><td>M</td><td>Mô men</td><td>N.m</td></tr>
-<tr><td>ω</td><td>Tốc độ góc</td><td>rad/s</td></tr>
-<tr><td>n</td><td>Tốc độ quay</td><td>rpm</td></tr>
-<tr><td>J</td><td>Mô men đà</td><td>kg.m²</td></tr>
-<tr><td>B</td><td>Hệ số ma sát nhớt</td><td>N.m.s/rad</td></tr>
-<tr><td>T_a</td><td>Hằng số thời gian điện</td><td>s</td></tr>
-<tr><td>T_m</td><td>Hằng số thời gian cơ</td><td>s</td></tr>
-<tr><td>P</td><td>Công suất</td><td>W</td></tr>
-<tr><td>η</td><td>Hiệu suất</td><td>%</td></tr>
-<tr><td>D</td><td>Duty Cycle</td><td>%</td></tr>
-<tr><td>f</td><td>Tần số</td><td>Hz</td></tr>
-<tr><td>t</td><td>Thời gian</td><td>s</td></tr>
-</table>
-<h3>B. Danh sách chữ viết tắt</h3>
-<table>
-<tr><th>Viết tắt</th><th>Tiếng Anh</th><th>Tiếng Việt</th></tr>
-<tr><td>RC</td><td>Radio Control</td><td>Điều khiển từ xa</td></tr>
-<tr><td>DC</td><td>Direct Current</td><td>Dòng một chiều</td></tr>
-<tr><td>AC</td><td>Alternating Current</td><td>Dòng xoay chiều</td></tr>
-<tr><td>PWM</td><td>Pulse Width Modulation</td><td>Điều chế độ rộng xung</td></tr>
-<tr><td>ESC</td><td>Electronic Speed Controller</td><td>Bộ điều khiển tốc độ điện tử</td></tr>
-<tr><td>BEC</td><td>Battery Eliminator Circuit</td><td>Mạch thay pin (cấp 5V)</td></tr>
-<tr><td>EMF</td><td>Electromotive Force</td><td>Sức điện động</td></tr>
-<tr><td>MOSFET</td><td>Metal-Oxide-Semiconductor FET</td><td>Transistor hiệu ứng trường</td></tr>
 </body>
 </html>

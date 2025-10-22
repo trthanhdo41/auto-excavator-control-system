@@ -1,89 +1,328 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 13pt;
-            line-height: 1.8;
-            margin: 2.54cm 3.17cm;
-            text-align: justify;
-        }
-        h1 { font-size: 18pt; font-weight: bold; text-align: center; margin: 24pt 0 18pt; text-transform: uppercase; }
-        h2 { font-size: 16pt; font-weight: bold; margin: 18pt 0 12pt; }
-        h3 { font-size: 14pt; font-weight: bold; margin: 14pt 0 10pt; }
-        h4 { font-size: 13pt; font-weight: bold; margin: 12pt 0 8pt; }
-        p { text-indent: 1cm; margin: 6pt 0; }
-        .no-indent { text-indent: 0; }
-        table { border-collapse: collapse; width: 100%; margin: 12pt 0; font-size: 12pt; }
-        th, td { border: 1px solid black; padding: 8pt; }
-        th { background-color: #e8e8e8; font-weight: bold; text-align: center; }
-        pre, code { font-family: 'Courier New'; background: #f5f5f5; padding: 2pt 6pt; font-size: 11pt; }
-        pre { padding: 12pt; border: 1px solid #ddd; margin: 12pt 0; white-space: pre-wrap; }
-        ul, ol { margin-left: 2cm; }
-        li { margin-bottom: 6pt; }
-        strong { font-weight: bold; }
-        em { font-style: italic; }
-    </style>
+<meta charset="UTF-8">
+<title>Báo cáo Huina 1592</title>
+<style>
+body { font-family: 'Times New Roman'; font-size: 13pt; line-height: 1.8; margin: 2.54cm 3.17cm; text-align: justify; }
+h1 { font-size: 18pt; font-weight: bold; text-align: center; margin: 24pt 0 18pt; text-transform: uppercase; }
+h2 { font-size: 16pt; font-weight: bold; margin: 18pt 0 12pt; }
+h3 { font-size: 14pt; font-weight: bold; margin: 14pt 0 10pt; }
+h4 { font-size: 13pt; font-weight: bold; margin: 12pt 0 8pt; }
+p { text-indent: 1cm; margin: 6pt 0; }
+.no-indent { text-indent: 0; }
+table { border-collapse: collapse; width: 100%; margin: 12pt 0; }
+th, td { border: 1px solid black; padding: 8pt; }
+th { background-color: #e8e8e8; font-weight: bold; text-align: center; }
+pre { font-family: 'Courier New'; background: #f5f5f5; padding: 12pt; border: 1px solid #ddd; white-space: pre-wrap; }
+ul, ol { margin-left: 2cm; }
+li { margin-bottom: 6pt; }
+</style>
 </head>
 <body>
-<tr><td>PID</td><td>Proportional-Integral-Derivative</td><td>Điều khiển tỷ lệ-tích phân-vi phân</td></tr>
-<tr><td>IMU</td><td>Inertial Measurement Unit</td><td>Cảm biến quán tính</td></tr>
-<tr><td>SLAM</td><td>Simultaneous Localization And Mapping</td><td>Định vị và lập bản đồ đồng thời</td></tr>
-<tr><td>ROS</td><td>Robot Operating System</td><td>Hệ điều hành robot</td></tr>
-<tr><td>AI</td><td>Artificial Intelligence</td><td>Trí tuệ nhân tạo</td></tr>
-<tr><td>RL</td><td>Reinforcement Learning</td><td>Học tăng cường</td></tr>
-</table>
+<li>✅ Tính toán tần số PWM tối ưu (20kHz)</li>
+<ul class="no-indent">
+<li>✅ Phân tích dòng gợn sóng, tổn thất MOSFET</li>
+<ul class="no-indent">
+<li>✅ Thiết kế mạch cầu H</li>
+<ul class="no-indent">
+<li>✅ Cung cấp code Arduino thực tế</li>
+<h4>3. Mô phỏng MATLAB:</h4>
+<ul class="no-indent">
+<li>✅ Xây dựng 5 chương trình mô phỏng hoàn chỉnh</li>
+<ul class="no-indent">
+<li>✅ Kết quả phù hợp với lý thuyết (sai số < 3%)</li>
+<ul class="no-indent">
+<li>✅ Phân tích đặc tính tĩnh và động</li>
+<ul class="no-indent">
+<li>✅ ~2000 dòng code, đầy đủ comment tiếng Việt</li>
+<h4>4. Đánh giá hệ thống:</h4>
+<ul class="no-indent">
+<li>✅ Xác định ưu nhược điểm</li>
+<ul class="no-indent">
+<li>✅ So sánh với các lựa chọn khác</li>
+<ul class="no-indent">
+<li>✅ Đề xuất hướng nâng cấp và cải tiến</li>
+<h3>6.2. Khuyến nghị</h3>
+<h4>A. Cho sinh viên/người học:</h4>
+<p class="no-indent"><strong>1. Thực hành đo đạc:<strong></p>
+<ul class="no-indent">
+<li>Đo R_a bằng đồng hồ vạn năng</li>
+<ul class="no-indent">
+<li>Đo tốc độ không tải bằng tachometer</li>
+<ul class="no-indent">
+<li>Đo dòng điện ở các mức tải khác nhau</li>
+<ul class="no-indent">
+<li>So sánh kết quả đo với mô phỏng</li>
+<p class="no-indent"><strong>2. Lập trình vi điều khiển:<strong></p>
+<ul class="no-indent">
+<li>Bắt đầu với Arduino Uno/Nano</li>
+<ul class="no-indent">
+<li>Học PWM cơ bản (analogWrite)</li>
+<ul class="no-indent">
+<li>Tiến đến điều khiển ESC (Servo library)</li>
+<ul class="no-indent">
+<li>Thử nghiệm PID tốc độ</li>
+<p class="no-indent"><strong>3. Tích hợp cảm biến:<strong></p>
+<ul class="no-indent">
+<li>Encoder quang học đo tốc độ</li>
+<ul class="no-indent">
+<li>Potentiometer đo góc khớp</li>
+<ul class="no-indent">
+<li>Cảm biến dòng ACS712</li>
+<ul class="no-indent">
+<li>IMU MPU6050 đo nghiêng</li>
+<h4>B. Cho nghiên cứu viên:</h4>
+<p class="no-indent"><strong>1. Mô hình hóa chính xác hơn:<strong></p>
+<ul class="no-indent">
+<li>Đo mô men đà J thực tế (pendulum test)</li>
+<ul class="no-indent">
+<li>Xây dựng mô hình nhiệt độ động cơ</li>
+<ul class="no-indent">
+<li>Mô hình phi tuyến ma sát</li>
+<ul class="no-indent">
+<li>Mô hình tương tác đất-gầu</li>
+<p class="no-indent"><strong>2. Điều khiển nâng cao:<strong></p>
+<ul class="no-indent">
+<li>Triển khai PID với anti-windup</li>
+<ul class="no-indent">
+<li>Thử nghiệm Sliding Mode Control</li>
+<ul class="no-indent">
+<li>Áp dụng Machine Learning</li>
+<ul class="no-indent">
+<li>Tích hợp Computer Vision</li>
+<p class="no-indent"><strong>3. Tự động hóa:<strong></p>
+<ul class="no-indent">
+<li>Nghiên cứu TERA framework</li>
+<ul class="no-indent">
+<li>Áp dụng Reinforcement Learning</li>
+<ul class="no-indent">
+<li>Phát triển path planning</li>
+<ul class="no-indent">
+<li>Multi-agent coordination</li>
+<h4>C. Cho triển khai thực tế:</h4>
+<p class="no-indent"><strong>1. Ngắn hạn (1-3 tháng):<strong></p>
+<ul class="no-indent">
+<li>Mua Huina 1592</li>
+<ul class="no-indent">
+<li>Tháo mở, đo đạc thông số thực tế</li>
+<ul class="no-indent">
+<li>Thử nghiệm điều khiển Arduino</li>
+<ul class="no-indent">
+<li>Tích hợp encoder, IMU cơ bản</li>
+<p class="no-indent"><strong>2. Trung hạn (3-6 tháng):<strong></p>
+<ul class="no-indent">
+<li>Nâng cấp lên ESP32 (WiFi)</li>
+<ul class="no-indent">
+<li>Thêm camera FPV</li>
+<ul class="no-indent">
+<li>Phát triển GUI điều khiển</li>
+<ul class="no-indent">
+<li>Thử nghiệm PID, computer vision</li>
+<p class="no-indent"><strong>3. Dài hạn (6-12 tháng):<strong></p>
+<ul class="no-indent">
+<li>Tích hợp ROS 2</li>
+<ul class="no-indent">
+<li>Triển khai SLAM, path planning</li>
+<ul class="no-indent">
+<li>Áp dụng RL cho autonomous digging</li>
+<ul class="no-indent">
+<li>Chuẩn bị scaling lên mô hình lớn hơn</li>
+<h3>6.3. Hướng nghiên cứu tiếp theo</h3>
+<h4>1. Cải thiện mô hình động cơ:</h4>
+<ul class="no-indent">
+<li>Mô hình phi tuyến bão hòa từ</li>
+<ul class="no-indent">
+<li>Ảnh hưởng nhiệt độ lên R_a, K_e</li>
+<ul class="no-indent">
+<li>Mô hình ma sát Coulomb + Viscous</li>
+<ul class="no-indent">
+<li>Xét moment of inertia thay đổi</li>
+<h4>2. Tối ưu hóa điều khiển:</h4>
+<ul class="no-indent">
+<li>Tuning PID tự động (Ziegler-Nichols, genetic algorithm)</li>
+<ul class="no-indent">
+<li>Điều khiển thích nghi (adaptive control)</li>
+<ul class="no-indent">
+<li>Bù nhiễu (disturbance observer)</li>
+<ul class="no-indent">
+<li>Feedforward control</li>
+<h4>3. Tích hợp AI:</h4>
+<ul class="no-indent">
+<li>Reinforcement Learning cho autonomous excavation</li>
+<ul class="no-indent">
+<li>Computer Vision nhận dạng địa hình</li>
+<ul class="no-indent">
+<li>Path planning tối ưu</li>
+<ul class="no-indent">
+<li>Predictive maintenance</li>
+<h4>4. Nghiên cứu multi-robot:</h4>
+<ul class="no-indent">
+<li>Điều khiển phối hợp nhiều máy xúc</li>
+<ul class="no-indent">
+<li>Communication protocol</li>
+<ul class="no-indent">
+<li>Task allocation</li>
+<ul class="no-indent">
+<li>Collision avoidance</li>
+<h3>6.4. Đóng góp của nghiên cứu</h3>
+<h4>Về mặt học thuật:</h4>
+<ul class="no-indent">
+<li>Tài liệu chi tiết về động cơ RC và điều khiển PWM</li>
+<ul class="no-indent">
+<li>Code mô phỏng MATLAB mã nguồn mở</li>
+<ul class="no-indent">
+<li>Phương pháp đo đạc và tính toán thông số</li>
+<ul class="no-indent">
+<li>So sánh lý thuyết với thực nghiệm</li>
+<h4>Về mặt thực tiễn:</h4>
+<ul class="no-indent">
+<li>Nền tảng giá rẻ cho nghiên cứu autonomous excavator</li>
+<ul class="no-indent">
+<li>Hướng dẫn từng bước cho sinh viên</li>
+<ul class="no-indent">
+<li>Code Arduino sẵn sàng triển khai</li>
+<ul class="no-indent">
+<li>Roadmap rõ ràng cho phát triển tiếp</li>
+<h4>Về mặt cộng đồng:</h4>
+<ul class="no-indent">
+<li>Tất cả tài liệu mã nguồn mở trên GitHub</li>
+<ul class="no-indent">
+<li>Khuyến khích đóng góp và cải tiến</li>
+<ul class="no-indent">
+<li>Tạo nền tảng cho các dự án tương tự</li>
+<ul class="no-indent">
+<li>Kết nối với cộng đồng RC và robotics Việt Nam</li>
+<hr style="border:1px solid #ccc;margin:18pt 0">
+<h2>7. TÀI LIỆU THAM KHẢO</h2>
+<h3>7.1. Tài liệu chính</h3>
+<p class="no-indent"><strong>1. Huina Official:<strong></p>
+<ul class="no-indent">
+<li>Website: https://www.huina-toys.com/</li>
+<ul class="no-indent">
+<li>Manual Huina 1592</li>
+<ul class="no-indent">
+<li>Technical specifications</li>
+<p class="no-indent"><strong>2. Giáo trình và sách:<strong></p>
+<ul class="no-indent">
+<li>*Truyền động điện* - PGS.TS Nguyễn Phùng Quang</li>
+<ul class="no-indent">
+<li>*Máy điện DC* - TS. Phạm Quốc Hải</li>
+<ul class="no-indent">
+<li>*Điều khiển tự động* - GS.TS Trần Đình Long</li>
+<ul class="no-indent">
+<li>*DC Motors, Speed Controls, Servo Systems* - Electro-Craft Corporation</li>
+<p class="no-indent"><strong>3. Arduino và điều khiển:<strong></p>
+<ul class="no-indent">
+<li>Arduino Reference: https://www.arduino.cc/reference/en/</li>
+<ul class="no-indent">
+<li>*Arduino Cookbook* - Michael Margolis</li>
+<ul class="no-indent">
+<li>PWM Control for DC Motors - Application Notes</li>
+<h3>7.2. Papers về Autonomous Excavator</h3>
+<p class="no-indent"><strong>1. TERA: Terrain Excavation Robot Autonomy<strong></p>
+<ul class="no-indent">
+<li>Aluckal et al., IEEE SIMPAR 2025</li>
+<ul class="no-indent">
+<li>Link: https://droneslab.github.io/tera/</li>
+<ul class="no-indent">
+<li>Framework mô phỏng máy xúc với Unity + AGX Dynamics</li>
+<p class="no-indent"><strong>2. Deep Reinforcement Learning for Excavation<strong></p>
+<ul class="no-indent">
+<li>Osa & Aizawa, IEEE Access</li>
+<ul class="no-indent">
+<li>RL cho điều khiển máy xúc tự động</li>
+<p class="no-indent"><strong>3. HEAP - The Autonomous Walking Excavator<strong></p>
+<ul class="no-indent">
+<li>Jud et al., Automation in Construction, 2021</li>
+<ul class="no-indent">
+<li>Link: https://github.com/leggedrobotics/rsl_heap</li>
+<ul class="no-indent">
+<li>Máy xúc tự hành trên địa hình phức tạp</li>
+<p class="no-indent"><strong>4. Earth-moving Simulation<strong></p>
+<ul class="no-indent">
+<li>Holz, Azimi et al.</li>
+<ul class="no-indent">
+<li>Mô hình FEE (Finite Element Earth) cho mô phỏng đào</li>
+<p class="no-indent"><strong>5. MathWorks Excavator Example<strong></p>
+<ul class="no-indent">
+<li>https://www.mathworks.com/help/robotics/ug/simulate-earth-moving-with-autonomous-excavator-in-construction-site.html</li>
+<h3>7.3. Standards</h3>
+<p class="no-indent"><strong>1. IEEE Standards:<strong></p>
+<ul class="no-indent">
+<li>IEEE Std 113: Test Procedures for DC Machines</li>
+<ul class="no-indent">
+<li>IEEE Std 421.5: Excitation System Models</li>
+<p class="no-indent"><strong>2. IEC Standards:<strong></p>
+<ul class="no-indent">
+<li>IEC 60034: Rotating Electrical Machines</li>
+<ul class="no-indent">
+<li>IEC 61800: Adjustable Speed Electrical Power Drive Systems</li>
+<h3>7.4. Websites & Communities</h3>
+<p class="no-indent"><strong>1. RC Communities:<strong></p>
+<ul class="no-indent">
+<li>RCGroups Forum: https://www.rcgroups.com/</li>
+<ul class="no-indent">
+<li>RC Universe: https://www.rcuniverse.com/</li>
+<ul class="no-indent">
+<li>Huina RC Excavator Facebook Groups</li>
+<p class="no-indent"><strong>2. Robotics:<strong></p>
+<ul class="no-indent">
+<li>ROS 2 Documentation: https://docs.ros.org/</li>
+<ul class="no-indent">
+<li>OpenCV: https://opencv.org/</li>
+<ul class="no-indent">
+<li>Gazebo Simulator: https://gazebosim.org/</li>
+<p class="no-indent"><strong>3. Electronics:<strong></p>
+<ul class="no-indent">
+<li>Arduino Forum: https://forum.arduino.cc/</li>
+<ul class="no-indent">
+<li>ESP32 Forum: https://esp32.com/</li>
+<ul class="no-indent">
+<li>Electronics Stack Exchange</li>
+<hr style="border:1px solid #ccc;margin:18pt 0">
+<h2>PHỤ LỤC</h2>
+<h3>A. Danh sách ký hiệu</h3>
+<h3>B. Danh sách chữ viết tắt</h3>
 <h3>C. Công thức tổng hợp</h3>
 <h4>1. Động cơ DC:</h4>
 <pre>
-U = R_a × I_a + L_a × dI_a/dt + K_e × ω
-E_a = K_e × ω
-M_em = K_m × I_a
-J × dω/dt = M_em - M_load - B × ω
-n = (U / K_e) - (R_a / K_e²) × M
-T_a = L_a / R_a
-T_m = (J × R_a) / K_e²
-</pre>
+<p>U = R_a × I_a + L_a × dI_a/dt + K_e × ω</p>
+<p>E_a = K_e × ω</p>
+<p>M_em = K_m × I_a</p>
+<p>J × dω/dt = M_em - M_load - B × ω</p>
+<p>n = (U / K_e) - (R_a / K_e²) × M</p>
+<p>T_a = L_a / R_a</p>
+<p>T_m = (J × R_a) / K_e²</p>
+<pre>
 <h4>2. PWM:</h4>
 <pre>
-U_avg = D × V_supply
-ΔI ≈ (V - E_a) × D × (1-D) / (L_a × f_PWM)
-P_loss_MOSFET = I² × R_ds_on + V × I × t_sw × f_PWM
-η_ESC = P_out / (P_out + P_loss)
-</pre>
+<p>U_avg = D × V_supply</p>
+<p>ΔI ≈ (V - E_a) × D × (1-D) / (L_a × f_PWM)</p>
+<p>P_loss_MOSFET = I² × R_ds_on + V × I × t_sw × f_PWM</p>
+<p>η_ESC = P_out / (P_out + P_loss)</p>
+<pre>
 <h4>3. Hiệu suất:</h4>
 <pre>
-P_out = M × ω
-P_in = U × I
-η = P_out / P_in
-P_loss = P_Cu + P_cơ + P_sắt + P_ESC
-P_Cu = I² × R_a
-</pre>
+<p>P_out = M × ω</p>
+<p>P_in = U × I</p>
+<p>η = P_out / P_in</p>
+<p>P_loss = P_Cu + P_cơ + P_sắt + P_ESC</p>
+<p>P_Cu = I² × R_a</p>
+<pre>
 <h3>D. Bảng chuyển đổi đơn vị</h3>
-<table>
-<tr><th>Đại lượng</th><th>Đơn vị 1</th><th>Đơn vị 2</th><th>Công thức</th></tr>
-<tr><td>Tốc độ</td><td>rpm</td><td>rad/s</td><td>ω = 2πn/60</td></tr>
-<tr><td>Tốc độ</td><td>rad/s</td><td>rpm</td><td>n = 60ω/(2π)</td></tr>
-<tr><td>Mô men</td><td>N.m</td><td>mN.m</td><td>M_mNm = M_Nm × 1000</td></tr>
-<tr><td>Công suất</td><td>W</td><td>mW</td><td>P_mW = P_W × 1000</td></tr>
-<tr><td>Thời gian</td><td>s</td><td>ms</td><td>t_ms = t_s × 1000</td></tr>
-<tr><td>Điện trở</td><td>Ω</td><td>mΩ</td><td>R_mΩ = R_Ω × 1000</td></tr>
-<tr><td>Độ tự cảm</td><td>H</td><td>mH</td><td>L_mH = L_H × 1000</td></tr>
-</table>
-<hr style="border: 1px solid #ccc; margin: 18pt 0;">
+<hr style="border:1px solid #ccc;margin:18pt 0">
 <h2>KẾT THÚC BÁO CÁO</h2>
-<p class="no-indent"><strong>Ngày hoàn thành:</strong> Tháng 10/2025</p>
-<p class="no-indent"><strong>Nhóm nghiên cứu:</strong> Hệ thống điều khiển máy xúc tự động Huina 1592</p>
-<p class="no-indent"><strong>GitHub:</strong> https://github.com/trthanhdo41/auto-excavator-control-system</p>
-<p class="no-indent"><strong>Liên hệ:</strong> [Thông tin liên hệ]</p>
-<hr style="border: 1px solid #ccc; margin: 18pt 0;">
+<p class="no-indent"><strong>Ngày hoàn thành:<strong> Tháng 10/2025</p>
+<p class="no-indent"><strong>Nhóm nghiên cứu:<strong> Hệ thống điều khiển máy xúc tự động Huina 1592</p>
+<p class="no-indent"><strong>GitHub:<strong> https://github.com/trthanhdo41/auto-excavator-control-system</p>
+<p class="no-indent"><strong>Liên hệ:<strong> [Thông tin liên hệ]</p>
+<hr style="border:1px solid #ccc;margin:18pt 0">
 <h3>Lời cảm ơn:</h3>
 <p>Cảm ơn cộng đồng RC Việt Nam, Arduino Vietnam, và các diễn đàn robotics đã hỗ trợ trong quá trình nghiên cứu.</p>
 <p>Đặc biệt cảm ơn các tác giả của TERA framework và RSL HEAP project đã cung cấp nguồn cảm hứng và tài liệu quý báu về autonomous excavation.</p>
-<hr style="border: 1px solid #ccc; margin: 18pt 0;">
-<p class="no-indent"><strong>Tất cả code mô phỏng MATLAB và tài liệu có sẵn trên GitHub.</strong></p>
-<p class="no-indent"><strong>Chúc các bạn thành công với dự án! 🚜⚡</strong></p>
+<hr style="border:1px solid #ccc;margin:18pt 0">
+<p class="no-indent"><strong>Tất cả code mô phỏng MATLAB và tài liệu có sẵn trên GitHub.<strong></p>
+<p class="no-indent"><strong>Chúc các bạn thành công với dự án! 🚜⚡<strong></p>
 </body>
 </html>
